@@ -1,0 +1,102 @@
+{
+  "dmf_configuration": {
+     "information": [<json>, <json>, ...],
+     "electrodes": [<json>, <json>, ...],
+     "actuators": [<json>, <json>, ...],
+     "sensors": [<json>, <json>, ...],
+     "inputs": [<json>, <json>, ...],
+     "outputs": [<json>, <json>, ...],
+     "droplets": [<json>, <json>, ...],
+     "bubbles": [<json>, <json>, ...],
+     "unclassified": [<json>, <json>, ...]
+  },
+
+  "program_actions": [
+    {
+      "action": "Start",
+      "id": "unique_start_id",
+      "next": "next_unique_id_1"
+    },
+    {
+      "action": "Input",
+      "id": "unique_input_id",
+      "dropletId": "unique_droplet_id",
+      "posX": 10,
+      "posY": 20,
+      "volume": 50,
+      "next": "next_unique_id_2"
+    },
+    {
+      "action": "Output",
+      "id": "unique_output_id",
+      "dropletId": "unique_droplet_id",
+      "posX": 30,
+      "posY": 40,
+      "next": "next_unique_id_3"
+    },
+    {
+      "action": "Move",
+      "id": "unique_move_id",
+      "dropletId": "unique_droplet_id",
+      "destX": 50,
+      "destY": 60,
+      "next": "next_unique_id_4"
+    },
+    {
+      "action": "Merge",
+      "id": "unique_merge_id",
+      "resultDropletId": "unique_droplet_id",
+      "dropletId1": "unique_droplet_id",
+      "dropletId2": "unique_droplet_id",
+      "destX": 80,
+      "destY": 90,
+      "next": "next_unique_id_5"
+    },
+    {
+      "action": "Split",
+      "id": "unique_split_id",
+      "originDroplet": "unique_droplet_id",
+      "resultDroplet1": "unique_droplet_id",
+      "resultDroplet2": "unique_droplet_id",
+      "ratio": 0.2,
+      "destX1": 100,
+      "destY1": 110,
+      "destX2": 120,
+      "destY2": 130,
+      "next": "next_unique_id_6"
+    },
+    {
+      "action": "Mix",
+      "id": "unique_mix_id",
+      "dropletId": "unique_droplet_id",
+      "next": "next_unique_id_7"
+    },
+    {
+      "action": "Store",
+      "id": "unique_store_id",
+      "dropletId": "unique_droplet_id",
+      "posX": 140,
+      "posY": 150,
+      "time": 10,
+      "next": "next_unique_id_8"
+    },
+    {
+      "action": "If",
+      "id": "unique_if_id",
+      "condition": "sample_condition",
+      "trueNext": "next_unique_id_10",
+      "falseNext": "next_unique_id_11"
+    },
+    {
+      "action": "Repeat",
+      "id": "unique_repeat_id",
+      "times": 5,
+      "nextRepeat": "next_unique_id_12",
+      "nextExit": "next_unique_id_13"
+    },
+    {
+      "action": "End",
+      "id": "unique_end_id"
+    }
+  ]
+}
