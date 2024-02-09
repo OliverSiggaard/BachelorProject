@@ -1,14 +1,14 @@
 {
   "dmf_configuration": {
-     "information": [<json>, <json>, ...],
-     "electrodes": [<json>, <json>, ...],
-     "actuators": [<json>, <json>, ...],
-     "sensors": [<json>, <json>, ...],
-     "inputs": [<json>, <json>, ...],
-     "outputs": [<json>, <json>, ...],
-     "droplets": [<json>, <json>, ...],
-     "bubbles": [<json>, <json>, ...],
-     "unclassified": [<json>, <json>, ...]
+     "information": [],
+     "electrodes": [],
+     "actuators": [],
+     "sensors": [],
+     "inputs": [],
+     "outputs": [],
+     "droplets": [],
+     "bubbles": [],
+     "unclassified": []
   },
 
   "program_actions": [
