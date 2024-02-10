@@ -1,21 +1,21 @@
 {
   "dmf_configuration": {
-     "information": [],
-     "electrodes": [],
-     "actuators": [],
-     "sensors": [],
-     "inputs": [],
-     "outputs": [],
-     "droplets": [],
-     "bubbles": [],
-     "unclassified": []
+    "information": [],
+    "electrodes": [],
+    "actuators": [],
+    "sensors": [],
+    "inputs": [],
+    "outputs": [],
+    "droplets": [],
+    "bubbles": [],
+    "unclassified": []
   },
 
   "program_actions": [
     {
       "action": "start",
       "id": "unique_start_id",
-      "next": "next_unique_id_1"
+      "next": "next_unique_id_start"
     },
     {
       "action": "input",
@@ -23,8 +23,8 @@
       "dropletId": "unique_droplet_id",
       "posX": 10,
       "posY": 20,
-      "volume": 50,
-      "next": "next_unique_id_2"
+      "volume": 30,
+      "next": "next_unique_id_input"
     },
     {
       "action": "output",
@@ -32,7 +32,7 @@
       "dropletId": "unique_droplet_id",
       "posX": 30,
       "posY": 40,
-      "next": "next_unique_id_3"
+      "next": "next_unique_id_output"
     },
     {
       "action": "move",
@@ -40,7 +40,7 @@
       "dropletId": "unique_droplet_id",
       "destX": 50,
       "destY": 60,
-      "next": "next_unique_id_4"
+      "next": "next_unique_id_move"
     },
     {
       "action": "merge",
@@ -50,7 +50,7 @@
       "dropletId2": "unique_droplet_id",
       "destX": 80,
       "destY": 90,
-      "next": "next_unique_id_5"
+      "next": "next_unique_id_merge"
     },
     {
       "action": "split",
@@ -63,13 +63,13 @@
       "destY1": 110,
       "destX2": 120,
       "destY2": 130,
-      "next": "next_unique_id_6"
+      "next": "next_unique_id_split"
     },
     {
       "action": "mix",
       "id": "unique_mix_id",
       "dropletId": "unique_droplet_id",
-      "next": "next_unique_id_7"
+      "next": "next_unique_id_mix"
     },
     {
       "action": "store",
@@ -78,21 +78,21 @@
       "posX": 140,
       "posY": 150,
       "time": 10,
-      "next": "next_unique_id_8"
+      "next": "next_unique_id_store"
     },
     {
       "action": "if",
       "id": "unique_if_id",
       "condition": "sample_condition",
-      "trueNext": "next_unique_id_10",
-      "falseNext": "next_unique_id_11"
+      "trueNext": "next_true_unique_id_if",
+      "falseNext": "next_false_unique_id_if"
     },
     {
       "action": "repeat",
       "id": "unique_repeat_id",
       "times": 5,
-      "nextRepeat": "next_unique_id_12",
-      "nextExit": "next_unique_id_13"
+      "nextRepeat": "next_repeat_unique_id_repeat",
+      "nextExit": "next_exit_unique_id_repeat"
     },
     {
       "action": "end",
