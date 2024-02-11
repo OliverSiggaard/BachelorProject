@@ -16,7 +16,7 @@ public class JsonStartActionMapper implements IActionMapper<JsonStartAction, Sta
     @Override
     public JsonStartAction mapToDtoModel(StartAction internalModel) {
         return new JsonStartAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getNextAction().getId()
         );
     }

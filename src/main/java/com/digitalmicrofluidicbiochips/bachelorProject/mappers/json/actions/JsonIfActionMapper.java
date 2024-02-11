@@ -19,7 +19,7 @@ public class JsonIfActionMapper implements IActionMapper<JsonIfAction, IfAction>
     @Override
     public JsonIfAction mapToDtoModel(IfAction internalModel) {
         return new JsonIfAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getCondition(),
                 internalModel.getTrueNextAction().getId(),
                 internalModel.getFalseNextAction().getId()

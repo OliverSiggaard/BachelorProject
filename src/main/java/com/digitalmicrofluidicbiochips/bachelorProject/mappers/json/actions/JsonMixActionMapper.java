@@ -19,7 +19,7 @@ public class JsonMixActionMapper implements IActionMapper<JsonMixAction, MixActi
     @Override
     public JsonMixAction mapToDtoModel(MixAction internalModel) {
         return new JsonMixAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getDropletId(),
                 internalModel.getNextAction().getId()
         );

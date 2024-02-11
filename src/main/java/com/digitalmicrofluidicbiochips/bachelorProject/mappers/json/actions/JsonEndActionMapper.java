@@ -12,13 +12,13 @@ public class JsonEndActionMapper implements IActionMapper<JsonEndAction, EndActi
     public EndAction mapToInternalModel(JsonEndAction dtoModel) {
         return new EndAction(
                 dtoModel.getId()
-                );
+        );
     }
 
     @Override
     public JsonEndAction mapToDtoModel(EndAction internalModel) {
         return new JsonEndAction(
-                internalModel.id
+                internalModel.getId()
         );
     }
 

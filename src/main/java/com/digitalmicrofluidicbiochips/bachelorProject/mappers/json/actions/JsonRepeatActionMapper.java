@@ -19,7 +19,7 @@ public class JsonRepeatActionMapper implements IActionMapper<JsonRepeatAction, R
     @Override
     public JsonRepeatAction mapToDtoModel(RepeatAction internalModel) {
         return new JsonRepeatAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getTimes(),
                 internalModel.getNextRepeatAction().getId(),
                 internalModel.getNextExitAction().getId()

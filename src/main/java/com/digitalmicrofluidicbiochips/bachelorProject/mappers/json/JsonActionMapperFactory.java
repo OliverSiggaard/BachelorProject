@@ -8,6 +8,12 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Factory for creating action mappers for JSON format.
+ * getMapper method returns the appropriate mapper for the given DTO class,
+ * allowing for easy mapping of DTO to internal models.
+ */
+
 public class JsonActionMapperFactory {
     private static final Map<Class<? extends DtoActionBase>, IActionMapper<?, ?>> mappers = new HashMap<>();
 

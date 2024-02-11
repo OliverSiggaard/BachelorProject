@@ -22,7 +22,7 @@ public class JsonMergeActionMapper implements IActionMapper<JsonMergeAction, Mer
     @Override
     public JsonMergeAction mapToDtoModel(MergeAction internalModel) {
         return new JsonMergeAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getResultDropletId(),
                 internalModel.getDropletId1(),
                 internalModel.getDropletId2(),

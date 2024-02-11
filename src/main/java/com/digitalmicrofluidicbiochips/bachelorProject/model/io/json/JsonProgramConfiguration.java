@@ -18,7 +18,7 @@ public class JsonProgramConfiguration {
 
     // The initial state of the DMF platform. This is the state that the platform will be in when the program starts.
     @JsonProperty("dmf_configuration")
-    private JsonDmfPlatformState initialDmfState;
+    private JsonDmfPlatformState dmfPlatformState;
 
     // The list of actions that the program will execute.
     @JsonProperty("program_actions")

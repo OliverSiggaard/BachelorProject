@@ -20,7 +20,7 @@ public class JsonMoveActionMapper implements IActionMapper<JsonMoveAction, MoveA
     @Override
     public JsonMoveAction mapToDtoModel(MoveAction internalModel) {
         return new JsonMoveAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getDropletId(),
                 internalModel.getDestX(),
                 internalModel.getDestY(),

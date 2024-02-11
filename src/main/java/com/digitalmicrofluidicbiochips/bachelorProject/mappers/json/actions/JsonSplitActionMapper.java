@@ -26,7 +26,7 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
     @Override
     public JsonSplitAction mapToDtoModel(SplitAction internalModel) {
         return new JsonSplitAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getOriginDroplet(),
                 internalModel.getResultDroplet1(),
                 internalModel.getResultDroplet2(),

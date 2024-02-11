@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class ActionBase {
 
-    public String id;
+    private final String id;
 
     public ActionBase(String id) {
         this.id = id;

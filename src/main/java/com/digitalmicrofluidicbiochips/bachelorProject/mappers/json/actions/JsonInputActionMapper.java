@@ -22,7 +22,7 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
     @Override
     public JsonInputAction mapToDtoModel(InputAction internalModel) {
         return new JsonInputAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getDropletId(),
                 internalModel.getPosX(),
                 internalModel.getPosY(),

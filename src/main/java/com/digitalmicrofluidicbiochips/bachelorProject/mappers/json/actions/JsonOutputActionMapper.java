@@ -21,7 +21,7 @@ public class JsonOutputActionMapper implements IActionMapper<JsonOutputAction, O
     @Override
     public JsonOutputAction mapToDtoModel(OutputAction internalModel) {
         return new JsonOutputAction(
-                internalModel.id,
+                internalModel.getId(),
                 internalModel.getDropletId(),
                 internalModel.getPosX(),
                 internalModel.getPosY(),
