@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.io.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.dmf_platform.JsonDmfPlatformState;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * A Program Configuration JSON file can be generated using the complimentary GUI application, which can be found:
  * here: https://github.com/OliverSiggaard/bachelor-project-ui
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 public class JsonProgramConfiguration {
 

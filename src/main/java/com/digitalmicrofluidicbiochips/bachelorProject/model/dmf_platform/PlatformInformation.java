@@ -1,5 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
+import lombok.Getter;
+
 import java.util.List;
 
 /**
@@ -9,10 +11,12 @@ import java.util.List;
  * Not all fields are implemented, only the ones that are relevant for the project.
  */
 
-public class DmfPlatformState {
+public class PlatformInformation {
 
+    @Getter
     private final int sizeX, sizeY;
 
+    @Getter
     private final List<Electrode> electrodes;
 
 
@@ -21,7 +25,7 @@ public class DmfPlatformState {
     // TODO: Information about sensors?
     // TODO: Information about input/output?
 
-    public DmfPlatformState(int sizeX, int sizeY, List<Electrode> electrodes) {
+    public PlatformInformation(int sizeX, int sizeY, List<Electrode> electrodes) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.electrodes = electrodes;

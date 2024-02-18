@@ -1,17 +1,17 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.IFileToInternalMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.IFileToInternalMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.dmf_platform.JsonDmfInformationMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.factory.JsonActionMapperFactory;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DmfPlatformState;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.PlatformInformation;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.dmf_platform.JsonDmfPlatformInformation;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.JsonModelLoader;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,10 +37,14 @@ public class JsonFileToInternalMapper implements IFileToInternalMapper {
         }
     }
 
+    @Override
+    public ProgramConfiguration getProgramConfiguration() {
+        return new ProgramConfiguration(getPlatformInformation(), getActions());
+    }
+
     /**
      * Get a list of all the actions from the JSON file, mapped to their internal representation.
      */
-    @Override
     public List<ActionBase> getActions() {
 
         HashMap<String, ActionBase> actionMap = new HashMap<>();
@@ -65,25 +69,23 @@ public class JsonFileToInternalMapper implements IFileToInternalMapper {
     /**
      * Get the platform information from the JSON file.
      */
-    @Override
-    public DmfPlatformState getPlatformInformation() {
+    public PlatformInformation getPlatformInformation() {
 
-        JsonDmfPlatformInformation platformInformation = programConfiguration.getDmfPlatformState().getInformation();
+        //TODO: This is "hardcoded" for now. The platform information should be read from the provided JSON file.
+        //For now, the platform is hardcoded to be read from the file "src/test/resources/reader/dmf_configuration.JSON".
+        //This allows for us not having to deal with sending the files from the frontend to the backend (for now).
+        String dmfConfigFile = "src/test/resources/reader/dmf_configuration.JSON";
+        JsonProgramConfiguration dmfProgramConfiguration;
+        try {
+            dmfProgramConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(dmfConfigFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read the JSON file: " + dmfConfigFile, e);
+        }
 
-        // TODO: Gather relevant information regarding electrodes.?
-        List<Electrode> electrodes = new ArrayList<>();
+        JsonDmfInformationMapper mapper = new JsonDmfInformationMapper();
 
-
-        // TODO: Information Actuators?
-        // TODO Information about sensors?
-        // TODO Information about input/output?
-
-        DmfPlatformState dmfPlatformState = new DmfPlatformState(
-                platformInformation.getSizeX(),
-                platformInformation.getSizeY(),
-                electrodes
-        );
-
-        return dmfPlatformState;
+        return mapper.mapToInternal(dmfProgramConfiguration.getDmfPlatformState());
     }
+
+
 }

@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class JsonModelReaderTests {
-    private final String filePath = "src/test/resources/reader/simpleJsonModel.JSON"; // Adjust the file name if needed
+public class JsonActionModelReaderTests {
+    private final String filePath = "src/test/resources/reader/simpleActionModel.JSON"; // Adjust the file name if needed
     private JsonProgramConfiguration programConfiguration;
     private HashMap<String, JsonActionBase> actionMap;
 

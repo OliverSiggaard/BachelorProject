@@ -1,16 +1,20 @@
 {
   "dmf_configuration": {
-     "information": [],
-     "electrodes": [],
-     "actuators": [],
-     "sensors": [],
-     "inputs": [],
-     "outputs": [],
-     "droplets": [],
-     "bubbles": [],
-     "unclassified": []
+    "information": {
+      "platform_name": "Platform 640 V2",
+      "platform_type": "platform_640_v2",
+      "platform_ID": 6401,
+      "sizeX": 860,
+      "sizeY": 400
+    },
+    "electrodes": [],
+    "actuators": [],
+    "sensors": [],
+    "inputs": [],
+    "outputs": [],
+    "droplets": [],
+    "bubbles": []
   },
-
   "program_actions": [
     {
       "action": "start",

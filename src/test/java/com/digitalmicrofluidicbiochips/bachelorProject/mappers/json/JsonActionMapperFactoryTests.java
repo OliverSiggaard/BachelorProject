@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.IActionMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.factory.JsonActionMapperFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.*;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +32,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         StartAction startAction = (StartAction) action;
-        Assertions.assertEquals(id, startAction.id);
+        Assertions.assertEquals(id, startAction.getId());
         Assertions.assertNull(startAction.getNextAction());
     }
 
@@ -57,7 +58,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         InputAction inputAction = (InputAction) action;
-        Assertions.assertEquals(id, inputAction.id);
+        Assertions.assertEquals(id, inputAction.getId());
         Assertions.assertEquals(dropletId, inputAction.getDropletId());
         Assertions.assertEquals(posX, inputAction.getPosX());
         Assertions.assertEquals(posY, inputAction.getPosY());
@@ -85,7 +86,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         OutputAction outputAction = (OutputAction) action;
-        Assertions.assertEquals(id, outputAction.id);
+        Assertions.assertEquals(id, outputAction.getId());
         Assertions.assertEquals(dropletId, outputAction.getDropletId());
         Assertions.assertEquals(posX, outputAction.getPosX());
         Assertions.assertEquals(posY, outputAction.getPosY());
@@ -112,7 +113,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         MoveAction moveAction = (MoveAction) action;
-        Assertions.assertEquals(id, moveAction.id);
+        Assertions.assertEquals(id, moveAction.getId());
         Assertions.assertEquals(dropletId, moveAction.getDropletId());
         Assertions.assertEquals(destX, moveAction.getDestX());
         Assertions.assertEquals(destY, moveAction.getDestY());
@@ -141,7 +142,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         MergeAction mergeAction = (MergeAction) action;
-        Assertions.assertEquals(id, mergeAction.id);
+        Assertions.assertEquals(id, mergeAction.getId());
         Assertions.assertEquals(resultDropletId, mergeAction.getResultDropletId());
         Assertions.assertEquals(dropletId1, mergeAction.getDropletId1());
         Assertions.assertEquals(dropletId2, mergeAction.getDropletId2());
@@ -175,7 +176,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         SplitAction splitAction = (SplitAction) action;
-        Assertions.assertEquals(id, splitAction.id);
+        Assertions.assertEquals(id, splitAction.getId());
         Assertions.assertEquals(originDropletId, splitAction.getOriginDroplet());
         Assertions.assertEquals(resultDropletId1, splitAction.getResultDroplet1());
         Assertions.assertEquals(resultDropletId2, splitAction.getResultDroplet2());
@@ -205,7 +206,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         MixAction mixAction = (MixAction) action;
-        Assertions.assertEquals(id, mixAction.id);
+        Assertions.assertEquals(id, mixAction.getId());
         Assertions.assertEquals(dropletId, mixAction.getDropletId());
         Assertions.assertNull(mixAction.getNextAction());
     }
@@ -231,7 +232,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         StoreAction storeAction = (StoreAction) action;
-        Assertions.assertEquals(id, storeAction.id);
+        Assertions.assertEquals(id, storeAction.getId());
         Assertions.assertEquals(dropletId, storeAction.getDropletId());
         Assertions.assertEquals(posX, storeAction.getPosX());
         Assertions.assertEquals(posY, storeAction.getPosY());
@@ -258,7 +259,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         IfAction ifAction = (IfAction) action;
-        Assertions.assertEquals(id, ifAction.id);
+        Assertions.assertEquals(id, ifAction.getId());
         Assertions.assertEquals(condition, ifAction.getCondition());
         Assertions.assertNull(ifAction.getTrueNextAction());
         Assertions.assertNull(ifAction.getFalseNextAction());
@@ -283,7 +284,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         RepeatAction repeatAction = (RepeatAction) action;
-        Assertions.assertEquals(id, repeatAction.id);
+        Assertions.assertEquals(id, repeatAction.getId());
         Assertions.assertEquals(times, repeatAction.getTimes());
         Assertions.assertNull(repeatAction.getNextRepeatAction());
         Assertions.assertNull(repeatAction.getNextExitAction());
@@ -305,7 +306,7 @@ public class JsonActionMapperFactoryTests {
         }
 
         EndAction endAction = (EndAction) action;
-        Assertions.assertEquals(id, endAction.id);
+        Assertions.assertEquals(id, endAction.getId());
     }
 
 }

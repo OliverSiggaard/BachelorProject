@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.dmf_platform;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import lombok.Getter;
  * See the provided pdf DMFasJSON.pdf for more information.
  */
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 public class JsonDmfPlatformInformation {
     @JsonProperty("platform_name")

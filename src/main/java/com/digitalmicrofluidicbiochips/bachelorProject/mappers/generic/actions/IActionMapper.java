@@ -1,4 +1,4 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.mappers;
+package com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.generic.DtoActionBase;

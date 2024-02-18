@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class represents an electrode in the DMF platform.
