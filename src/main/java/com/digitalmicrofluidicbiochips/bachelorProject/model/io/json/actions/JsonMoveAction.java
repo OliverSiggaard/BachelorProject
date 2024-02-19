@@ -11,22 +11,22 @@ import lombok.Getter;
 public class JsonMoveAction extends JsonActionBase {
 
     private final String dropletId;
-    private final int destX;
-    private final int destY;
+    private final int posX;
+    private final int posY;
     private final String nextActionId;
 
     @JsonCreator
     public JsonMoveAction(
             @JsonProperty("id") String id,
             @JsonProperty("dropletId") String dropletId,
-            @JsonProperty("destX") int destX,
-            @JsonProperty("destY") int destY,
+            @JsonProperty("posX") int posX,
+            @JsonProperty("posY") int posY,
             @JsonProperty("next") String nextActionId
     ) {
         super(id);
         this.dropletId = dropletId;
-        this.destX = destX;
-        this.destY = destY;
+        this.posX = posX;
+        this.posY = posY;
         this.nextActionId = nextActionId;
     }
 

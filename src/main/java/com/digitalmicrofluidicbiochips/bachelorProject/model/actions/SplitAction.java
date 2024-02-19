@@ -10,10 +10,10 @@ public class SplitAction extends ActionBase {
     private final String resultDroplet1;
     private final String resultDroplet2;
     private final double ratio;
-    private final int destX1;
-    private final int destY1;
-    private final int destX2;
-    private final int destY2;
+    private final int posX1;
+    private final int posY1;
+    private final int posX2;
+    private final int posY2;
 
     @Setter
     private ActionBase nextAction = null;
@@ -24,19 +24,19 @@ public class SplitAction extends ActionBase {
             String resultDroplet1,
             String resultDroplet2,
             double ratio,
-            int destX1,
-            int destY1,
-            int destX2,
-            int destY2
+            int posX1,
+            int posY1,
+            int posX2,
+            int posY2
     ) {
         super(id);
         this.originDroplet = originDroplet;
         this.resultDroplet1 = resultDroplet1;
         this.resultDroplet2 = resultDroplet2;
         this.ratio = ratio;
-        this.destX1 = destX1;
-        this.destY1 = destY1;
-        this.destX2 = destX2;
-        this.destY2 = destY2;
+        this.posX1 = posX1;
+        this.posY1 = posY1;
+        this.posX2 = posX2;
+        this.posY2 = posY2;
     }
 }

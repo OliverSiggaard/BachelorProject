@@ -31,6 +31,7 @@ public class JsonOutputActionMapper implements IActionMapper<JsonOutputAction, O
 
     @Override
     public void resolveReferences(JsonOutputAction dtoModel, HashMap<String, OutputAction> internalModelMap) {
-
+        OutputAction outputAction = internalModelMap.get(dtoModel.getId());
+        outputAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }

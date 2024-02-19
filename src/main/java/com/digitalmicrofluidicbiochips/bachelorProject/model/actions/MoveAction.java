@@ -7,20 +7,20 @@ import lombok.Setter;
 public class MoveAction extends ActionBase {
 
     private final String dropletId;
-    private final int destX;
-    private final int destY;
+    private final int posX;
+    private final int posY;
     @Setter
     private ActionBase nextAction = null;
 
     public MoveAction(
             String id,
             String dropletId,
-            int destX,
-            int destY
+            int posX,
+            int posY
     ) {
         super(id);
         this.dropletId = dropletId;
-        this.destX = destX;
-        this.destY = destY;
+        this.posX = posX;
+        this.posY = posY;
     }
 }

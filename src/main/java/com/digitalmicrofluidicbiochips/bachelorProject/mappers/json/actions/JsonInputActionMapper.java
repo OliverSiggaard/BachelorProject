@@ -33,6 +33,7 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
 
     @Override
     public void resolveReferences(JsonInputAction dtoModel, HashMap<String, InputAction> internalModelMap) {
-
+        InputAction inputAction = internalModelMap.get(dtoModel.getId());
+        inputAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }

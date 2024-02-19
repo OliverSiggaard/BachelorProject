@@ -127,8 +127,8 @@ public class JsonActionModelReaderTests {
         JsonMoveAction moveAction = (JsonMoveAction) actionBase;
         Assertions.assertEquals("unique_move_id", moveAction.getId());
         Assertions.assertEquals("unique_droplet_id", moveAction.getDropletId());
-        Assertions.assertEquals(50, moveAction.getDestX());
-        Assertions.assertEquals(60, moveAction.getDestY());
+        Assertions.assertEquals(50, moveAction.getPosX());
+        Assertions.assertEquals(60, moveAction.getPosY());
         Assertions.assertEquals("next_unique_id_move", moveAction.getNextActionId());
     }
 
@@ -150,8 +150,8 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id", mergeAction.getResultDropletId());
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId1());
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId2());
-        Assertions.assertEquals(80, mergeAction.getDestX());
-        Assertions.assertEquals(90, mergeAction.getDestY());
+        Assertions.assertEquals(80, mergeAction.getPosX());
+        Assertions.assertEquals(90, mergeAction.getPosY());
         Assertions.assertEquals("next_unique_id_merge", mergeAction.getNextActionId());
     }
 
@@ -174,10 +174,10 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id", splitAction.getResultDroplet1());
         Assertions.assertEquals("unique_droplet_id", splitAction.getResultDroplet2());
         Assertions.assertEquals(0.2, splitAction.getRatio());
-        Assertions.assertEquals(100, splitAction.getDestX1());
-        Assertions.assertEquals(110, splitAction.getDestY1());
-        Assertions.assertEquals(120, splitAction.getDestX2());
-        Assertions.assertEquals(130, splitAction.getDestY2());
+        Assertions.assertEquals(100, splitAction.getPosX1());
+        Assertions.assertEquals(110, splitAction.getPosY1());
+        Assertions.assertEquals(120, splitAction.getPosX2());
+        Assertions.assertEquals(130, splitAction.getPosY2());
         Assertions.assertEquals("next_unique_id_split", splitAction.getNextActionId());
     }
 

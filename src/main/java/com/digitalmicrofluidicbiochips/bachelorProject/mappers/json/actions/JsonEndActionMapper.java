@@ -24,6 +24,6 @@ public class JsonEndActionMapper implements IActionMapper<JsonEndAction, EndActi
 
     @Override
     public void resolveReferences(JsonEndAction dtoModel, HashMap<String, EndAction> internalModelMap) {
-
+        // No next actions on EndAction
     }
 }

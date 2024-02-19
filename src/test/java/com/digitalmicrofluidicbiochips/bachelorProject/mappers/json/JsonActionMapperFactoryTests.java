@@ -98,11 +98,11 @@ public class JsonActionMapperFactoryTests {
         // Arrange
         String id = "id";
         String dropletId = "dropletId";
-        int destX = 1;
-        int destY = 2;
+        int posX = 1;
+        int posY = 2;
         String nextActionId = "nextActionId";
 
-        JsonMoveAction jsonMoveAction = new JsonMoveAction(id, dropletId, destX, destY, nextActionId);
+        JsonMoveAction jsonMoveAction = new JsonMoveAction(id, dropletId, posX, posY, nextActionId);
 
         // Act
         ActionBase action = getInternalAction(jsonMoveAction);
@@ -115,8 +115,8 @@ public class JsonActionMapperFactoryTests {
         MoveAction moveAction = (MoveAction) action;
         Assertions.assertEquals(id, moveAction.getId());
         Assertions.assertEquals(dropletId, moveAction.getDropletId());
-        Assertions.assertEquals(destX, moveAction.getDestX());
-        Assertions.assertEquals(destY, moveAction.getDestY());
+        Assertions.assertEquals(posX, moveAction.getPosX());
+        Assertions.assertEquals(posY, moveAction.getPosY());
         Assertions.assertNull(moveAction.getNextAction());
     }
 
@@ -127,11 +127,11 @@ public class JsonActionMapperFactoryTests {
         String resultDropletId = "ResultDropletId";
         String dropletId1 = "dropletId1";
         String dropletId2 = "dropletId2";
-        int destX = 1;
-        int destY = 2;
+        int posX = 1;
+        int posY = 2;
         String nextActionId = "nextActionId";
 
-        JsonMergeAction jsonMergeAction = new JsonMergeAction(id, resultDropletId, dropletId1, dropletId2, destX, destY, nextActionId);
+        JsonMergeAction jsonMergeAction = new JsonMergeAction(id, resultDropletId, dropletId1, dropletId2, posX, posY, nextActionId);
 
         // Act
         ActionBase action = getInternalAction(jsonMergeAction);
@@ -146,8 +146,8 @@ public class JsonActionMapperFactoryTests {
         Assertions.assertEquals(resultDropletId, mergeAction.getResultDropletId());
         Assertions.assertEquals(dropletId1, mergeAction.getDropletId1());
         Assertions.assertEquals(dropletId2, mergeAction.getDropletId2());
-        Assertions.assertEquals(destX, mergeAction.getDestX());
-        Assertions.assertEquals(destY, mergeAction.getDestY());
+        Assertions.assertEquals(posX, mergeAction.getPosX());
+        Assertions.assertEquals(posY, mergeAction.getPosY());
         Assertions.assertNull(mergeAction.getNextAction());
     }
 
@@ -159,13 +159,13 @@ public class JsonActionMapperFactoryTests {
         String resultDropletId1 = "ResultDropletId1";
         String resultDropletId2 = "ResultDropletId2";
         double splitRatio = 0.5;
-        int destX1 = 1;
-        int destY1 = 2;
-        int destX2 = 3;
-        int destY2 = 4;
+        int posX1 = 1;
+        int posY1 = 2;
+        int posX2 = 3;
+        int posY2 = 4;
         String nextActionId = "nextActionId";
 
-        JsonSplitAction jsonSplitAction = new JsonSplitAction(id, originDropletId, resultDropletId1, resultDropletId2, splitRatio, destX1, destY1, destX2, destY2, nextActionId);
+        JsonSplitAction jsonSplitAction = new JsonSplitAction(id, originDropletId, resultDropletId1, resultDropletId2, splitRatio, posX1, posY1, posX2, posY2, nextActionId);
 
         // Act
         ActionBase action = getInternalAction(jsonSplitAction);
@@ -181,10 +181,10 @@ public class JsonActionMapperFactoryTests {
         Assertions.assertEquals(resultDropletId1, splitAction.getResultDroplet1());
         Assertions.assertEquals(resultDropletId2, splitAction.getResultDroplet2());
         Assertions.assertEquals(splitRatio, splitAction.getRatio());
-        Assertions.assertEquals(destX1, splitAction.getDestX1());
-        Assertions.assertEquals(destY1, splitAction.getDestY1());
-        Assertions.assertEquals(destX2, splitAction.getDestX2());
-        Assertions.assertEquals(destY2, splitAction.getDestY2());
+        Assertions.assertEquals(posX1, splitAction.getPosX1());
+        Assertions.assertEquals(posY1, splitAction.getPosY1());
+        Assertions.assertEquals(posX2, splitAction.getPosX2());
+        Assertions.assertEquals(posY2, splitAction.getPosY2());
         Assertions.assertNull(splitAction.getNextAction());
     }
 

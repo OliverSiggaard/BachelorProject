@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
-public class JsonnDmfModelReaderTests {
+public class JsonDmfModelReaderTests {
 
     private final String filePath = "src/test/resources/reader/dmf_configuration.JSON"; // Adjust the file name if needed
     private JsonProgramConfiguration programConfiguration;

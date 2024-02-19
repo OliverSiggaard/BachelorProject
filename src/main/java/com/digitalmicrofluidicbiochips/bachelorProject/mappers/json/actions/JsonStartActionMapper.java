@@ -23,6 +23,7 @@ public class JsonStartActionMapper implements IActionMapper<JsonStartAction, Sta
 
     @Override
     public void resolveReferences(JsonStartAction dtoModel, HashMap<String, StartAction> internalModelMap) {
-
+        StartAction startAction = internalModelMap.get(dtoModel.getId());
+        startAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }

@@ -9,8 +9,8 @@ public class MergeAction extends ActionBase {
     private final String resultDropletId;
     private final String dropletId1;
     private final String dropletId2;
-    private final int destX;
-    private final int destY;
+    private final int posX;
+    private final int posY;
 
     @Setter
     private ActionBase nextAction = null;
@@ -20,14 +20,14 @@ public class MergeAction extends ActionBase {
             String resultDropletId,
             String dropletId1,
             String dropletId2,
-            int destX,
-            int destY
+            int posX,
+            int posY
     ) {
         super(id);
         this.resultDropletId = resultDropletId;
         this.dropletId1 = dropletId1;
         this.dropletId2 = dropletId2;
-        this.destX = destX;
-        this.destY = destY;
+        this.posX = posX;
+        this.posY = posY;
     }
 }

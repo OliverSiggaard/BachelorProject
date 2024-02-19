@@ -16,10 +16,10 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
                 dtoModel.getResultDroplet1(),
                 dtoModel.getResultDroplet2(),
                 dtoModel.getRatio(),
-                dtoModel.getDestX1(),
-                dtoModel.getDestY1(),
-                dtoModel.getDestX2(),
-                dtoModel.getDestY2()
+                dtoModel.getPosX1(),
+                dtoModel.getPosY1(),
+                dtoModel.getPosX2(),
+                dtoModel.getPosY2()
         );
     }
 
@@ -31,16 +31,17 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
                 internalModel.getResultDroplet1(),
                 internalModel.getResultDroplet2(),
                 internalModel.getRatio(),
-                internalModel.getDestX1(),
-                internalModel.getDestY1(),
-                internalModel.getDestX2(),
-                internalModel.getDestY2(),
+                internalModel.getPosX1(),
+                internalModel.getPosY1(),
+                internalModel.getPosX2(),
+                internalModel.getPosY2(),
                 internalModel.getNextAction().getId()
         );
     }
 
     @Override
     public void resolveReferences(JsonSplitAction dtoModel, HashMap<String, SplitAction> internalModelMap) {
-
+        SplitAction splitAction = internalModelMap.get(dtoModel.getId());
+        splitAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }

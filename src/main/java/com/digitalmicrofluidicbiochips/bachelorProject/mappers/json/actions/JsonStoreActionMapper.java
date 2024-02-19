@@ -32,7 +32,8 @@ public class JsonStoreActionMapper implements IActionMapper<JsonStoreAction, Sto
 
     @Override
     public void resolveReferences(JsonStoreAction dtoModel, HashMap<String, StoreAction> internalModelMap) {
-
+        StoreAction storeAction = internalModelMap.get(dtoModel.getId());
+        storeAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 
 }

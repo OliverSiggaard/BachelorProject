@@ -14,8 +14,8 @@ public class JsonMergeActionMapper implements IActionMapper<JsonMergeAction, Mer
                 dtoModel.getResultDropletId(),
                 dtoModel.getDropletId1(),
                 dtoModel.getDropletId2(),
-                dtoModel.getDestX(),
-                dtoModel.getDestY()
+                dtoModel.getPosX(),
+                dtoModel.getPosY()
         );
     }
 
@@ -26,14 +26,15 @@ public class JsonMergeActionMapper implements IActionMapper<JsonMergeAction, Mer
                 internalModel.getResultDropletId(),
                 internalModel.getDropletId1(),
                 internalModel.getDropletId2(),
-                internalModel.getDestX(),
-                internalModel.getDestY(),
+                internalModel.getPosX(),
+                internalModel.getPosY(),
                 internalModel.getNextAction().getId()
         );
     }
 
     @Override
     public void resolveReferences(JsonMergeAction dtoModel, HashMap<String, MergeAction> internalModelMap) {
-
+        MergeAction mergeAction = internalModelMap.get(dtoModel.getId());
+        mergeAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }

@@ -12,8 +12,8 @@ public class JsonMoveActionMapper implements IActionMapper<JsonMoveAction, MoveA
         return new MoveAction(
                 dtoModel.getId(),
                 dtoModel.getDropletId(),
-                dtoModel.getDestX(),
-                dtoModel.getDestY()
+                dtoModel.getPosX(),
+                dtoModel.getPosY()
         );
     }
 
@@ -22,14 +22,15 @@ public class JsonMoveActionMapper implements IActionMapper<JsonMoveAction, MoveA
         return new JsonMoveAction(
                 internalModel.getId(),
                 internalModel.getDropletId(),
-                internalModel.getDestX(),
-                internalModel.getDestY(),
+                internalModel.getPosX(),
+                internalModel.getPosY(),
                 internalModel.getNextAction().getId()
         );
     }
 
     @Override
     public void resolveReferences(JsonMoveAction dtoModel, HashMap<String, MoveAction> internalModelMap) {
-
+        MoveAction moveAction = internalModelMap.get(dtoModel.getId());
+        moveAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }

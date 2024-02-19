@@ -27,6 +27,7 @@ public class JsonMixActionMapper implements IActionMapper<JsonMixAction, MixActi
 
     @Override
     public void resolveReferences(JsonMixAction dtoModel, HashMap<String, MixAction> internalModelMap) {
-
+        MixAction mixAction = internalModelMap.get(dtoModel.getId());
+        mixAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
     }
 }
