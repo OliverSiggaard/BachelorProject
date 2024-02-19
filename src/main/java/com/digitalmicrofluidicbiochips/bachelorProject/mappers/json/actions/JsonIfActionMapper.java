@@ -29,7 +29,7 @@ public class JsonIfActionMapper implements IActionMapper<JsonIfAction, IfAction>
     @Override
     public void resolveReferences(JsonIfAction dtoModel, HashMap<String, IfAction> internalModelMap) {
         IfAction ifAction = internalModelMap.get(dtoModel.getId());
-        ifAction.setTrueNextAction(internalModelMap.get(dtoModel.getTrueNext()));
-        ifAction.setFalseNextAction(internalModelMap.get(dtoModel.getFalseNext()));
+        ifAction.setTrueNextAction(internalModelMap.get(dtoModel.getTrueNextActionId()));
+        ifAction.setFalseNextAction(internalModelMap.get(dtoModel.getFalseNextActionId()));
     }
 }

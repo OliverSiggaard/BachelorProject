@@ -1,4 +1,4 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.reader;
+package com.digitalmicrofluidicbiochips.bachelorProject.reader.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.*;
@@ -65,7 +65,7 @@ public class JsonActionModelReaderTests {
 
         JsonStartAction startAction = (JsonStartAction) actionBase;
         Assertions.assertEquals("unique_start_id", startAction.getId());
-        Assertions.assertEquals("next_unique_id_start", startAction.getNextActionId());
+        Assertions.assertEquals("unique_input_id", startAction.getNextActionId());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals(10, inputAction.getPosX());
         Assertions.assertEquals(20, inputAction.getPosY());
         Assertions.assertEquals(30, inputAction.getVolume());
-        Assertions.assertEquals("next_unique_id_input", inputAction.getNextActionId());
+        Assertions.assertEquals("unique_output_id", inputAction.getNextActionId());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id", outputAction.getDropletId());
         Assertions.assertEquals(30, outputAction.getPosX());
         Assertions.assertEquals(40, outputAction.getPosY());
-        Assertions.assertEquals("next_unique_id_output", outputAction.getNextActionId());
+        Assertions.assertEquals("unique_move_id", outputAction.getNextActionId());
     }
 
     @Test
@@ -129,7 +129,7 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id", moveAction.getDropletId());
         Assertions.assertEquals(50, moveAction.getPosX());
         Assertions.assertEquals(60, moveAction.getPosY());
-        Assertions.assertEquals("next_unique_id_move", moveAction.getNextActionId());
+        Assertions.assertEquals("unique_merge_id", moveAction.getNextActionId());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId2());
         Assertions.assertEquals(80, mergeAction.getPosX());
         Assertions.assertEquals(90, mergeAction.getPosY());
-        Assertions.assertEquals("next_unique_id_merge", mergeAction.getNextActionId());
+        Assertions.assertEquals("unique_split_id", mergeAction.getNextActionId());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals(110, splitAction.getPosY1());
         Assertions.assertEquals(120, splitAction.getPosX2());
         Assertions.assertEquals(130, splitAction.getPosY2());
-        Assertions.assertEquals("next_unique_id_split", splitAction.getNextActionId());
+        Assertions.assertEquals("unique_mix_id", splitAction.getNextActionId());
     }
 
     @Test
@@ -197,7 +197,7 @@ public class JsonActionModelReaderTests {
         JsonMixAction mixAction = (JsonMixAction) actionBase;
         Assertions.assertEquals("unique_mix_id", mixAction.getId());
         Assertions.assertEquals("unique_droplet_id", mixAction.getDropletId());
-        Assertions.assertEquals("next_unique_id_mix", mixAction.getNextActionId());
+        Assertions.assertEquals("unique_store_id", mixAction.getNextActionId());
     }
 
     @Test
@@ -219,7 +219,7 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals(140, storeAction.getPosX());
         Assertions.assertEquals(150, storeAction.getPosY());
         Assertions.assertEquals(10, storeAction.getTime());
-        Assertions.assertEquals("next_unique_id_store", storeAction.getNextActionId());
+        Assertions.assertEquals("unique_if_id", storeAction.getNextActionId());
     }
 
     @Test
@@ -238,8 +238,8 @@ public class JsonActionModelReaderTests {
         JsonIfAction ifAction = (JsonIfAction) actionBase;
         Assertions.assertEquals("unique_if_id", ifAction.getId());
         Assertions.assertEquals("sample_condition", ifAction.getCondition());
-        Assertions.assertEquals("next_true_unique_id_if", ifAction.getTrueNext());
-        Assertions.assertEquals("next_false_unique_id_if", ifAction.getFalseNext());
+        Assertions.assertEquals("unique_repeat_id", ifAction.getTrueNextActionId());
+        Assertions.assertEquals("unique_end_id", ifAction.getFalseNextActionId());
     }
 
     @Test
@@ -258,8 +258,8 @@ public class JsonActionModelReaderTests {
         JsonRepeatAction repeatAction = (JsonRepeatAction) actionBase;
         Assertions.assertEquals("unique_repeat_id", repeatAction.getId());
         Assertions.assertEquals(5, repeatAction.getRepeatCount());
-        Assertions.assertEquals("next_repeat_unique_id_repeat", repeatAction.getNextRepeatId());
-        Assertions.assertEquals("next_exit_unique_id_repeat", repeatAction.getNextExitId());
+        Assertions.assertEquals("unique_repeat_id", repeatAction.getRepeatNextActionId());
+        Assertions.assertEquals("unique_end_id", repeatAction.getExitNextActionId());
     }
 
     @Test

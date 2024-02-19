@@ -15,7 +15,7 @@
     {
       "action": "start",
       "id": "unique_start_id",
-      "next": "next_unique_id_start"
+      "next": "unique_input_id"
     },
     {
       "action": "input",
@@ -24,7 +24,7 @@
       "posX": 10,
       "posY": 20,
       "volume": 30,
-      "next": "next_unique_id_input"
+      "next": "unique_output_id"
     },
     {
       "action": "output",
@@ -32,7 +32,7 @@
       "dropletId": "unique_droplet_id",
       "posX": 30,
       "posY": 40,
-      "next": "next_unique_id_output"
+      "next": "unique_move_id"
     },
     {
       "action": "move",
@@ -40,7 +40,7 @@
       "dropletId": "unique_droplet_id",
       "posX": 50,
       "posY": 60,
-      "next": "next_unique_id_move"
+      "next": "unique_merge_id"
     },
     {
       "action": "merge",
@@ -50,7 +50,7 @@
       "dropletId2": "unique_droplet_id",
       "posX": 80,
       "posY": 90,
-      "next": "next_unique_id_merge"
+      "next": "unique_split_id"
     },
     {
       "action": "split",
@@ -63,13 +63,13 @@
       "posY1": 110,
       "posX2": 120,
       "posY2": 130,
-      "next": "next_unique_id_split"
+      "next": "unique_mix_id"
     },
     {
       "action": "mix",
       "id": "unique_mix_id",
       "dropletId": "unique_droplet_id",
-      "next": "next_unique_id_mix"
+      "next": "unique_store_id"
     },
     {
       "action": "store",
@@ -78,21 +78,21 @@
       "posX": 140,
       "posY": 150,
       "time": 10,
-      "next": "next_unique_id_store"
+      "next": "unique_if_id"
     },
     {
       "action": "if",
       "id": "unique_if_id",
       "condition": "sample_condition",
-      "trueNext": "next_true_unique_id_if",
-      "falseNext": "next_false_unique_id_if"
+      "trueNext": "unique_repeat_id",
+      "falseNext": "unique_end_id"
     },
     {
       "action": "repeat",
       "id": "unique_repeat_id",
       "times": 5,
-      "nextRepeat": "next_repeat_unique_id_repeat",
-      "nextExit": "next_exit_unique_id_repeat"
+      "nextRepeat": "unique_repeat_id",
+      "nextExit": "unique_end_id"
     },
     {
       "action": "end",

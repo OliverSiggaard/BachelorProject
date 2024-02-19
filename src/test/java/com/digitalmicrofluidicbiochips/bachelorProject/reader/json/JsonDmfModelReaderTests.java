@@ -1,7 +1,8 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.reader;
+package com.digitalmicrofluidicbiochips.bachelorProject.reader.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.dmf_platform.JsonDmfPlatformElectrode;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

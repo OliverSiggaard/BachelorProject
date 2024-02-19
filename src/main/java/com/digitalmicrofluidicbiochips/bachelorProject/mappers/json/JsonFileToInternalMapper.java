@@ -9,7 +9,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.PlatformInformation;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.reader.JsonModelLoader;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
 
 import java.io.IOException;
 import java.util.HashMap;

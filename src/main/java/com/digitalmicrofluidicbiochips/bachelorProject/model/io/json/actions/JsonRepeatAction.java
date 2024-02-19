@@ -10,8 +10,8 @@ import lombok.Getter;
 @Getter
 public class JsonRepeatAction extends JsonActionBase {
     private final int repeatCount;
-    private final String nextRepeatId;
-    private final String nextExitId;
+    private final String RepeatNextActionId;
+    private final String exitNextActionId;
 
     @JsonCreator
     public JsonRepeatAction(
@@ -22,8 +22,8 @@ public class JsonRepeatAction extends JsonActionBase {
     ) {
         super(id);
         this.repeatCount = repeatCount;
-        this.nextRepeatId = nextRepeatId;
-        this.nextExitId = nextExitId;
+        this.RepeatNextActionId = nextRepeatId;
+        this.exitNextActionId = nextExitId;
     }
 
 }

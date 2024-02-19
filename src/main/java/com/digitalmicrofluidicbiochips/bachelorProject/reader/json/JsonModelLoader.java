@@ -1,4 +1,4 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.reader;
+package com.digitalmicrofluidicbiochips.bachelorProject.reader.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;

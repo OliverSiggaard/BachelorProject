@@ -1,4 +1,4 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json;
+package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.factory.JsonActionMapperFactory;

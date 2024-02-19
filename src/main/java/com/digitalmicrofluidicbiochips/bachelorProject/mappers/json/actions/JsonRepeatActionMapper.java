@@ -29,7 +29,7 @@ public class JsonRepeatActionMapper implements IActionMapper<JsonRepeatAction, R
     @Override
     public void resolveReferences(JsonRepeatAction dtoModel, HashMap<String, RepeatAction> internalModelMap) {
         RepeatAction repeatAction = internalModelMap.get(dtoModel.getId());
-        repeatAction.setNextRepeatAction(internalModelMap.get(dtoModel.getNextRepeatId()));
-        repeatAction.setNextExitAction(internalModelMap.get(dtoModel.getNextExitId()));
+        repeatAction.setNextRepeatAction(internalModelMap.get(dtoModel.getRepeatNextActionId()));
+        repeatAction.setNextExitAction(internalModelMap.get(dtoModel.getExitNextActionId()));
     }
 }

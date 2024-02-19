@@ -10,8 +10,8 @@ import lombok.Getter;
 @Getter
 public class JsonIfAction extends JsonActionBase {
     private final String condition;
-    private final String trueNext;
-    private final String falseNext;
+    private final String trueNextActionId;
+    private final String falseNextActionId;
 
     @JsonCreator
     public JsonIfAction(
@@ -22,8 +22,8 @@ public class JsonIfAction extends JsonActionBase {
     ) {
         super(id);
         this.condition = condition;
-        this.trueNext = trueNext;
-        this.falseNext = falseNext;
+        this.trueNextActionId = trueNext;
+        this.falseNextActionId = falseNext;
     }
 
 }
