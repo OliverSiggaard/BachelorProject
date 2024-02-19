@@ -1,4 +1,6 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.model;
+package com.digitalmicrofluidicbiochips.bachelorProject;
+
+import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 
 public class Executor {
 

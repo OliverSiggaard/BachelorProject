@@ -1,7 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.JsonFileToInternalMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.Executor;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
