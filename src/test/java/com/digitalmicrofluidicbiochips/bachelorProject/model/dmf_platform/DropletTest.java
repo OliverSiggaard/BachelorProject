@@ -14,7 +14,7 @@ public class DropletTest {
         assertEquals(20, droplet.getPositionX());
         assertEquals(40, droplet.getPositionY());
         assertEquals(0.2, droplet.getVolume());
-        assertEquals(0.022568, droplet.getDiameter(), 0.0001); // Tests diameter calculation
+        assertEquals(23, droplet.getDiameter()); // Tests diameter calculation
     }
 
     @Test
@@ -23,6 +23,6 @@ public class DropletTest {
         droplet.setVolume(0.3);
 
         assertEquals(0.3, droplet.getVolume());
-        assertEquals(0.02764, droplet.getDiameter(), 0.0001); // Tests diameter calculation
+        assertEquals(28, droplet.getDiameter()); // Tests diameter calculation
     }
 }
