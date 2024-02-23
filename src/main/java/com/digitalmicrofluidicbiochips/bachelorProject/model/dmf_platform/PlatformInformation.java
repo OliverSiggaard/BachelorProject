@@ -22,6 +22,7 @@ public class PlatformInformation {
     // TODO: Information Actuators?
     // TODO: Information about sensors?
     // TODO: Information about input/output?
+    // TODO: Information about height to top glass for calculating droplet diameter?
 
     public PlatformInformation(int sizeX, int sizeY, List<Electrode> electrodes) {
         this.sizeX = sizeX;

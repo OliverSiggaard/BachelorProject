@@ -15,10 +15,10 @@ public class Executor {
     /* TODO:
      *  The chip electrodes should be represented as a 2D array of references to the electrodes.
      *  This should prob. be in its own class, that takes a List<Electrode> in the constructor.
-     *  Should be solvable by inserting into a Map of Lists, where the key is the x, and the lists all electrodes at that x.
+     *  Should be solvable by inserting into a Map of Lists, where the key is the x, and then lists all electrodes at that x value.
      *  The "grid" can then be deducted by sorting the lists by y, and the map by x - Or something like that.
      *  Unit tests should be written for this, to ensure that the grid is correctly constructed.
-     *  Maybe the grid should even be refferences to a "grid-cell" that then have a reference to the electrode in the cell.
+     *  Maybe the grid should even be references to a "grid-cell" that then have a reference to the electrode in the cell.
      *  This allows for us to assign more states to the cell, eg. if a droplet has its top left corner in the cell, etc.
      *  A PrettyPrint method should prob. be implemented, to visualize the state of the grid in the console.
      *
@@ -31,7 +31,7 @@ public class Executor {
 
     //Representation of the droplets. (+ droplets on board)
     /* TODO:
-     *  Radius of droplet has to be calculated from the volume. See comment in the bottom of the Droplet class.
+     *  Diameter of droplet has to be calculated from the volume. See comment in the bottom of the Droplet class.
      *  Luca agreed, that we just took Wenje's code.
      *
      * TODO:

@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 public class ProgramConfiguration {
 
-    private final PlatformInformation initialDmfState;
+    private final PlatformInformation platformInformation;
     private final List<ActionBase> programActions;
 
-    public ProgramConfiguration(PlatformInformation initialDmfState, List<ActionBase> programActions) {
-        this.initialDmfState = initialDmfState;
+    public ProgramConfiguration(PlatformInformation platformInformation, List<ActionBase> programActions) {
+        this.platformInformation = platformInformation;
         this.programActions = programActions;
     }
 }
