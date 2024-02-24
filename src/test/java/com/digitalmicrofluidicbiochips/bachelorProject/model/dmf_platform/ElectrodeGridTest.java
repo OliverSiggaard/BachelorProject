@@ -18,7 +18,7 @@ class ElectrodeGridTest {
     void setUp() {
         ProgramConfiguration programConfiguration = mock(ProgramConfiguration.class);
         PlatformInformation platformInformation = mock(PlatformInformation.class);
-        List<Electrode> electrodes = getMockElectrodes();
+        List<Electrode> electrodes = createMockElectrodes();
 
         when(programConfiguration.getPlatformInformation()).thenReturn(platformInformation);
 
@@ -40,28 +40,97 @@ class ElectrodeGridTest {
     @Test
     void testElectrodesAreOrderedCorrectly() {
         // Electrodes should be in an (x,y) format
-        assertEquals(getMockElectrodes().get(0).getElectrodeID(), electrodeGrid.getGrid()[0][0].getElectrodeID());
-        assertEquals(getMockElectrodes().get(1).getElectrodeID(), electrodeGrid.getGrid()[1][0].getElectrodeID());
-        assertEquals(getMockElectrodes().get(4).getElectrodeID(), electrodeGrid.getGrid()[1][1].getElectrodeID());
-        assertEquals(getMockElectrodes().get(8).getElectrodeID(), electrodeGrid.getGrid()[2][2].getElectrodeID());
+        assertEquals(createMockElectrodes().get(0).getElectrodeID(), electrodeGrid.getGrid()[0][0].getElectrodeID());
+        assertEquals(createMockElectrodes().get(1).getElectrodeID(), electrodeGrid.getGrid()[1][0].getElectrodeID());
+        assertEquals(createMockElectrodes().get(4).getElectrodeID(), electrodeGrid.getGrid()[1][1].getElectrodeID());
+        assertEquals(createMockElectrodes().get(8).getElectrodeID(), electrodeGrid.getGrid()[2][2].getElectrodeID());
+    }
+
+
+    @Test
+    void testGetCorrectElectrodesFromDroplet_smallerDroplet() {
+        Droplet droplet = new Droplet(1, "Water", 20, 20, 0.1);
+
+        // Get electrodes that the droplet is touching
+        List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
+
+        // This droplet should only touch the center electrode which is (1,1) with electrodeID 105.
+        assertEquals(1, dropletElectrodes.size());
+        assertEquals(105, dropletElectrodes.getFirst().getElectrodeID());
     }
 
     @Test
-    void testGetCorrectElectrodesFromValidDroplet() {
+    void testGetCorrectElectrodesFromDroplet_biggerDroplet() {
         Droplet droplet = new Droplet(1, "Water", 20, 20, 0.3);
 
         List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
 
         // This droplet should take up 4 electrodes with the top left corner at pos (20,20), which is electrode (1,1).
         // That is that the droplet electrodes should have the electrodeID's {105, 106, 108, 109}
+        assertEquals(4, dropletElectrodes.size());
         assertEquals(105, dropletElectrodes.get(0).getElectrodeID());
         assertEquals(106, dropletElectrodes.get(1).getElectrodeID());
         assertEquals(108, dropletElectrodes.get(2).getElectrodeID());
         assertEquals(109, dropletElectrodes.get(3).getElectrodeID());
     }
 
-    // Helper method creating a list of mock electrodes used for creating the grid
-    public static List<Electrode> getMockElectrodes() {
+    @Test
+    void testGetDropletElectrodes_edgeCaseDiameterCausesOverflow() {
+        Droplet droplet = new Droplet(1, "Water", 40, 40, 0.3);
+
+        List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
+
+        // This droplet should take up 4 electrodes, but since the top left corner of the droplet is already in the
+        // bottom left corner electrode (2,2), the diameter will cause overflow but only one electrode is returned
+        assertEquals(1, dropletElectrodes.size());
+        assertEquals(109, dropletElectrodes.getFirst().getElectrodeID());
+    }
+
+
+    @Test
+    void testSafeAreaElectrodes() {
+        Droplet droplet = new Droplet(1, "Water", 20, 20, 0.1);
+
+        // Get electrodes that the droplet is touching + safe area around droplet
+        List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
+
+        // This droplet should only touch the center electrode which is (1,1) with electrodeID 105.
+        // The safe area should be all droplets around it, which is all droplets in the grid (9).
+        assertEquals(9, dropletElectrodes.size());
+    }
+
+    @Test
+    void testSafeAreaElectrodes_edgeCaseTopLeftCorner() {
+        Droplet droplet = new Droplet(1, "Water", 0, 0, 0.1);
+
+        List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
+
+        // Droplet should only touch top left corner electrode (0,0), with electrodeID 101.
+        // The safe area should consist of electrodeID's 102, 104 and 105
+        assertEquals(4, dropletElectrodes.size());
+        assertEquals(101, dropletElectrodes.get(0).getElectrodeID());
+        assertEquals(102, dropletElectrodes.get(1).getElectrodeID());
+        assertEquals(104, dropletElectrodes.get(2).getElectrodeID());
+        assertEquals(105, dropletElectrodes.get(3).getElectrodeID());
+    }
+
+    @Test
+    void testSafeAreaElectrodes_edgeCaseBottomRightCorner() {
+        Droplet droplet = new Droplet(1, "Water", 40, 40, 0.1);
+
+        List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
+
+        // Droplet should only touch bottom right corner electrode (2,2), with electrodeID 109.
+        // The safe area should consist of electrodeID's 105, 106 and 108
+        assertEquals(4, dropletElectrodes.size());
+        assertEquals(105, dropletElectrodes.get(0).getElectrodeID());
+        assertEquals(106, dropletElectrodes.get(1).getElectrodeID());
+        assertEquals(108, dropletElectrodes.get(2).getElectrodeID());
+        assertEquals(109, dropletElectrodes.get(3).getElectrodeID());
+    }
+
+
+    public static List<Electrode> createMockElectrodes() {
         List<Electrode> electrodes = new ArrayList<>();
 
         electrodes.add(new Electrode("Electrode1", 1, 101, 201, 0, 0, 20, 20, 0));

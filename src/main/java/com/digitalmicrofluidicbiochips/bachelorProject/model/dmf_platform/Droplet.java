@@ -55,7 +55,7 @@ public class Droplet {
 
     // TODO: From Wenje's report we get that the height is about 500 micrometers (converted to meters for the calculation).
     // TODO: Wenje's code for calculating droplet: https://github.com/gggdttt/BioGo/blob/main/Executor/Model/Droplet.cs
-    // Height to glass
+    // Height to glass (in meters)
     private final double heightToGlass = 0.0005;
 
     private int getMillimeterDiameterFromVol() {
