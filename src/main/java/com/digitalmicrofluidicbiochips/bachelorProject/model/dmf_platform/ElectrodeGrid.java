@@ -1,17 +1,19 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This is a representation of the grid of electrodes of the Biochip.
  * Electrodes are placed in an m * n grid.
  */
-
 public class ElectrodeGrid {
 
     private final ProgramConfiguration programConfiguration;
+    @Getter
     private Electrode[][] grid;
     private int electrodeSizeX, electrodeSizeY;
 
@@ -34,33 +36,50 @@ public class ElectrodeGrid {
 
         // Construct m * n grid of electrodes
         if (platformSizeX % electrodeSizeX == 0 && platformSizeY % electrodeSizeY == 0) {
-            int m = (platformSizeX / electrodeSizeX) - 1;
-            int n = (platformSizeY / electrodeSizeY) - 1;
+            int xMax = (platformSizeX / electrodeSizeX);
+            int yMax = (platformSizeY / electrodeSizeY);
 
-            // Construct Biochip representation from electrodes
-            grid = new Electrode[m][n];
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    int currentElectrodeIndex = i * m + j;
-                    grid[i][j] = electrodes.get(currentElectrodeIndex);
+            // Grid will be Electrode[x][y]
+            grid = new Electrode[xMax][yMax];
+            for (int y = 0; y < yMax; y++) {
+                for (int x = 0; x < xMax; x++) {
+                    int currentElectrodeIndex = y * xMax + x;
+                    grid[x][y] = electrodes.get(currentElectrodeIndex);
                 }
             }
         } else {
             /*
                 TODO: Handle if platform size is not directly divisible by electrode size.
                  This can happen if electrodes have different sizes (which we will not handle),
-                 but it also includes if there is space between the individual electrodes.
+                 but it can also happen if there is space between the individual electrodes.
              */
             System.out.println("Platform size not directly divisible by electrode size");
         }
     }
 
-    // TODO: We need to change this method to return a list/array of all electrodes that the droplet is currently on,
-    //  we can also make a similar method that gets the electrodes that the droplet is on + the "safety area"
-    /*
-    public Electrode getElectrodeFromCoords(int xCoord, int yCoord, int diameter) {
-        // TODO: Handle edge cases e.g. 60/20 if there platform size x is 60. (out of bounds).
-        return grid[xCoord / electrodeSizeX][yCoord / electrodeSizeY];
+    // Returns all electrodes that the droplet is touching
+    // TODO: Handle edge cases (if dropletPosition is 60 and electrodeSizeX is 20 then it will return 3 but in fact it is the border of 2 and 3 might not exist (on a very small board).
+    //  What about literal edge cases where a droplet is up against the border of electrode grid, can it happen that the pos + diameter can cause out of bounds (literally).
+    public List<Electrode> getElectrodesFromDroplet(Droplet droplet) {
+        // Electrode at top left corner of droplet
+        int x1 = droplet.getPositionX() / electrodeSizeX;
+        int y1 = droplet.getPositionY() / electrodeSizeY;
+
+        // Electrode at bottom right corner of droplet
+        int x2 = (droplet.getPositionX() + droplet.getDiameter()) / electrodeSizeX;
+        int y2 = (droplet.getPositionY() + droplet.getDiameter()) / electrodeSizeY;
+
+        List<Electrode> dropletElectrodes = new ArrayList<>();
+
+        for (int y = y1; y <= y2; y++) {
+            for (int x = x1; x <= x2; x++) {
+                dropletElectrodes.add(grid[x][y]);
+            }
+        }
+
+        return dropletElectrodes;
     }
-     */
+
+    // TODO: Should have a method for getting the droplet electrodes + the safe space
+    //  The logic for the method above can possibly be used again (extract)
 }
