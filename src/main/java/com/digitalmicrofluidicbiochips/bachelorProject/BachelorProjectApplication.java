@@ -26,9 +26,8 @@ public class BachelorProjectApplication {
 		return "Hello from Spring Boot!";
 	}
 
-
 	/**
-	 * Showcase of how to load in the data, and then create a executor, to execute the program.
+	 * Showcase of how to load in the data, and then create an executor, to execute the program.
 	 * For now, the program is loaded directly from hardcoded JSON files, but in the future,
 	 * this will of cause be loaded from the frontend (by sending it to the backend, using Spring Boot).
 	 */
