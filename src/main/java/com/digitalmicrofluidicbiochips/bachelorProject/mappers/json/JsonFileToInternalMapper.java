@@ -6,14 +6,18 @@ import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.dmf_platform
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.factory.JsonActionMapperFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.PlatformInformation;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonActionBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonInputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Main access point for the JSON file to internal model mapping.
@@ -57,10 +61,15 @@ public class JsonFileToInternalMapper implements IFileToInternalMapper {
             actionMap.put(action.getId(), action);
         });
 
+        //Creating a list of all the droplets from the json input actions.
+        List<Droplet> dropletList = getDropletsFromJsonInputActions(JsonActions);
+        Map<String, Droplet> dropletMap = dropletList.stream()
+                .collect(Collectors.toMap(Droplet::getID, droplet -> droplet));
+
         //Resolving the next actions for all the internal actions. The JsonActions are required to resolve the next actions.
         JsonActions.forEach(jsonAction -> {
             IActionMapper mapper = JsonActionMapperFactory.getMapper(jsonAction.getClass());
-            mapper.resolveReferences(jsonAction, actionMap);
+            mapper.resolveReferences(jsonAction, actionMap, dropletMap);
         });
 
         return actionMap.values().stream().toList();
@@ -85,6 +94,18 @@ public class JsonFileToInternalMapper implements IFileToInternalMapper {
         JsonDmfInformationMapper mapper = new JsonDmfInformationMapper();
 
         return mapper.mapToInternal(dmfProgramConfiguration.getDmfPlatformState());
+    }
+
+
+
+    private List<Droplet> getDropletsFromJsonInputActions(List<JsonActionBase> actions) {
+        return actions.stream()
+                .filter(a -> a instanceof JsonInputAction)
+                .map( a -> {
+                    JsonInputAction jsonInputAction = (JsonInputAction) a;
+                    return new Droplet(jsonInputAction.getDropletId(), jsonInputAction.getPosX(), jsonInputAction.getPosY(), jsonInputAction.getVolume());
+                })
+                .collect(Collectors.toList());
     }
 
 

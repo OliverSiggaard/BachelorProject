@@ -1,30 +1,53 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 public class StoreAction extends ActionBase {
 
-    private final String dropletId;
     private final int posX;
     private final int posY;
     private final int time;
 
     @Setter
     private ActionBase nextAction = null;
-
+    @Setter
+    private Droplet droplet = null;
     public StoreAction(
             String id,
-            String dropletId,
             int posX,
             int posY,
             int time
     ) {
         super(id);
-        this.dropletId = dropletId;
         this.posX = posX;
         this.posY = posY;
         this.time = time;
+    }
+
+    @Override
+    public Set<Droplet> affectedDroplets() {
+        return new HashSet<>(Set.of(droplet));
+    }
+
+    @Override
+    public void beforeExecution() {
+        droplet.setStatus(DropletStatus.UNAVAILABLE);
+    }
+
+    @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void afterExecution() {
+        droplet.setStatus(DropletStatus.AVAILABLE);
     }
 }

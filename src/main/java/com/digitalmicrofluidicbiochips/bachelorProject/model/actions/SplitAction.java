@@ -1,14 +1,16 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 public class SplitAction extends ActionBase {
 
-    private final String originDroplet;
-    private final String resultDroplet1;
-    private final String resultDroplet2;
     private final double ratio;
     private final int posX1;
     private final int posY1;
@@ -17,12 +19,15 @@ public class SplitAction extends ActionBase {
 
     @Setter
     private ActionBase nextAction = null;
+    @Setter
+    private Droplet originDroplet = null;
+    @Setter
+    private Droplet resultDroplet1 = null;
+    @Setter
+    private Droplet resultDroplet2 = null;
 
     public SplitAction(
             String id,
-            String originDroplet,
-            String resultDroplet1,
-            String resultDroplet2,
             double ratio,
             int posX1,
             int posY1,
@@ -30,13 +35,34 @@ public class SplitAction extends ActionBase {
             int posY2
     ) {
         super(id);
-        this.originDroplet = originDroplet;
-        this.resultDroplet1 = resultDroplet1;
-        this.resultDroplet2 = resultDroplet2;
         this.ratio = ratio;
         this.posX1 = posX1;
         this.posY1 = posY1;
         this.posX2 = posX2;
         this.posY2 = posY2;
+    }
+
+    @Override
+    public Set<Droplet> affectedDroplets() {
+        return new HashSet<>(Set.of(originDroplet, resultDroplet1, resultDroplet2));
+    }
+
+    @Override
+    public void beforeExecution() {
+        originDroplet.setStatus(DropletStatus.UNAVAILABLE);
+        resultDroplet1.setStatus(DropletStatus.UNAVAILABLE);
+        resultDroplet2.setStatus(DropletStatus.UNAVAILABLE);
+    }
+
+    @Override
+    public void execute() {
+
+    }
+
+    @Override
+    public void afterExecution() {
+        originDroplet.setStatus(DropletStatus.CONSUMED);
+        resultDroplet1.setStatus(DropletStatus.AVAILABLE);
+        resultDroplet2.setStatus(DropletStatus.AVAILABLE);
     }
 }

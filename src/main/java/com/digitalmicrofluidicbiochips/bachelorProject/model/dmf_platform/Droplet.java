@@ -13,10 +13,7 @@ import lombok.Setter;
 public class Droplet {
 
     // A unique integer ID identifying the element
-    private final int ID;
-
-    // The name of the substance in the droplet
-    private final String substance_name;
+    private final String ID;
 
     // The X coordinate of the top-left corner of the droplet.
     @Setter
@@ -32,19 +29,21 @@ public class Droplet {
     // Calculated from the volume of the droplet, assuming cylindrical size of the droplet.
     private int diameter;
 
+    @Setter
+    private DropletStatus status;
+
     public Droplet(
-            int ID,
-            String substance_name,
+            String ID,
             int positionX,
             int positionY,
             double volume
     ) {
         this.ID = ID;
-        this.substance_name = substance_name;
         this.positionX = positionX;
         this.positionY = positionY;
         this.volume = volume;
         this.diameter = getMillimeterDiameterFromVol();
+        this.status = DropletStatus.NOT_CREATED;
     }
 
     // We need a custom method for setting volume as this will also affect the droplets diameter

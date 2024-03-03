@@ -49,7 +49,7 @@ class ElectrodeGridTest {
 
     @Test
     void testGetCorrectElectrodesFromDroplet_smallerDroplet() {
-        Droplet droplet = new Droplet(1, "Water", 20, 20, 0.1);
+        Droplet droplet = new Droplet("1", 20, 20, 0.1);
 
         // Get electrodes that the droplet is touching
         List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
@@ -61,7 +61,7 @@ class ElectrodeGridTest {
 
     @Test
     void testGetCorrectElectrodesFromDroplet_biggerDroplet() {
-        Droplet droplet = new Droplet(1, "Water", 20, 20, 0.3);
+        Droplet droplet = new Droplet("1", 20, 20, 0.3);
 
         List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
 
@@ -76,7 +76,7 @@ class ElectrodeGridTest {
 
     @Test
     void testGetDropletElectrodes_edgeCaseDiameterCausesOverflow() {
-        Droplet droplet = new Droplet(1, "Water", 40, 40, 0.3);
+        Droplet droplet = new Droplet("1", 40, 40, 0.3);
 
         List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
 
@@ -89,7 +89,7 @@ class ElectrodeGridTest {
 
     @Test
     void testSafeAreaElectrodes() {
-        Droplet droplet = new Droplet(1, "Water", 20, 20, 0.1);
+        Droplet droplet = new Droplet("1", 20, 20, 0.1);
 
         // Get electrodes that the droplet is touching + safe area around droplet
         List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
@@ -101,7 +101,7 @@ class ElectrodeGridTest {
 
     @Test
     void testSafeAreaElectrodes_edgeCaseTopLeftCorner() {
-        Droplet droplet = new Droplet(1, "Water", 0, 0, 0.1);
+        Droplet droplet = new Droplet("1", 0, 0, 0.1);
 
         List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
 
@@ -116,7 +116,7 @@ class ElectrodeGridTest {
 
     @Test
     void testSafeAreaElectrodes_edgeCaseBottomRightCorner() {
-        Droplet droplet = new Droplet(1, "Water", 40, 40, 0.1);
+        Droplet droplet = new Droplet("1", 40, 40, 0.1);
 
         List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
 

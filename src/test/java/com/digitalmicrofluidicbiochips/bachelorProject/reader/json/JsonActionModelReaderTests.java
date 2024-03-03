@@ -170,9 +170,9 @@ public class JsonActionModelReaderTests {
 
         JsonSplitAction splitAction = (JsonSplitAction) actionBase;
         Assertions.assertEquals("unique_split_id", splitAction.getId());
-        Assertions.assertEquals("unique_droplet_id", splitAction.getOriginDroplet());
-        Assertions.assertEquals("unique_droplet_id", splitAction.getResultDroplet1());
-        Assertions.assertEquals("unique_droplet_id", splitAction.getResultDroplet2());
+        Assertions.assertEquals("unique_droplet_id", splitAction.getOriginDropletId());
+        Assertions.assertEquals("unique_droplet_id", splitAction.getResultDropletId1());
+        Assertions.assertEquals("unique_droplet_id", splitAction.getResultDropletId2());
         Assertions.assertEquals(0.2, splitAction.getRatio());
         Assertions.assertEquals(100, splitAction.getPosX1());
         Assertions.assertEquals(110, splitAction.getPosY1());

@@ -2,9 +2,11 @@ package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.IfAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonIfAction;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class JsonIfActionMapper implements IActionMapper<JsonIfAction, IfAction> {
 
@@ -27,9 +29,12 @@ public class JsonIfActionMapper implements IActionMapper<JsonIfAction, IfAction>
     }
 
     @Override
-    public void resolveReferences(JsonIfAction dtoModel, HashMap<String, IfAction> internalModelMap) {
+    public void resolveReferences(JsonIfAction dtoModel, Map<String, IfAction> internalModelMap, Map<String, Droplet> dropletMap) {
         IfAction ifAction = internalModelMap.get(dtoModel.getId());
+
         ifAction.setTrueNextAction(internalModelMap.get(dtoModel.getTrueNextActionId()));
         ifAction.setFalseNextAction(internalModelMap.get(dtoModel.getFalseNextActionId()));
+
+        // No droplets to resolve on IfAction
     }
 }

@@ -2,9 +2,10 @@ package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.SplitAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonSplitAction;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, SplitAction> {
 
@@ -12,9 +13,6 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
     public SplitAction mapToInternalModel(JsonSplitAction dtoModel) {
         return new SplitAction(
                 dtoModel.getId(),
-                dtoModel.getOriginDroplet(),
-                dtoModel.getResultDroplet1(),
-                dtoModel.getResultDroplet2(),
                 dtoModel.getRatio(),
                 dtoModel.getPosX1(),
                 dtoModel.getPosY1(),
@@ -27,9 +25,9 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
     public JsonSplitAction mapToDtoModel(SplitAction internalModel) {
         return new JsonSplitAction(
                 internalModel.getId(),
-                internalModel.getOriginDroplet(),
-                internalModel.getResultDroplet1(),
-                internalModel.getResultDroplet2(),
+                internalModel.getOriginDroplet().getID(),
+                internalModel.getResultDroplet1().getID(),
+                internalModel.getResultDroplet2().getID(),
                 internalModel.getRatio(),
                 internalModel.getPosX1(),
                 internalModel.getPosY1(),
@@ -40,8 +38,13 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
     }
 
     @Override
-    public void resolveReferences(JsonSplitAction dtoModel, HashMap<String, SplitAction> internalModelMap) {
+    public void resolveReferences(JsonSplitAction dtoModel, Map<String, SplitAction> internalModelMap, Map<String, Droplet> dropletMap) {
         SplitAction splitAction = internalModelMap.get(dtoModel.getId());
+
         splitAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
+
+        splitAction.setOriginDroplet(dropletMap.get(dtoModel.getOriginDropletId()));
+        splitAction.setResultDroplet1(dropletMap.get(dtoModel.getResultDropletId1()));
+        splitAction.setResultDroplet2(dropletMap.get(dtoModel.getResultDropletId2()));
     }
 }

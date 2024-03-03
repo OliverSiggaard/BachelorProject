@@ -2,9 +2,11 @@ package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.InputAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonInputAction;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class JsonInputActionMapper implements IActionMapper<JsonInputAction, InputAction> {
 
@@ -12,7 +14,6 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
     public InputAction mapToInternalModel(JsonInputAction dtoModel) {
         return new InputAction(
                 dtoModel.getId(),
-                dtoModel.getDropletId(),
                 dtoModel.getPosX(),
                 dtoModel.getPosY(),
                 dtoModel.getVolume()
@@ -23,7 +24,7 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
     public JsonInputAction mapToDtoModel(InputAction internalModel) {
         return new JsonInputAction(
                 internalModel.getId(),
-                internalModel.getDropletId(),
+                internalModel.getDroplet().getID(),
                 internalModel.getPosX(),
                 internalModel.getPosY(),
                 internalModel.getVolume(),
@@ -32,8 +33,11 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
     }
 
     @Override
-    public void resolveReferences(JsonInputAction dtoModel, HashMap<String, InputAction> internalModelMap) {
+    public void resolveReferences(JsonInputAction dtoModel, Map<String, InputAction> internalModelMap, Map<String, Droplet> dropletMap) {
         InputAction inputAction = internalModelMap.get(dtoModel.getId());
+
         inputAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
+
+        inputAction.setDroplet(dropletMap.get(dtoModel.getDropletId()));
     }
 }

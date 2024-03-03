@@ -59,11 +59,11 @@ public class JsonActionMapperFactoryTests {
 
         InputAction inputAction = (InputAction) action;
         Assertions.assertEquals(id, inputAction.getId());
-        Assertions.assertEquals(dropletId, inputAction.getDropletId());
         Assertions.assertEquals(posX, inputAction.getPosX());
         Assertions.assertEquals(posY, inputAction.getPosY());
         Assertions.assertEquals(volume, inputAction.getVolume());
         Assertions.assertNull(inputAction.getNextAction());
+        Assertions.assertNull(inputAction.getDroplet());
     }
 
     @Test
@@ -87,10 +87,10 @@ public class JsonActionMapperFactoryTests {
 
         OutputAction outputAction = (OutputAction) action;
         Assertions.assertEquals(id, outputAction.getId());
-        Assertions.assertEquals(dropletId, outputAction.getDropletId());
         Assertions.assertEquals(posX, outputAction.getPosX());
         Assertions.assertEquals(posY, outputAction.getPosY());
         Assertions.assertNull(outputAction.getNextAction());
+        Assertions.assertNull(outputAction.getDroplet());
     }
 
     @Test
@@ -114,10 +114,10 @@ public class JsonActionMapperFactoryTests {
 
         MoveAction moveAction = (MoveAction) action;
         Assertions.assertEquals(id, moveAction.getId());
-        Assertions.assertEquals(dropletId, moveAction.getDropletId());
         Assertions.assertEquals(posX, moveAction.getPosX());
         Assertions.assertEquals(posY, moveAction.getPosY());
         Assertions.assertNull(moveAction.getNextAction());
+        Assertions.assertNull(moveAction.getDroplet());
     }
 
     @Test
@@ -143,12 +143,12 @@ public class JsonActionMapperFactoryTests {
 
         MergeAction mergeAction = (MergeAction) action;
         Assertions.assertEquals(id, mergeAction.getId());
-        Assertions.assertEquals(resultDropletId, mergeAction.getResultDropletId());
-        Assertions.assertEquals(dropletId1, mergeAction.getDropletId1());
-        Assertions.assertEquals(dropletId2, mergeAction.getDropletId2());
         Assertions.assertEquals(posX, mergeAction.getPosX());
         Assertions.assertEquals(posY, mergeAction.getPosY());
         Assertions.assertNull(mergeAction.getNextAction());
+        Assertions.assertNull(mergeAction.getResultDroplet());
+        Assertions.assertNull(mergeAction.getDroplet1());
+        Assertions.assertNull(mergeAction.getDroplet2());
     }
 
     @Test
@@ -177,15 +177,15 @@ public class JsonActionMapperFactoryTests {
 
         SplitAction splitAction = (SplitAction) action;
         Assertions.assertEquals(id, splitAction.getId());
-        Assertions.assertEquals(originDropletId, splitAction.getOriginDroplet());
-        Assertions.assertEquals(resultDropletId1, splitAction.getResultDroplet1());
-        Assertions.assertEquals(resultDropletId2, splitAction.getResultDroplet2());
         Assertions.assertEquals(splitRatio, splitAction.getRatio());
         Assertions.assertEquals(posX1, splitAction.getPosX1());
         Assertions.assertEquals(posY1, splitAction.getPosY1());
         Assertions.assertEquals(posX2, splitAction.getPosX2());
         Assertions.assertEquals(posY2, splitAction.getPosY2());
         Assertions.assertNull(splitAction.getNextAction());
+        Assertions.assertNull(splitAction.getOriginDroplet());
+        Assertions.assertNull(splitAction.getResultDroplet1());
+        Assertions.assertNull(splitAction.getResultDroplet2());
     }
 
     @Test
@@ -207,8 +207,8 @@ public class JsonActionMapperFactoryTests {
 
         MixAction mixAction = (MixAction) action;
         Assertions.assertEquals(id, mixAction.getId());
-        Assertions.assertEquals(dropletId, mixAction.getDropletId());
         Assertions.assertNull(mixAction.getNextAction());
+        Assertions.assertNull(mixAction.getDroplet());
     }
 
     @Test
@@ -233,11 +233,11 @@ public class JsonActionMapperFactoryTests {
 
         StoreAction storeAction = (StoreAction) action;
         Assertions.assertEquals(id, storeAction.getId());
-        Assertions.assertEquals(dropletId, storeAction.getDropletId());
         Assertions.assertEquals(posX, storeAction.getPosX());
         Assertions.assertEquals(posY, storeAction.getPosY());
         Assertions.assertEquals(time, storeAction.getTime());
         Assertions.assertNull(storeAction.getNextAction());
+        Assertions.assertNull(storeAction.getDroplet());
     }
 
     @Test

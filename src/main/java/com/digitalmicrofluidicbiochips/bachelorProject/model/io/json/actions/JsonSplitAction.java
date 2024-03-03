@@ -10,9 +10,9 @@ import lombok.Getter;
 @Getter
 public class JsonSplitAction extends JsonActionBase {
 
-    private final String originDroplet;
-    private final String resultDroplet1;
-    private final String resultDroplet2;
+    private final String originDropletId;
+    private final String resultDropletId1;
+    private final String resultDropletId2;
     private final double ratio;
     private final int posX1;
     private final int posY1;
@@ -34,9 +34,9 @@ public class JsonSplitAction extends JsonActionBase {
             @JsonProperty("next") String nextActionId
     ) {
         super(id);
-        this.originDroplet = originDroplet;
-        this.resultDroplet1 = resultDroplet1;
-        this.resultDroplet2 = resultDroplet2;
+        this.originDropletId = originDroplet;
+        this.resultDropletId1 = resultDroplet1;
+        this.resultDropletId2 = resultDroplet2;
         this.ratio = ratio;
         this.posX1 = posX1;
         this.posY1 = posY1;
