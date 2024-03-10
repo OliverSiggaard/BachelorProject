@@ -42,27 +42,4 @@ public class SplitAction extends ActionBase {
         this.posY2 = posY2;
     }
 
-    @Override
-    public Set<Droplet> affectedDroplets() {
-        return new HashSet<>(Set.of(originDroplet, resultDroplet1, resultDroplet2));
-    }
-
-    @Override
-    public void beforeExecution() {
-        originDroplet.setStatus(DropletStatus.UNAVAILABLE);
-        resultDroplet1.setStatus(DropletStatus.UNAVAILABLE);
-        resultDroplet2.setStatus(DropletStatus.UNAVAILABLE);
-    }
-
-    @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void afterExecution() {
-        originDroplet.setStatus(DropletStatus.CONSUMED);
-        resultDroplet1.setStatus(DropletStatus.AVAILABLE);
-        resultDroplet2.setStatus(DropletStatus.AVAILABLE);
-    }
 }

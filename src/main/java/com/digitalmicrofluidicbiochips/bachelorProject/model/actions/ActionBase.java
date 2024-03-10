@@ -14,27 +14,5 @@ public abstract class ActionBase {
         this.id = id;
     }
 
-    /**
-     * Returns the set of droplets that are affected by this action.
-     * @return the set of droplets that are affected by this action.
-     */
-    public abstract Set<Droplet> affectedDroplets();
-
-    /**
-     * Executes before the action is executed.
-     */
-    public abstract void beforeExecution();
-
-    /**
-     * Executes the action.
-     */
-    public abstract void execute();
-
-    /**
-     * Executes after the action is executed.
-     */
-    public abstract void afterExecution();
-
-
 
 }

@@ -1,9 +1,9 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.factory.JsonActionMapperFactory;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.factory.JsonActionMapperFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.*;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -194,8 +194,12 @@ public class JsonActionMapperFactoryTests {
         String id = "id";
         String dropletId = "dropletId";
         String nextActionId = "nextActionId";
+        int posX = 1;
+        int posY = 2;
+        int sizeX = 3;
+        int sizeY = 4;
 
-        JsonMixAction jsonMixAction = new JsonMixAction(id, dropletId, nextActionId);
+        JsonMixAction jsonMixAction = new JsonMixAction(id, dropletId, nextActionId, posX, posY, sizeX, sizeY);
 
         // Act
         ActionBase action = getInternalAction(jsonMixAction);
@@ -207,6 +211,10 @@ public class JsonActionMapperFactoryTests {
 
         MixAction mixAction = (MixAction) action;
         Assertions.assertEquals(id, mixAction.getId());
+        Assertions.assertEquals(posX, mixAction.getPosX());
+        Assertions.assertEquals(posY, mixAction.getPosY());
+        Assertions.assertEquals(sizeX, mixAction.getSizeX());
+        Assertions.assertEquals(sizeY, mixAction.getSizeY());
         Assertions.assertNull(mixAction.getNextAction());
         Assertions.assertNull(mixAction.getDroplet());
     }

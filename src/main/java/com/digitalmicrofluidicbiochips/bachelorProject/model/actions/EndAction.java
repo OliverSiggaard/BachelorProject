@@ -15,23 +15,4 @@ public class EndAction extends ActionBase {
             super(id);
         }
 
-    @Override
-    public Set<Droplet> affectedDroplets() {
-        return new HashSet<>();
-    }
-
-    @Override
-    public void beforeExecution() {
-
-    }
-
-    @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void afterExecution() {
-
-    }
 }

@@ -35,27 +35,4 @@ public class MergeAction extends ActionBase {
         this.posY = posY;
     }
 
-    @Override
-    public Set<Droplet> affectedDroplets() {
-        return new HashSet<>(Set.of(resultDroplet, droplet1, droplet2));
-    }
-
-    @Override
-    public void beforeExecution() {
-        droplet1.setStatus(DropletStatus.UNAVAILABLE);
-        droplet2.setStatus(DropletStatus.UNAVAILABLE);
-        resultDroplet.setStatus(DropletStatus.UNAVAILABLE);
-    }
-
-    @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void afterExecution() {
-        droplet1.setStatus(DropletStatus.CONSUMED);
-        droplet2.setStatus(DropletStatus.CONSUMED);
-        resultDroplet.setStatus(DropletStatus.AVAILABLE);
-    }
 }

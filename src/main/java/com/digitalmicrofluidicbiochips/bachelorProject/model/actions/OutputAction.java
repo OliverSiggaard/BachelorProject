@@ -29,23 +29,4 @@ public class OutputAction extends ActionBase{
         this.posY = posY;
     }
 
-    @Override
-    public Set<Droplet> affectedDroplets() {
-        return new HashSet<>(Set.of(droplet));
-    }
-
-    @Override
-    public void beforeExecution() {
-        droplet.setStatus(DropletStatus.UNAVAILABLE);
-    }
-
-    @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void afterExecution() {
-        droplet.setStatus(DropletStatus.CONSUMED);
-    }
 }

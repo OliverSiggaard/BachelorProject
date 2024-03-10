@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.JsonFileToInternalMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.Executor;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonFileToInternalMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

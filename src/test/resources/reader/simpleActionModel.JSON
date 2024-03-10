@@ -69,6 +69,10 @@
       "action": "mix",
       "id": "unique_mix_id",
       "dropletId": "unique_droplet_id",
+      "posX": 1,
+      "posY": 2,
+      "sizeX": 3,
+      "sizeY": 4,
       "next": "unique_store_id"
     },
     {

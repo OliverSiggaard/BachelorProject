@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.json;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.JsonActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonActionBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.JsonProgramConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 

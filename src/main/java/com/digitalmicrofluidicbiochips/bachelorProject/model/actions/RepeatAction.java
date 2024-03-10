@@ -25,23 +25,4 @@ public class RepeatAction extends ActionBase {
         this.times = times;
     }
 
-    @Override
-    public Set<Droplet> affectedDroplets() {
-        return new HashSet<>();
-    }
-
-    @Override
-    public void beforeExecution() {
-
-    }
-
-    @Override
-    public void execute() {
-
-    }
-
-    @Override
-    public void afterExecution() {
-
-    }
 }

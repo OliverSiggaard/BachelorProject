@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.json;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.*;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.JsonProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -198,6 +198,10 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_mix_id", mixAction.getId());
         Assertions.assertEquals("unique_droplet_id", mixAction.getDropletId());
         Assertions.assertEquals("unique_store_id", mixAction.getNextActionId());
+        Assertions.assertEquals(1, mixAction.getPosX());
+        Assertions.assertEquals(2, mixAction.getPosY());
+        Assertions.assertEquals(3, mixAction.getSizeX());
+        Assertions.assertEquals(4, mixAction.getSizeY());
     }
 
     @Test

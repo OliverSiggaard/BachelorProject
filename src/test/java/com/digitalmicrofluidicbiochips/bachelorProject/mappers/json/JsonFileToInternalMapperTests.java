@@ -2,9 +2,10 @@ package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.JsonProgramConfiguration;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.io.json.actions.*;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.JsonProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonFileToInternalMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
