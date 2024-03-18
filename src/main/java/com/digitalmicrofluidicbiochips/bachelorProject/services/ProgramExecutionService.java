@@ -1,8 +1,8 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.services;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.Executor;
-import com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.JsonFileToInternalMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.Executor;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonFileToInternalMapper;
 import org.springframework.stereotype.Service;
 
 @Service
