@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.restControllers;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.services.ProgramExecutionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,7 @@ public class ProgramDataController {
         try {
             System.out.println("Received data from frontend: " + data);
 
-            // TODO: Execute the program here with the data received from the frontend - using the ProgramExecutionService
-            // programExecutionService.executeProgram(data);
+            ProgramExecutionService.executeProgram(data);
 
             return ResponseEntity.ok("Data recieved successfully!");
         } catch (Exception e) {

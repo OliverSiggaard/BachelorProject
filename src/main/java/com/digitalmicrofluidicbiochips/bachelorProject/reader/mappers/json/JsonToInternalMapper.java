@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.IFileToInternalMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.IDtoToInternalMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.dmf_platform.JsonDmfInformationMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.factory.JsonActionMapperFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
@@ -13,6 +13,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonInputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -25,21 +26,40 @@ import java.util.stream.Collectors;
  * <br>
  * This includes actions, and relevant information about the DMF platform.
  */
-public class JsonFileToInternalMapper implements IFileToInternalMapper {
+public class JsonToInternalMapper implements IDtoToInternalMapper {
 
     private final JsonProgramConfiguration programConfiguration;
 
     /**
      * Create a new instance of the JsonFileToInternalMapper.
-     * @param filePath The path to the JSON file to be mapped to the internal model.
+     *
+     * Mainly used for testing purposes.
+     *
+     * @param jsonFile the JSON file to be mapped to the internal model.
      */
-    public JsonFileToInternalMapper(String filePath) {
+    public JsonToInternalMapper(File jsonFile) {
         try {
-            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(filePath);
+            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(jsonFile);
         } catch (IOException e) {
-            throw new RuntimeException("Could not read the JSON file: " + filePath, e);
+            throw new RuntimeException("Could not read the JSON file: " + jsonFile.getPath(), e);
         }
     }
+
+    /**
+     * Create a new instance of the JsonFileToInternalMapper.
+     *
+     * Used when receiving a JSON string from the frontend.
+     *
+     * @param jsonString the JSON string to be mapped to the internal model.
+     */
+    public JsonToInternalMapper(String jsonString) {
+        try {
+            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJsonString(jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read the JSON object: " + jsonString, e);
+        }
+    }
+
 
     @Override
     public ProgramConfiguration getProgramConfiguration() {
@@ -83,7 +103,9 @@ public class JsonFileToInternalMapper implements IFileToInternalMapper {
         //TODO: This is "hardcoded" for now. The platform information should be read from the provided JSON file.
         //For now, the platform is hardcoded to be read from the file "src/test/resources/reader/dmf_configuration.JSON".
         //This allows for us not having to deal with sending the files from the frontend to the backend (for now).
-        String dmfConfigFile = "src/test/resources/reader/dmf_configuration.JSON";
+        String dmfConfigFilePath = "src/test/resources/reader/dmf_configuration.JSON";
+        File dmfConfigFile = new File(dmfConfigFilePath);
+
         JsonProgramConfiguration dmfProgramConfiguration;
         try {
             dmfProgramConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(dmfConfigFile);

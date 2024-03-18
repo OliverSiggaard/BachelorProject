@@ -31,7 +31,7 @@ public class JsonDmfInformationMapperTests {
         }
 
         try {
-            JsonProgramConfiguration programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(filePath);
+            JsonProgramConfiguration programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(programFile);
             jsonInfo = programConfiguration.getDmfPlatformState();
             platformInfo = sut.mapToInternal(jsonInfo);
         } catch (IOException e) {

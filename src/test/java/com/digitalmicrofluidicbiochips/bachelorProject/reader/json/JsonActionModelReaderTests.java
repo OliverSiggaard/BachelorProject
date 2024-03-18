@@ -25,7 +25,7 @@ public class JsonActionModelReaderTests {
         }
 
         try {
-            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(filePath);
+            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(programFile);
         } catch (IOException e) {
             Assertions.fail("Could not read the program configuration from the JSON file. Error: " + e.getMessage());
         }

@@ -16,14 +16,20 @@ import java.util.List;
  * The mapping of the JSON file to the ActionBase objects is done using the Jackson library.
  */
 public class JsonModelLoader {
-    public static JsonProgramConfiguration loadProgramConfigurationFromJson(String filePath) throws IOException {
+    public static JsonProgramConfiguration loadProgramConfigurationFromJson(File jsonFile) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Define the type of the list
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, JsonActionBase.class);
-
         // Read the JSON file and convert it to a list of ActionBase objects
-        JsonProgramConfiguration programConfiguration = objectMapper.readValue(new File(filePath), JsonProgramConfiguration.class);
+        JsonProgramConfiguration programConfiguration = objectMapper.readValue(jsonFile, JsonProgramConfiguration.class);
+
+        return programConfiguration;
+    }
+
+    public static JsonProgramConfiguration loadProgramConfigurationFromJsonString(String jsonString) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Read the JSON string and convert it to a JsonProgramConfiguration object
+        JsonProgramConfiguration programConfiguration = objectMapper.readValue(jsonString, JsonProgramConfiguration.class);
 
         return programConfiguration;
     }

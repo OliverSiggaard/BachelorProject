@@ -5,7 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
-import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonFileToInternalMapper;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonToInternalMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,12 +30,12 @@ public class JsonFileToInternalMapperTests {
         }
 
         try {
-            jsonProgramConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(filePath);
+            jsonProgramConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(programFile);
         } catch (IOException e) {
             Assertions.fail("Could not read the program configuration from the JSON file. Error: " + e.getMessage());
         }
 
-        JsonFileToInternalMapper jsonFileToInternalMapper = new JsonFileToInternalMapper(filePath);
+        JsonToInternalMapper jsonFileToInternalMapper = new JsonToInternalMapper(programFile);
         programConfiguration = jsonFileToInternalMapper.getProgramConfiguration();
     }
 
