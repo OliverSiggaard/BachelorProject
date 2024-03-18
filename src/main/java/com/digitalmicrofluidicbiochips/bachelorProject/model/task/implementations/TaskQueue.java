@@ -1,18 +1,28 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.model.task;
+package com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskStatus;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TaskList extends TaskBase {
+/**
+ * A Task queue consists of a list of tasks that are executed after each other.
+ * The next task is only executed if and when the previous task was completed.
+ *
+ * The queue is completed when all tasks are completed.
+ */
 
+@Getter
+public class TaskQueue extends TaskBase {
 
     private final List<TaskBase> tasks;
     private int currentTaskIndex = 0;
 
-    public TaskList(List<TaskBase> tasks) {
+    public TaskQueue(List<TaskBase> tasks) {
         this.tasks = tasks;
     }
 
@@ -63,7 +73,7 @@ public class TaskList extends TaskBase {
 
     @Override
     public void afterExecution() {
-        setStatus(TaskStatus.COMPLETED);
+
     }
 
 }

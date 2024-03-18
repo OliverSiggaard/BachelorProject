@@ -19,13 +19,11 @@ public class Schedule {
 
         tasks.forEach(task -> {
             task.affectedDroplets().forEach(droplet -> {
-                if (dropletTasks.containsKey(droplet)) {
-                    dropletTasks.get(droplet).add(task);
-                } else {
-                    Queue<TaskBase> newQueue = new LinkedList<>();
-                    newQueue.add(task);
-                    dropletTasks.put(droplet, newQueue);
+                if (!dropletTasks.containsKey(droplet)) {
+                    dropletTasks.put(droplet, new LinkedList<>());
                 }
+
+                dropletTasks.get(droplet).add(task);
             });
         });
     }

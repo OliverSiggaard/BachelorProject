@@ -1,13 +1,13 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.MixAction;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.MoveTask;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskList;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations.MoveTask;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations.TaskQueue;
 
 import java.util.Arrays;
 
-public class MixToTaskMapper implements IActionToTaskMapper<MixAction, TaskList>{
-    public TaskList mapToTask(MixAction action) {
+public class MixToTaskMapper implements IActionToTaskMapper<MixAction, TaskQueue>{
+    public TaskQueue mapToTask(MixAction action) {
 
         //Move to the first position
         MoveTask moveTask1 = new MoveTask(action.getDroplet(), action.getPosX(), action.getPosY());
@@ -19,6 +19,6 @@ public class MixToTaskMapper implements IActionToTaskMapper<MixAction, TaskList>
         MoveTask moveTask5 = new MoveTask(action.getDroplet(), action.getPosX(), action.getPosY());
 
         //Return as a list of move tasks.
-        return new TaskList(Arrays.asList(moveTask1, moveTask2, moveTask3, moveTask4, moveTask5));
+        return new TaskQueue(Arrays.asList(moveTask1, moveTask2, moveTask3, moveTask4, moveTask5));
     }
 }

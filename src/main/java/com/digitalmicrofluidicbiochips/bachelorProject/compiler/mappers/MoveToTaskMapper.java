@@ -1,8 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.MoveAction;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.MoveTask;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations.MoveTask;
 
 public class MoveToTaskMapper implements IActionToTaskMapper<MoveAction, MoveTask>{
     @Override

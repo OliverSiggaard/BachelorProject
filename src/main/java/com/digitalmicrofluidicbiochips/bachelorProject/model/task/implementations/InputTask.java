@@ -1,21 +1,27 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.model.task;
+package com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskStatus;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
 public class InputTask extends TaskBase {
 
     private final Droplet droplet;
     private final int posX;
     private final int posY;
+    private final int volume;
 
-    public InputTask(Droplet droplet, int x, int y) {
+    public InputTask(Droplet droplet, int x, int y, int volume) {
         this.droplet = droplet;
         this.posX = x;
         this.posY = y;
+        this.volume = volume;
     }
 
     @Override

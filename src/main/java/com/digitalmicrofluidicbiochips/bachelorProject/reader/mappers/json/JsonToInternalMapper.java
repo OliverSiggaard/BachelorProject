@@ -121,6 +121,9 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
 
 
     private List<Droplet> getDropletsFromJsonInputActions(List<JsonActionBase> actions) {
+
+        //TODO: Split Actions does also create droplets. This should be handled as well.
+
         return actions.stream()
                 .filter(a -> a instanceof JsonInputAction)
                 .map( a -> {

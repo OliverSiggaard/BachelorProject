@@ -1,11 +1,15 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.model.task;
+package com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskStatus;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
 public class MoveTask extends TaskBase {
 
     private final Droplet droplet;
@@ -33,7 +37,10 @@ public class MoveTask extends TaskBase {
     @Override
     public void executeTick() {
         // TODO: ExecuteTick should probably take the current state of the board as input.
-        setStatus(TaskStatus.COMPLETED);
+
+        if(droplet.getPositionX() == posX && droplet.getPositionY() == posY) {
+            setStatus(TaskStatus.COMPLETED);
+        }
     }
 
     @Override
