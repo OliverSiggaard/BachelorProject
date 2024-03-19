@@ -27,9 +27,7 @@ public class AStar implements IPathFinder {
 
         // Log path if logging is enabled
         if (logPath && path != null) {
-            for (Node node : path) {
-                System.out.println("(" + node.x + "," + node.y + ")");
-            }
+            logAStarPath(path);
         }
 
         // Return the droplet move
@@ -44,6 +42,7 @@ public class AStar implements IPathFinder {
         // h is cost to get from node to goal
         // f = g + h
         double g, h, f;
+
         Node parent;
 
         public Node(int x, int y) {
@@ -81,16 +80,18 @@ public class AStar implements IPathFinder {
 
             closedList.add(current);
 
-            // Get and add neighbors to the openList
-            List<Node> neighbors = getNeighbors(current, grid);
+            // Get neighbors for current node
+            List<Node> neighbors = getNeighborNodes(current, grid);
             for (Node neighbor : neighbors) {
                 if (closedList.contains(neighbor)) continue; // Skip already examined neighbors
 
-                double gScore = current.g + 1;
+                double gCost = current.g + 1; // Simple uniform cost for all moves
 
-                if (!openList.contains(neighbor) || gScore < neighbor.g) {
+                // If neighbor is not the in the open list it is added
+                // If the new cost (gCost) is lower than the current neighbor.g its information is updated
+                if (!openList.contains(neighbor) || gCost < neighbor.g) {
                     neighbor.parent = current;
-                    neighbor.g = gScore;
+                    neighbor.g = gCost;
                     neighbor.h = calculateHeuristic(neighbor, goal);
                     neighbor.f = neighbor.g + neighbor.h;
 
@@ -104,7 +105,8 @@ public class AStar implements IPathFinder {
         return null; // No path found
     }
 
-    private List<Node> getNeighbors(Node node, Electrode[][] grid) {
+
+    private List<Node> getNeighborNodes(Node node, Electrode[][] grid) {
         List<Node> neighbors = new ArrayList<>();
 
         // Possible movements (up, down, left, right)
@@ -120,8 +122,8 @@ public class AStar implements IPathFinder {
         return neighbors;
     }
 
+    // Checks if the position is within bounds and if electrode is available
     private boolean isValidPosition(int x, int y, Electrode[][] grid) {
-        // Check if position is within bounds and if electrode is available
         return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length && grid[x][y] != null;
     }
 
@@ -160,6 +162,12 @@ public class AStar implements IPathFinder {
             return DropletMove.LEFT;
         } else {
             throw new IllegalStateException("No valid move found for path");
+        }
+    }
+
+    private void logAStarPath(List<Node> path) {
+        for (Node node : path) {
+            System.out.println("(" + node.x + "," + node.y + ")");
         }
     }
 }
