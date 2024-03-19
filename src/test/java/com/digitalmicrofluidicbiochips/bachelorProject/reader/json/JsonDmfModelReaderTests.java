@@ -51,7 +51,7 @@ public class JsonDmfModelReaderTests {
         }
         List<JsonDmfPlatformElectrode> electrodes = programConfiguration.getDmfPlatformState().getElectrodes();
 
-        Assertions.assertEquals(724, electrodes.size());
+        Assertions.assertEquals(640, electrodes.size());
 
         JsonDmfPlatformElectrode electrode1 = electrodes.get(0);
         Assertions.assertEquals("arrel1", electrode1.getName());

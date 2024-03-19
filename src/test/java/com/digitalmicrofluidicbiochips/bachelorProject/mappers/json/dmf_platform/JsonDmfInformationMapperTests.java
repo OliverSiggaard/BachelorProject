@@ -49,7 +49,7 @@ public class JsonDmfInformationMapperTests {
     // Test the correct number of electrodes is read
     @Test
     public void correctNumberOfElectrodesRead() {
-        Assertions.assertEquals(724, platformInfo.getElectrodes().size());
+        Assertions.assertEquals(640, platformInfo.getElectrodes().size());
     }
 
     @Test

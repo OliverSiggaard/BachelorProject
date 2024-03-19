@@ -1,148 +1,188 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ElectrodeGridTest {
 
     private ElectrodeGrid electrodeGrid;
+    private ElectrodeGridVisualizer electrodeGridVisualizer;
+    private static final int SIZE_X = 10;
+    private static final int SIZE_Y = 8;
+
 
     @BeforeEach
     void setUp() {
-        ProgramConfiguration programConfiguration = mock(ProgramConfiguration.class);
-        PlatformInformation platformInformation = mock(PlatformInformation.class);
-        List<Electrode> electrodes = createMockElectrodes();
-
-        when(programConfiguration.getPlatformInformation()).thenReturn(platformInformation);
-
-        when(platformInformation.getElectrodes()).thenReturn(electrodes);
-        // Mock platform size
-        when(platformInformation.getSizeX()).thenReturn(60);
-        when(platformInformation.getSizeY()).thenReturn(60);
-
-        electrodeGrid = new ElectrodeGrid(programConfiguration);
+        electrodeGrid = MockElectrodeGridSetupUtil.createMockElectrodeGrid(SIZE_X, SIZE_Y);
+        electrodeGridVisualizer = new ElectrodeGridVisualizer();
     }
+
 
     @Test
     void testGridHasCorrectDimensions() {
-        // Assume 3x3 grid
-        assertEquals(3, electrodeGrid.getGrid().length);
-        assertEquals(3, electrodeGrid.getGrid()[0].length);
-    }
-
-    @Test
-    void testElectrodesAreOrderedCorrectly() {
-        // Electrodes should be in an (x,y) format
-        assertEquals(createMockElectrodes().get(0).getElectrodeID(), electrodeGrid.getGrid()[0][0].getElectrodeID());
-        assertEquals(createMockElectrodes().get(1).getElectrodeID(), electrodeGrid.getGrid()[1][0].getElectrodeID());
-        assertEquals(createMockElectrodes().get(4).getElectrodeID(), electrodeGrid.getGrid()[1][1].getElectrodeID());
-        assertEquals(createMockElectrodes().get(8).getElectrodeID(), electrodeGrid.getGrid()[2][2].getElectrodeID());
+        // Assume SIZE_X * SIZE_Y grid
+        assertEquals(SIZE_X, electrodeGrid.getGrid().length);
+        assertEquals(SIZE_Y, electrodeGrid.getGrid()[0].length);
     }
 
 
     @Test
-    void testGetCorrectElectrodesFromDroplet_smallerDroplet() {
-        Droplet droplet = new Droplet("1", 20, 20, 0.1);
+    void testAvailableElectrodesRetrievedCorrectly_activeDia1_obstacleDia1() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 1);
 
-        // Get electrodes that the droplet is touching
-        List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
+        obstacleDroplets.add(obstacleDroplet);
 
-        // This droplet should only touch the center electrode which is (1,1) with electrodeID 105.
-        assertEquals(1, dropletElectrodes.size());
-        assertEquals(105, dropletElectrodes.getFirst().getElectrodeID());
-    }
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
 
-    @Test
-    void testGetCorrectElectrodesFromDroplet_biggerDroplet() {
-        Droplet droplet = new Droplet("1", 20, 20, 0.3);
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
 
-        List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
-
-        // This droplet should take up 4 electrodes with the top left corner at pos (20,20), which is electrode (1,1).
-        // That is that the droplet electrodes should have the electrodeID's {105, 106, 108, 109}
-        assertEquals(4, dropletElectrodes.size());
-        assertEquals(105, dropletElectrodes.get(0).getElectrodeID());
-        assertEquals(106, dropletElectrodes.get(1).getElectrodeID());
-        assertEquals(108, dropletElectrodes.get(2).getElectrodeID());
-        assertEquals(109, dropletElectrodes.get(3).getElectrodeID());
-    }
-
-    @Test
-    void testGetDropletElectrodes_edgeCaseDiameterCausesOverflow() {
-        Droplet droplet = new Droplet("1", 40, 40, 0.3);
-
-        List<Electrode> dropletElectrodes = electrodeGrid.getElectrodesFromDroplet(droplet);
-
-        // This droplet should take up 4 electrodes, but since the top left corner of the droplet is already in the
-        // bottom left corner electrode (2,2), the diameter will cause overflow but only one electrode is returned
-        assertEquals(1, dropletElectrodes.size());
-        assertEquals(109, dropletElectrodes.getFirst().getElectrodeID());
+        assertTrue(electrodeSquareIsNull(3, 5, 3, 5, availableGrid));
     }
 
 
     @Test
-    void testSafeAreaElectrodes() {
-        Droplet droplet = new Droplet("1", 20, 20, 0.1);
+    void testAvailableElectrodesRetrievedCorrectly_activeDia1_obstacleDia2() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 1);
 
-        // Get electrodes that the droplet is touching + safe area around droplet
-        List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 2, 3);
+        obstacleDroplets.add(obstacleDroplet);
 
-        // This droplet should only touch the center electrode which is (1,1) with electrodeID 105.
-        // The safe area should be all droplets around it, which is all droplets in the grid (9).
-        assertEquals(9, dropletElectrodes.size());
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(3, 6, 1, 4, availableGrid));
+    }
+
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_overflowEdgeCase_topLeft() {
+        Droplet activeDroplet = new Droplet("1", 6, 6, 1);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 0, 0, 3);
+        obstacleDroplets.add(obstacleDroplet);
+
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(0, 1, 0, 1, availableGrid));
+    }
+
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_overflowEdgeCase_bottomRight() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 1);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 9, 7, 3);
+        obstacleDroplets.add(obstacleDroplet);
+
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(8, 9, 6, 7, availableGrid));
+    }
+
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia1() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
+        obstacleDroplets.add(obstacleDroplet);
+
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(3, 5, 3, 5, availableGrid));
+        assertTrue(borderIsNull(1, availableGrid));
     }
 
     @Test
-    void testSafeAreaElectrodes_edgeCaseTopLeftCorner() {
-        Droplet droplet = new Droplet("1", 0, 0, 0.1);
+    void testAvailableElectrodesRetrievedCorrectly_activeDia3_obstacleDia1() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 8);
 
-        List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
+        obstacleDroplets.add(obstacleDroplet);
 
-        // Droplet should only touch top left corner electrode (0,0), with electrodeID 101.
-        // The safe area should consist of electrodeID's 102, 104 and 105
-        assertEquals(4, dropletElectrodes.size());
-        assertEquals(101, dropletElectrodes.get(0).getElectrodeID());
-        assertEquals(102, dropletElectrodes.get(1).getElectrodeID());
-        assertEquals(104, dropletElectrodes.get(2).getElectrodeID());
-        assertEquals(105, dropletElectrodes.get(3).getElectrodeID());
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(2, 5, 2, 5, availableGrid));
+        assertTrue(borderIsNull(2, availableGrid));
     }
 
     @Test
-    void testSafeAreaElectrodes_edgeCaseBottomRightCorner() {
-        Droplet droplet = new Droplet("1", 40, 40, 0.1);
+    void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia2() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
 
-        List<Electrode> dropletElectrodes = electrodeGrid.getSafeAreaElectrodesFromDroplet(droplet);
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
+        obstacleDroplets.add(obstacleDroplet);
 
-        // Droplet should only touch bottom right corner electrode (2,2), with electrodeID 109.
-        // The safe area should consist of electrodeID's 105, 106 and 108
-        assertEquals(4, dropletElectrodes.size());
-        assertEquals(105, dropletElectrodes.get(0).getElectrodeID());
-        assertEquals(106, dropletElectrodes.get(1).getElectrodeID());
-        assertEquals(108, dropletElectrodes.get(2).getElectrodeID());
-        assertEquals(109, dropletElectrodes.get(3).getElectrodeID());
+        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(2, 6, 2, 6, availableGrid));
+        assertTrue(borderIsNull(1, availableGrid));
     }
 
 
-    public static List<Electrode> createMockElectrodes() {
-        List<Electrode> electrodes = new ArrayList<>();
+    // Helper method for checking that a square of electrodes is null
+    private boolean electrodeSquareIsNull(int x1, int x2, int y1, int y2, Electrode[][] grid) {
+        boolean isNull = true;
 
-        electrodes.add(new Electrode("Electrode1", 1, 101, 201, 0, 0, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode2", 2, 102, 202, 20, 0, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode3", 3, 103, 203, 40, 0, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode4", 4, 104, 204, 0, 20, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode5", 5, 105, 205, 20, 20, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode6", 6, 106, 206, 40, 20, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode7", 7, 107, 207, 0, 40, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode8", 8, 108, 208, 20, 40, 20, 20, 0));
-        electrodes.add(new Electrode("Electrode9", 9, 109, 209, 40, 40, 20, 20, 0));
+        for (int y = y1; y <= y2; y++) {
+            for (int x = x1; x <= x2; x++) {
+                if(grid[x][y] != null) {
+                    isNull = false;
+                    break;
+                }
+            }
+        }
 
-        return electrodes;
+        return isNull;
+    }
+
+
+    // Helper method for checking that the borders of the bottom and right side are null with a given width
+    private boolean borderIsNull(int width, Electrode[][] grid) {
+        boolean isNull = true;
+
+        for (int i = 1; i <= width; i++) {
+            // Remove right border
+            for (int y = 0; y < SIZE_Y; y++) {
+                if (grid[SIZE_X - i][y] != null) {
+                    isNull = false;
+                    break;
+                }
+            }
+            // Remove bottom border
+            for (int x = 0; x < SIZE_X; x++) {
+                if (grid[x][SIZE_Y - i] != null) {
+                    isNull = false;
+                    break;
+                }
+            }
+        }
+
+        return isNull;
     }
 }

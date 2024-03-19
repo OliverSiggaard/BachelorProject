@@ -42,14 +42,14 @@ public class Droplet {
         this.positionX = positionX;
         this.positionY = positionY;
         this.volume = volume;
-        this.diameter = getMillimeterDiameterFromVol();
+        this.diameter = getDiameterFromVol();
         this.status = DropletStatus.NOT_CREATED;
     }
 
     // We need a custom method for setting volume as this will also affect the droplets diameter
     public void setVolume(double volume) {
         this.volume = volume;
-        this.diameter = getMillimeterDiameterFromVol();
+        this.diameter = getDiameterFromVol();
     }
 
     // TODO: From Wenje's report we get that the height is about 500 micrometers (converted to meters for the calculation).
@@ -57,12 +57,12 @@ public class Droplet {
     // Height to glass (in meters)
     private final double heightToGlass = 0.0005;
 
-    private int getMillimeterDiameterFromVol() {
-        double volumeInCubicMeters = volume * Math.pow(10, -6); // Convert volume from milliliter to cubic meters for calculation
+    private int getDiameterFromVol() {
+        double volumeInCubicMeters = volume * Math.pow(10, -9); // Convert volume from microliters to cubic meters
 
         double diameterInMeters = 2 * Math.sqrt((volumeInCubicMeters / (Math.PI * heightToGlass))); // Calculate diameter
-        double diameterInMillimeters = diameterInMeters * 1000; // Convert from m to mm
+        double diameterInCorrectUnit = diameterInMeters * 10000; // Convert from m to 1/10th of a mm
 
-        return (int) Math.ceil(diameterInMillimeters); // Return rounded (up) diameter in mm
+        return (int) Math.ceil(diameterInCorrectUnit); // Return rounded (up) diameter
     }
 }
