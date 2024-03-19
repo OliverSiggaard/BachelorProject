@@ -4,5 +4,5 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 
 public interface IPathFinder {
-    DropletMove getMove(Droplet activeDroplet, Electrode[][] availableGrid, int targetX, int targetY);
+    DropletMove getMove(Droplet activeDroplet, Electrode[][] availableGrid, int goalX, int goalY);
 }

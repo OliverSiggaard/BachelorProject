@@ -6,5 +6,6 @@ public enum DropletMove {
     LEFT,
     RIGHT,
     WAIT,
+    NONE,
     BLOCKED
 }
