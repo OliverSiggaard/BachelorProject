@@ -34,10 +34,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_activeDia1_obstacleDia1() {
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.1);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 4, 0.1);
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -50,10 +50,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_activeDia1_obstacleDia2() {
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.1);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 2, 0.3);
+        Droplet obstacleDroplet = new Droplet("2", 4, 2, 3);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -66,10 +66,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_overflowEdgeCase_topLeft() {
-        Droplet activeDroplet = new Droplet("1", 6, 6, 0.1);
+        Droplet activeDroplet = new Droplet("1", 6, 6, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 0, 0, 0.3);
+        Droplet obstacleDroplet = new Droplet("2", 0, 0, 3);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -82,10 +82,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_overflowEdgeCase_bottomRight() {
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.1);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 9, 7, 0.3);
+        Droplet obstacleDroplet = new Droplet("2", 9, 7, 3);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -98,10 +98,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia1() {
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.3);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 4, 0.1);
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -114,10 +114,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_activeDia3_obstacleDia1() {
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.8);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 8);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 4, 0.1);
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -130,10 +130,10 @@ class ElectrodeGridTest {
 
     @Test
     void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia2() {
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.3);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 4, 0.3);
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);

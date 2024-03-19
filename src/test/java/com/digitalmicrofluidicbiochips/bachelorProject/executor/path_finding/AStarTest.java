@@ -33,10 +33,10 @@ public class AStarTest {
     void testAStar_success() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.3);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 4, 0.1);
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -51,10 +51,10 @@ public class AStarTest {
     void testAStar_failure() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 0, 0, 0.3);
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
-        Droplet obstacleDroplet = new Droplet("2", 4, 4, 0.1);
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
         Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
@@ -69,7 +69,7 @@ public class AStarTest {
     void testAStar_moveUp() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 2, 2, 0.1);
+        Droplet activeDroplet = new Droplet("1", 2, 2, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
@@ -85,7 +85,7 @@ public class AStarTest {
     void testAStar_moveDown() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 2, 2, 0.1);
+        Droplet activeDroplet = new Droplet("1", 2, 2, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
@@ -101,7 +101,7 @@ public class AStarTest {
     void testAStar_moveLeft() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 2, 2, 0.1);
+        Droplet activeDroplet = new Droplet("1", 2, 2, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class AStarTest {
     void testAStar_moveRight() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 2, 2, 0.1);
+        Droplet activeDroplet = new Droplet("1", 2, 2, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
@@ -133,7 +133,7 @@ public class AStarTest {
     void testAStar_moveNone() {
         AStar aStar = new AStar(true);
 
-        Droplet activeDroplet = new Droplet("1", 2, 2, 0.1);
+        Droplet activeDroplet = new Droplet("1", 2, 2, 1);
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
