@@ -1,6 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.InputAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations.InputTask;
 
 public class InputToTaskMapper implements IActionToTaskMapper<InputAction, InputTask> {

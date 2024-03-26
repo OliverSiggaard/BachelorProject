@@ -1,5 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
@@ -12,21 +14,32 @@ import java.util.*;
  */
 public class Schedule {
 
-    private final Map<Droplet, Queue<TaskBase>> dropletTasks;
+    private final Map<Droplet, Queue<ActionBase>> dropletActions;
 
-    public Schedule(List<TaskBase> tasks) {
-        this.dropletTasks = new HashMap<>();
-
-        tasks.forEach(task -> {
-            task.affectedDroplets().forEach(droplet -> {
-                if (!dropletTasks.containsKey(droplet)) {
-                    dropletTasks.put(droplet, new LinkedList<>());
-                }
-
-                dropletTasks.get(droplet).add(task);
-            });
-        });
+    public Schedule(Map<Droplet, Queue<ActionBase>> dropletActions) {
+        this.dropletActions = dropletActions;
     }
+
+    public void updateSchedule() {
+        for ( Queue<ActionBase> actions : dropletActions.values() ) {
+            if(actions.isEmpty()) continue;
+            if(actions.peek().getStatus() == ActionStatus.COMPLETED) {
+                actions.poll();
+            }
+        }
+    }
+
+    public List<ActionBase> getActionsToBeTicked() {
+        List<ActionBase> actionsToBeTicked = new ArrayList<>();
+        for ( Queue<ActionBase> actions : dropletActions.values() ) {
+            if(actions.isEmpty()) continue;
+            actionsToBeTicked.add(actions.peek());
+        }
+
+        return actionsToBeTicked;
+    }
+
+
 
 
 

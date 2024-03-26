@@ -1,6 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.MixAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MixAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations.MoveTask;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations.TaskQueue;
 

@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.JsonProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;

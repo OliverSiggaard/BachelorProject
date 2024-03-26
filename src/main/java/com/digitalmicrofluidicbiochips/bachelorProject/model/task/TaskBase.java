@@ -1,12 +1,13 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.task;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 
 import java.util.Set;
 
 public abstract class TaskBase {
 
-    private TaskStatus status = TaskStatus.NOT_STARTED;
+    private ActionStatus status = ActionStatus.NOT_STARTED;
 
     public abstract Set<Droplet> affectedDroplets();
 
@@ -16,11 +17,11 @@ public abstract class TaskBase {
 
     public abstract void afterExecution();
 
-    protected void setStatus(TaskStatus status) {
+    protected void setStatus(ActionStatus status) {
         this.status = status;
     }
 
-    public TaskStatus getStatus() {
+    public ActionStatus getStatus() {
         return status;
     }
 }

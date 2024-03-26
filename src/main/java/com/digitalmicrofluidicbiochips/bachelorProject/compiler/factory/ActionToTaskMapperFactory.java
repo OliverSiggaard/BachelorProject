@@ -5,9 +5,9 @@ import com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers.InputToT
 import com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers.MixToTaskMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers.MoveToTaskMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.InputAction;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.MixAction;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.MoveAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MixAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MoveAction;
 
 import java.util.HashMap;
 import java.util.Map;

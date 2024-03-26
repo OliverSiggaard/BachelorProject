@@ -1,35 +1,29 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementations;
+package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
-import lombok.Getter;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * A Task queue consists of a list of tasks that are executed after each other.
- * The next task is only executed if and when the previous task was completed.
- *
- * The queue is completed when all tasks are completed.
- */
+public class ActionQueue extends ActionBase {
 
-@Getter
-public class TaskQueue extends TaskBase {
 
-    private final List<TaskBase> tasks;
-    private int currentTaskIndex = 0;
+    private final List<ActionBase> actions;
+    private int currentActionIndex = 0;
 
-    public TaskQueue(List<TaskBase> tasks) {
-        this.tasks = tasks;
+    public ActionQueue(String id, List<ActionBase> actions) {
+        super(id);
+        this.actions = actions;
     }
 
     @Override
     public Set<Droplet> affectedDroplets() {
-        return tasks.stream()
-                .flatMap(task -> task.affectedDroplets().stream())
+        return actions.stream()
+                .flatMap(action -> action.affectedDroplets().stream())
                 .collect(Collectors.toSet());
     }
 
@@ -39,11 +33,10 @@ public class TaskQueue extends TaskBase {
     }
 
     @Override
-    public void executeTick() {
+    public void executeTick(ProgramConfiguration programConfiguration) {
+        if(currentActionIndex >= actions.size()) return;
 
-        if(currentTaskIndex >= tasks.size()) return;
-
-        TaskBase currentTask = tasks.get(currentTaskIndex);
+        ActionBase currentTask = actions.get(currentActionIndex);
         if(currentTask.getStatus() == ActionStatus.COMPLETED) {
             throw new IllegalStateException("Current task can not be completed. Has to be Not Started or In Progress.");
         }
@@ -51,9 +44,9 @@ public class TaskQueue extends TaskBase {
         switch (currentTask.getStatus()) {
             case NOT_STARTED -> {
                 currentTask.beforeExecution();
-                currentTask.executeTick();
+                currentTask.executeTick(programConfiguration);
             }
-            case IN_PROGRESS -> currentTask.executeTick();
+            case IN_PROGRESS -> currentTask.executeTick(programConfiguration);
             case FAILED -> {
                 setStatus(ActionStatus.FAILED);
                 return;
@@ -63,8 +56,8 @@ public class TaskQueue extends TaskBase {
         //Was the task completed in this tick?
         if(currentTask.getStatus() == ActionStatus.COMPLETED) {
             currentTask.afterExecution();
-            currentTaskIndex++;
-            if (currentTaskIndex < tasks.size()) return;
+            currentActionIndex++;
+            if (currentActionIndex < actions.size()) return;
 
             //If the last task was completed, the task list is also completed.
             setStatus(ActionStatus.COMPLETED);
@@ -75,5 +68,4 @@ public class TaskQueue extends TaskBase {
     public void afterExecution() {
 
     }
-
 }

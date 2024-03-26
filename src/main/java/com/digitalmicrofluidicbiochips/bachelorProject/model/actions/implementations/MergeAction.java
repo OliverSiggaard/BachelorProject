@@ -1,5 +1,7 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.model.actions;
+package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import lombok.Getter;
@@ -35,4 +37,23 @@ public class MergeAction extends ActionBase {
         this.posY = posY;
     }
 
+    @Override
+    public Set<Droplet> affectedDroplets() {
+        return null;
+    }
+
+    @Override
+    public void beforeExecution() {
+
+    }
+
+    @Override
+    public void executeTick(ProgramConfiguration programConfiguration) {
+
+    }
+
+    @Override
+    public void afterExecution() {
+
+    }
 }

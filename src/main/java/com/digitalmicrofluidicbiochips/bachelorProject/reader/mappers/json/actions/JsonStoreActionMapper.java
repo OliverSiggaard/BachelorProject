@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.StoreAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.StoreAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonStoreAction;
 

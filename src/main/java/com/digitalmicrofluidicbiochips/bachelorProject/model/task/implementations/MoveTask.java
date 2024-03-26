@@ -3,7 +3,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.task.implementatio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -31,7 +31,7 @@ public class MoveTask extends TaskBase {
     @Override
     public void beforeExecution() {
         droplet.setStatus(DropletStatus.UNAVAILABLE);
-        setStatus(TaskStatus.IN_PROGRESS);
+        setStatus(ActionStatus.IN_PROGRESS);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class MoveTask extends TaskBase {
         // TODO: ExecuteTick should probably take the current state of the board as input.
 
         if(droplet.getPositionX() == posX && droplet.getPositionY() == posY) {
-            setStatus(TaskStatus.COMPLETED);
+            setStatus(ActionStatus.COMPLETED);
         }
     }
 

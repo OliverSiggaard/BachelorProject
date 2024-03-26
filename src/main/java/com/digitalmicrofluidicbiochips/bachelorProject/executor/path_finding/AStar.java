@@ -34,7 +34,7 @@ public class AStar implements IPathFinder {
         return getMoveFromPath(start, path);
     }
 
-    public static class Node implements Comparable<Node> {
+    private static class Node implements Comparable<Node> {
         // Position
         int x, y;
 

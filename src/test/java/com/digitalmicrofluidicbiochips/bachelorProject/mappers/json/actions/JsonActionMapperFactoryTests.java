@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.factory.JsonActionMapperFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
