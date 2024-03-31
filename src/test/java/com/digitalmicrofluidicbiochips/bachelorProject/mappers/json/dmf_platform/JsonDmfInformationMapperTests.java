@@ -42,7 +42,7 @@ public class JsonDmfInformationMapperTests {
     // Test if the information is read correctly
     @Test
     public void platformSizeReadCorrect() {
-        Assertions.assertEquals(860, platformInfo.getSizeX());
+        Assertions.assertEquals(640, platformInfo.getSizeX());
         Assertions.assertEquals(400, platformInfo.getSizeY());
     }
 

@@ -10,6 +10,7 @@ import lombok.Getter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public class ProgramConfiguration {
@@ -23,7 +24,10 @@ public class ProgramConfiguration {
         this.platformInformation = platformInformation;
         this.programActions = programActions;
         this.droplets = programActions.stream()
-                .flatMap(action -> action.affectedDroplets().stream())
+                .flatMap(action -> {
+                    Set<Droplet> affectedDroplets = action.affectedDroplets();
+                    return affectedDroplets != null ? affectedDroplets.stream() : Stream.empty();
+                })
                 .distinct()
                 .collect(Collectors.toList());
         this.pathFinder = new AStar();

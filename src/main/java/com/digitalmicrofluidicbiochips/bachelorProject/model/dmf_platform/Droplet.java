@@ -1,7 +1,12 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A droplet is a small liquid volume that can be moved around on the DMF platform.
@@ -29,8 +34,13 @@ public class Droplet {
     // Calculated from the volume of the droplet, assuming cylindrical size of the droplet.
     private int diameter;
 
+    private final double heightToGlass = 0.0005;
+
     @Setter
     private DropletStatus status;
+
+    @Getter @Setter
+    DropletMove dropletMove;
 
     public Droplet(
             String ID,
@@ -52,11 +62,6 @@ public class Droplet {
         this.diameter = getDiameterFromVol();
     }
 
-    // TODO: From Wenje's report we get that the height is about 500 micrometers (converted to meters for the calculation).
-    // TODO: Wenje's code for calculating droplet: https://github.com/gggdttt/BioGo/blob/main/Executor/Model/Droplet.cs
-    // Height to glass (in meters)
-    private final double heightToGlass = 0.0005;
-
     private int getDiameterFromVol() {
         double volumeInCubicMeters = volume * Math.pow(10, -9); // Convert volume from microliters to cubic meters
 
@@ -64,5 +69,59 @@ public class Droplet {
         double diameterInCorrectUnit = diameterInMeters * 10000; // Convert from m to 1/10th of a mm
 
         return (int) Math.ceil(diameterInCorrectUnit); // Return rounded (up) diameter
+
     }
+
+    //TODO: Rethink this method
+    public List<Point> getCoordinatesToEnableBeforeMove() {
+        List<Point> electrodePositions = new ArrayList<>();
+        if(dropletMove == DropletMove.UP) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX + i, positionY - 1));
+            }
+        }
+        if(dropletMove == DropletMove.DOWN) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX + i, positionY + diameter));
+            }
+        }
+        if(dropletMove == DropletMove.LEFT) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX - 1, positionY + i));
+            }
+        }
+        if(dropletMove == DropletMove.RIGHT) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX + diameter, positionY + i));
+            }
+        }
+        return electrodePositions;
+    }
+
+    //TODO: Rethink this method
+    public List<Point> getCoordinatesToDisableAfterMove() {
+        List<Point> electrodePositions = new ArrayList<>();
+        if(dropletMove == DropletMove.UP) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX + i, positionY + diameter - 1));
+            }
+        }
+        if(dropletMove == DropletMove.DOWN) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX + i, positionY));
+            }
+        }
+        if(dropletMove == DropletMove.LEFT) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX + diameter - 1, positionY + i));
+            }
+        }
+        if(dropletMove == DropletMove.RIGHT) {
+            for (int i = 0; i < diameter; i++) {
+                electrodePositions.add(new Point(positionX, positionY + i));
+            }
+        }
+        return electrodePositions;
+    }
+
 }

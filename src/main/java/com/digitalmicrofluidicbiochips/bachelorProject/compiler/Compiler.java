@@ -1,10 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.compiler.factory.ActionToTaskMapperFactory;
-import com.digitalmicrofluidicbiochips.bachelorProject.compiler.mappers.IActionToTaskMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
 
 import java.util.*;
 
@@ -19,13 +16,14 @@ public class Compiler {
 
         Map<Droplet, Queue<ActionBase>> dropletActions = new HashMap<>();
 
-        actions.forEach(task -> {
-            task.affectedDroplets().forEach(droplet -> {
+        actions.forEach(action -> {
+            Set<Droplet> affectedDroplets = action.affectedDroplets();
+            if(affectedDroplets == null) return;
+            affectedDroplets.forEach(droplet -> {
                 if (!dropletActions.containsKey(droplet)) {
                     dropletActions.put(droplet, new LinkedList<>());
                 }
-
-                dropletActions.get(droplet).add(task);
+                dropletActions.get(droplet).add(action);
             });
         });
 

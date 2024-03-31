@@ -1,11 +1,11 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
@@ -13,10 +13,8 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electr
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 public class MoveAction extends ActionBase {
@@ -28,6 +26,9 @@ public class MoveAction extends ActionBase {
     @Setter
     private Droplet droplet = null;
 
+    private final Queue<ActionTickResult> tickQueue;
+
+
     public MoveAction(
             String id,
             int posX,
@@ -36,6 +37,8 @@ public class MoveAction extends ActionBase {
         super(id);
         this.posX = posX;
         this.posY = posY;
+
+        this.tickQueue = new LinkedList<>();
     }
 
     @Override
@@ -50,22 +53,47 @@ public class MoveAction extends ActionBase {
     }
 
     @Override
-    public void executeTick(ProgramConfiguration programConfiguration) {
-        // if droplet is not moving -> get move
-        //    if an actual direction is found, assign movement to droplet, and tick droplet.
-        //       This should return a list of electrodes to be toggled.
-        //    if no direction is found, do nothing, and attempt again next tick.
-        // if droplet is moving -> tick droplet.
-        //    This should return a list of electrodes to be toggled.
+    public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
 
-        if(droplet.getPositionX() == posX && droplet.getPositionY() == posY) {
-            setStatus(ActionStatus.COMPLETED);
+        if(!tickQueue.isEmpty()) {
+            ActionTickResult tickResult = tickQueue.poll();
+            if(tickQueue.isEmpty()) {
+                moveDropletPosition(droplet.getDropletMove());
+                droplet.setDropletMove(DropletMove.NONE);
+                if(dropletIsAtTargetPosition()) setStatus(ActionStatus.COMPLETED);
+            }
+            return tickResult;
         }
+
+        DropletMove move = getDropletMove(programConfiguration);
+        if(!dropletMoveChangesDropletPosition(move)) return new ActionTickResult(); // Droplet is not moving.
+
+        droplet.setDropletMove(move);
+        ElectrodeGrid electrodeGridObject = new ElectrodeGrid(programConfiguration);
+        Electrode[][] electrodeGrid = electrodeGridObject.getGrid();
+
+        ActionTickResult thisTickResult = new ActionTickResult(getCommandsToActivateAdjacentElectrodes(electrodeGrid));
+        ActionTickResult nextTickResult = new ActionTickResult(getCommandsToDeactivateAbandonedElectrodes(electrodeGrid));
+
+        tickQueue.add(nextTickResult);
+        return thisTickResult; // Electrodes have to be enabled
     }
 
     @Override
     public void afterExecution() {
         droplet.setStatus(DropletStatus.AVAILABLE);
+    }
+
+    private List<String> getCommandsToActivateAdjacentElectrodes(Electrode[][] electrodeGrid) {
+        return droplet.getCoordinatesToEnableBeforeMove().stream()
+                .map(p -> electrodeGrid[p.x][p.y].getEnableBioAssemblyCommand())
+                .toList();
+    }
+
+    private List<String> getCommandsToDeactivateAbandonedElectrodes(Electrode[][] electrodeGrid) {
+        return droplet.getCoordinatesToDisableAfterMove().stream()
+                .map(p -> electrodeGrid[p.x][p.y].getDisableBioAssemblyCommand())
+                .toList();
     }
 
     private DropletMove getDropletMove(ProgramConfiguration programConfiguration) {
@@ -80,6 +108,26 @@ public class MoveAction extends ActionBase {
 
         IPathFinder pathFinder = programConfiguration.getPathFinder();
         return pathFinder.getMove(droplet, availableElectrodeGrid, posX, posY);
+    }
+
+    private void moveDropletPosition(DropletMove dropletMove) {
+        switch (dropletMove) {
+            case UP -> droplet.setPositionY(droplet.getPositionY() - 1);
+            case DOWN -> droplet.setPositionY(droplet.getPositionY() + 1);
+            case LEFT -> droplet.setPositionX(droplet.getPositionX() - 1);
+            case RIGHT -> droplet.setPositionX(droplet.getPositionX() + 1);
+        }
+    }
+
+    private boolean dropletMoveChangesDropletPosition(DropletMove dropletMove) {
+        return dropletMove == DropletMove.UP ||
+                dropletMove == DropletMove.LEFT ||
+                dropletMove == DropletMove.DOWN ||
+                dropletMove == DropletMove.RIGHT;
+    }
+
+    private boolean dropletIsAtTargetPosition() {
+        return droplet.getPositionX() == posX && droplet.getPositionY() == posY;
     }
 
 

@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+// TODO: Add tests for droplets.
 public class JsonFileToInternalMapperTests {
-
-
     private final String filePath = "src/test/resources/reader/simpleActionModel.JSON"; // Adjust the file name if needed
     private ProgramConfiguration programConfiguration;
     private JsonProgramConfiguration jsonProgramConfiguration;
@@ -37,7 +39,11 @@ public class JsonFileToInternalMapperTests {
         }
 
         JsonToInternalMapper jsonFileToInternalMapper = new JsonToInternalMapper(programFile);
-        programConfiguration = jsonFileToInternalMapper.getProgramConfiguration();
+
+        programConfiguration = mock(ProgramConfiguration.class);
+        when(programConfiguration.getProgramActions())
+                .thenReturn(jsonFileToInternalMapper.getProgramConfiguration().getProgramActions());
+
     }
 
     @Test
@@ -150,8 +156,8 @@ public class JsonFileToInternalMapperTests {
                 .findFirst()
                 .orElseThrow();
 
-        MixAction mixAction = (MixAction) actions.get(jsonMixAction.getId());
-        Assertions.assertEquals(jsonMixAction.getNextActionId(), mixAction.getNextAction().getId());
+        ActionQueue actionQueue = (ActionQueue) actions.get(jsonMixAction.getId());
+        Assertions.assertEquals(jsonMixAction.getNextActionId(), actionQueue.getNextAction().getId());
     }
 
     @Test

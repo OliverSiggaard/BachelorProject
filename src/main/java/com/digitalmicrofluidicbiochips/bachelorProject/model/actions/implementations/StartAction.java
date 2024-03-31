@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementa
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,7 @@ public class StartAction extends ActionBase {
 
     @Override
     public Set<Droplet> affectedDroplets() {
-        return null;
+        return new HashSet<>();
     }
 
     @Override
@@ -30,8 +31,8 @@ public class StartAction extends ActionBase {
     }
 
     @Override
-    public void executeTick(ProgramConfiguration programConfiguration) {
-
+    public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
+        return new ActionTickResult();
     }
 
     @Override

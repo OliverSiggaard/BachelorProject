@@ -1,44 +1,48 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.ActionQueue;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MoveAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MixAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMixAction;
 
+import java.util.Arrays;
 import java.util.Map;
 
-public class JsonMixActionMapper implements IActionMapper<JsonMixAction, MixAction> {
+public class JsonMixActionMapper implements IActionMapper<JsonMixAction, ActionQueue> {
 
     @Override
-    public MixAction mapToInternalModel(JsonMixAction dtoModel) {
-        return new MixAction(
+    public ActionQueue mapToInternalModel(JsonMixAction dtoModel) {
+        //Move to the first position
+        MoveAction moveAction1 = new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY());
+
+        //Do a lap in the anti-clockwise direction
+        MoveAction moveAction2 = new MoveAction(dtoModel.getId(), dtoModel.getPosX() + dtoModel.getSizeX(), dtoModel.getPosY());
+        MoveAction moveAction3 = new MoveAction(dtoModel.getId(), dtoModel.getPosX() + dtoModel.getSizeX(), dtoModel.getPosY() + dtoModel.getSizeY());
+        MoveAction moveAction4 = new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY() + dtoModel.getSizeY());
+        MoveAction moveAction5 = new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY());
+
+        return new ActionQueue(
                 dtoModel.getId(),
-                dtoModel.getPosX(),
-                dtoModel.getPosY(),
-                dtoModel.getSizeX(),
-                dtoModel.getSizeY()
-        );
+                Arrays.asList(moveAction1, moveAction2, moveAction3, moveAction4, moveAction5));
     }
 
     @Override
-    public JsonMixAction mapToDtoModel(MixAction internalModel) {
-        return new JsonMixAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getNextAction().getId(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getSizeX(),
-                internalModel.getSizeY()
-        );
+    public JsonMixAction mapToDtoModel(ActionQueue internalModel) {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
-    public void resolveReferences(JsonMixAction dtoModel, Map<String, MixAction> internalModelMap, Map<String, Droplet> dropletMap) {
-        MixAction mixAction = internalModelMap.get(dtoModel.getId());
+    public void resolveReferences(JsonMixAction dtoModel, Map<String, ActionQueue> internalModelMap, Map<String, Droplet> dropletMap) {
+        ActionQueue actionQueue = internalModelMap.get(dtoModel.getId());
 
-        mixAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
+        actionQueue.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
 
-        mixAction.setDroplet(dropletMap.get(dtoModel.getDropletId()));
+        actionQueue.getActions().forEach(action -> {
+            if(action instanceof MoveAction) {
+                MoveAction moveTask = (MoveAction) action;
+                moveTask.setDroplet(dropletMap.get(dtoModel.getDropletId()));
+            }
+        });
     }
 }

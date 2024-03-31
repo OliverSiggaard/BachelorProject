@@ -1,8 +1,10 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import lombok.Getter;
@@ -17,7 +19,7 @@ public class InputAction extends ActionBase {
 
     private final int posX;
     private final int posY;
-    private final int volume;
+    private final double volume;
 
     @Setter
     private ActionBase nextAction = null;
@@ -29,7 +31,7 @@ public class InputAction extends ActionBase {
             String id,
             int posX,
             int posY,
-            int volume
+            double volume
     ) {
         super(id);
         this.posX = posX;
@@ -49,15 +51,18 @@ public class InputAction extends ActionBase {
     }
 
     @Override
-    public void executeTick(ProgramConfiguration programConfiguration) {
-        //TODO: Figure out how to write this to file? BioAssembly Code? Is it done in 1 tick? Figure out if actuator exists?
+    public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
+        droplet.setPositionX(posX);
+        droplet.setPositionY(posY);
+        droplet.setDropletMove(DropletMove.NONE);
+        droplet.setStatus(DropletStatus.AVAILABLE);
+
+        setStatus(ActionStatus.COMPLETED);
+        return new ActionTickResult();
     }
 
     @Override
     public void afterExecution() {
-        droplet.setPositionX(posX);
-        droplet.setPositionY(posY);
-        droplet.setStatus(DropletStatus.AVAILABLE);
-        setStatus(ActionStatus.COMPLETED);
+
     }
 }

@@ -60,4 +60,11 @@ public class Electrode {
         this.status = status;
     }
 
+    public String getEnableBioAssemblyCommand() {
+        return "SETEL " + ID + ";";
+    }
+
+    public String getDisableBioAssemblyCommand() {
+        return "CLREL " + ID + ";";
+    }
 }

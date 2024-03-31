@@ -4,8 +4,6 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
-
 import java.util.*;
 
 /**

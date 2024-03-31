@@ -3,7 +3,10 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementa
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;
@@ -11,9 +14,12 @@ import java.util.stream.Collectors;
 
 public class ActionQueue extends ActionBase {
 
-
+    @Getter
     private final List<ActionBase> actions;
     private int currentActionIndex = 0;
+
+    @Getter @Setter
+    private ActionBase nextAction = null;
 
     public ActionQueue(String id, List<ActionBase> actions) {
         super(id);
@@ -33,35 +39,35 @@ public class ActionQueue extends ActionBase {
     }
 
     @Override
-    public void executeTick(ProgramConfiguration programConfiguration) {
-        if(currentActionIndex >= actions.size()) return;
+    public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
+        if(currentActionIndex >= actions.size()) return new ActionTickResult();
 
-        ActionBase currentTask = actions.get(currentActionIndex);
-        if(currentTask.getStatus() == ActionStatus.COMPLETED) {
-            throw new IllegalStateException("Current task can not be completed. Has to be Not Started or In Progress.");
+        ActionBase currentAction = actions.get(currentActionIndex);
+        if(currentAction.getStatus() == ActionStatus.COMPLETED) {
+            throw new IllegalStateException("Current action can not be completed. Has to be Not Started or In Progress.");
         }
 
-        switch (currentTask.getStatus()) {
+        switch (currentAction.getStatus()) {
             case NOT_STARTED -> {
-                currentTask.beforeExecution();
-                currentTask.executeTick(programConfiguration);
+                currentAction.executeTick(programConfiguration);
             }
-            case IN_PROGRESS -> currentTask.executeTick(programConfiguration);
+            case IN_PROGRESS -> currentAction.executeTick(programConfiguration);
             case FAILED -> {
                 setStatus(ActionStatus.FAILED);
-                return;
+                return new ActionTickResult();
             }
         }
 
-        //Was the task completed in this tick?
-        if(currentTask.getStatus() == ActionStatus.COMPLETED) {
-            currentTask.afterExecution();
+        //Was the action completed in this tick?
+        if(currentAction.getStatus() == ActionStatus.COMPLETED) {
+            currentAction.afterExecution();
             currentActionIndex++;
-            if (currentActionIndex < actions.size()) return;
+            if (currentActionIndex < actions.size()) return new ActionTickResult();;
 
-            //If the last task was completed, the task list is also completed.
+            //If the last action was completed, the action list is also completed.
             setStatus(ActionStatus.COMPLETED);
         }
+        return new ActionTickResult();
     }
 
     @Override

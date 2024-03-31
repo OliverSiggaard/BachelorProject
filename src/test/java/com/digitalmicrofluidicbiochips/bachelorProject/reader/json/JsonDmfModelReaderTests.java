@@ -40,7 +40,7 @@ public class JsonDmfModelReaderTests {
         Assertions.assertEquals("Platform 640 V2", programConfiguration.getDmfPlatformState().getInformation().getPlatform_name());
         Assertions.assertEquals("platform_640_v2", programConfiguration.getDmfPlatformState().getInformation().getPlatform_type());
         Assertions.assertEquals(6401, programConfiguration.getDmfPlatformState().getInformation().getPlatform_ID());
-        Assertions.assertEquals(860, programConfiguration.getDmfPlatformState().getInformation().getSizeX());
+        Assertions.assertEquals(640, programConfiguration.getDmfPlatformState().getInformation().getSizeX());
         Assertions.assertEquals(400, programConfiguration.getDmfPlatformState().getInformation().getSizeY());
     }
 
