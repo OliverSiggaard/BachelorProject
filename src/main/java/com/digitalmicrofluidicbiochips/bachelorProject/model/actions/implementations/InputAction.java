@@ -7,6 +7,8 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatu
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -57,8 +59,19 @@ public class InputAction extends ActionBase {
         droplet.setDropletMove(DropletMove.NONE);
         droplet.setStatus(DropletStatus.AVAILABLE);
 
+        ElectrodeGrid electrodeGridObject = new ElectrodeGrid(programConfiguration);
+        Electrode[][] electrodeGrid = electrodeGridObject.getGrid();
+
+        ActionTickResult actionTickResult = new ActionTickResult();
+        for(int x = 0; x < droplet.getDiameter() ; x++) {
+            for (int y = 0; y < droplet.getDiameter(); y++) {
+                String command = electrodeGrid[droplet.getPositionX() + x][droplet.getPositionY() + y].getEnableBioAssemblyCommand();
+                actionTickResult.addCommand(command);
+            }
+        }
+
         setStatus(ActionStatus.COMPLETED);
-        return new ActionTickResult();
+        return actionTickResult;
     }
 
     @Override

@@ -44,6 +44,13 @@ public class Executor {
                 tickResult.addTickResult(actionResult);
             }
 
+            for(ActionBase action : actionsToBeTicked) {
+                if(action.getStatus() == ActionStatus.COMPLETED) {
+                    action.afterExecution();
+                    schedule.updateSchedule();
+                }
+            }
+
             if(!tickResult.getTickCommands().isEmpty()) tickResults.add(tickResult);
         }
         return tickResults;
@@ -55,14 +62,7 @@ public class Executor {
             action.beforeExecution();
         }
 
-        ActionTickResult actionResult = action.executeTick(programConfiguration);
-
-        if(action.getStatus() == ActionStatus.COMPLETED) {
-            action.afterExecution();
-            schedule.updateSchedule();
-        }
-
-        return actionResult;
+        return action.executeTick(programConfiguration);
     }
 
     private void writeTickResultsToBioAssemblyFile(List<ActionTickResult> tickResults) {

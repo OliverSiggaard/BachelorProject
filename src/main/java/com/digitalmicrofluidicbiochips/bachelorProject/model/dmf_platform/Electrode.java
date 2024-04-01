@@ -61,10 +61,10 @@ public class Electrode {
     }
 
     public String getEnableBioAssemblyCommand() {
-        return "SETEL " + ID + ";";
+        return "SETELI " + ID + ";";
     }
 
     public String getDisableBioAssemblyCommand() {
-        return "CLREL " + ID + ";";
+        return "CLRELI " + ID + ";";
     }
 }
