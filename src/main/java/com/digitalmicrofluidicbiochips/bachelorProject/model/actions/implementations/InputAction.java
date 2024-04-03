@@ -63,8 +63,9 @@ public class InputAction extends ActionBase {
         Electrode[][] electrodeGrid = electrodeGridObject.getGrid();
 
         ActionTickResult actionTickResult = new ActionTickResult();
-        for(int x = 0; x < droplet.getDiameter() ; x++) {
-            for (int y = 0; y < droplet.getDiameter(); y++) {
+        int diameterInElectrodes = (int) Math.ceil((double)droplet.getDiameter() / 20);
+        for(int x = 0; x < diameterInElectrodes ; x++) {
+            for (int y = 0; y < diameterInElectrodes; y++) {
                 String command = electrodeGrid[droplet.getPositionX() + x][droplet.getPositionY() + y].getEnableBioAssemblyCommand();
                 actionTickResult.addCommand(command);
             }

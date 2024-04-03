@@ -32,8 +32,8 @@ public class ElectrodeGrid {
         List<Electrode> electrodes = programConfiguration.getPlatformInformation().getElectrodes();
 
         // Get size of electrodes (assuming that all electrodes are the same size as the first)
-        electrodeSizeX = electrodes.getFirst().getSizeX();
-        electrodeSizeY = electrodes.getFirst().getSizeY();
+        electrodeSizeX = electrodes.get(0).getSizeX();
+        electrodeSizeY = electrodes.get(0).getSizeY();
 
         // Get size of platform
         int platformSizeX = programConfiguration.getPlatformInformation().getSizeX();

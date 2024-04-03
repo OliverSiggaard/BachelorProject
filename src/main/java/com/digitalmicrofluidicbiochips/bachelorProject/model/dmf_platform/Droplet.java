@@ -75,24 +75,25 @@ public class Droplet {
     //TODO: Rethink this method
     public List<Point> getCoordinatesToEnableBeforeMove() {
         List<Point> electrodePositions = new ArrayList<>();
+        int diameterInElectrodes = (int) Math.ceil((double)diameter / 20);
         if(dropletMove == DropletMove.UP) {
-            for (int i = 0; i < diameter; i++) {
+            for (int i = 0; i < diameterInElectrodes ; i++) {
                 electrodePositions.add(new Point(positionX + i, positionY - 1));
             }
         }
         if(dropletMove == DropletMove.DOWN) {
-            for (int i = 0; i < diameter; i++) {
-                electrodePositions.add(new Point(positionX + i, positionY + diameter));
+            for (int i = 0; i < diameterInElectrodes; i++) {
+                electrodePositions.add(new Point(positionX + i, positionY + diameterInElectrodes));
             }
         }
         if(dropletMove == DropletMove.LEFT) {
-            for (int i = 0; i < diameter; i++) {
+            for (int i = 0; i < diameterInElectrodes; i++) {
                 electrodePositions.add(new Point(positionX - 1, positionY + i));
             }
         }
         if(dropletMove == DropletMove.RIGHT) {
-            for (int i = 0; i < diameter; i++) {
-                electrodePositions.add(new Point(positionX + diameter, positionY + i));
+            for (int i = 0; i < diameterInElectrodes; i++) {
+                electrodePositions.add(new Point(positionX + diameterInElectrodes, positionY + i));
             }
         }
         return electrodePositions;
@@ -101,23 +102,24 @@ public class Droplet {
     //TODO: Rethink this method
     public List<Point> getCoordinatesToDisableAfterMove() {
         List<Point> electrodePositions = new ArrayList<>();
+        int diameterInElectrodes = (int) Math.ceil((double)diameter / 20);
         if(dropletMove == DropletMove.UP) {
-            for (int i = 0; i < diameter; i++) {
-                electrodePositions.add(new Point(positionX + i, positionY + diameter - 1));
+            for (int i = 0; i < diameterInElectrodes; i++) {
+                electrodePositions.add(new Point(positionX + i, positionY + diameterInElectrodes - 1));
             }
         }
         if(dropletMove == DropletMove.DOWN) {
-            for (int i = 0; i < diameter; i++) {
+            for (int i = 0; i < diameterInElectrodes; i++) {
                 electrodePositions.add(new Point(positionX + i, positionY));
             }
         }
         if(dropletMove == DropletMove.LEFT) {
-            for (int i = 0; i < diameter; i++) {
-                electrodePositions.add(new Point(positionX + diameter - 1, positionY + i));
+            for (int i = 0; i < diameterInElectrodes; i++) {
+                electrodePositions.add(new Point(positionX + diameterInElectrodes - 1, positionY + i));
             }
         }
         if(dropletMove == DropletMove.RIGHT) {
-            for (int i = 0; i < diameter; i++) {
+            for (int i = 0; i < diameterInElectrodes; i++) {
                 electrodePositions.add(new Point(positionX, positionY + i));
             }
         }
