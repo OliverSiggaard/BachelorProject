@@ -17,7 +17,11 @@ public class ElectrodeGrid implements Cloneable {
 
     @Override
     public ElectrodeGrid clone() {
-        return new ElectrodeGrid(grid.clone());
+        Electrode[][] clonedGrid = new Electrode[grid.length][];
+        for (int i = 0; i < grid.length; i++) {
+            clonedGrid[i] = grid[i].clone(); // Cloning each inner array
+        }
+        return new ElectrodeGrid(clonedGrid);
     }
 
     public int getXSize() {

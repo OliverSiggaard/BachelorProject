@@ -58,7 +58,7 @@ public class ElectrodeGridFactory {
             removeElectrodesForObstacleDroplet(electrodeGridClone, obstacleDroplet, activeDropletSize);
         }
 
-        return electrodeGrid;
+        return electrodeGridClone;
     }
 
 
