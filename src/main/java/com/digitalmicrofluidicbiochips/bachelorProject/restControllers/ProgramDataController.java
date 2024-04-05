@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -29,9 +27,7 @@ public class ProgramDataController {
             System.out.println("Executed program successfully!");
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="
-                    + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
-                    + ".basm");
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=compiled_program.basm");
             headers.setContentType(new MediaType("application", "text-plain", StandardCharsets.UTF_8));
 
             return ResponseEntity.ok()
