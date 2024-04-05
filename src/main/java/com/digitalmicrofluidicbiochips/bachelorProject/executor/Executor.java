@@ -7,13 +7,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Executor {
@@ -65,31 +59,25 @@ public class Executor {
         return action.executeTick(programConfiguration);
     }
 
-    private void writeTickResultsToBioAssemblyFile(List<ActionTickResult> tickResults) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String timeStamp = dateFormat.format(new Date());
-        String fileName = "src/main/resources/output/" + timeStamp + ".basm";
-        File outputFile = new File(fileName);
+    public String convertTickResultsToString(List<ActionTickResult> tickResults) {
+        StringBuilder programStringBuilder = new StringBuilder();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            for (ActionTickResult tickResult : tickResults) {
-                for (String command : tickResult.getTickCommands()) {
-                    writer.write(command);
-                    writer.newLine();
-                }
-                writer.write("TICK;");
-                writer.newLine();
+        for (ActionTickResult tickResult : tickResults) {
+            for (String command : tickResult.getTickCommands()) {
+                programStringBuilder.append(command).append(System.lineSeparator());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            programStringBuilder.append("TICK;").append(System.lineSeparator());
         }
+        programStringBuilder.append("TSTOP;");
+
+        return programStringBuilder.toString();
     }
 
 
-    public void startExecution() {
+    public String startExecution() {
         List<ActionTickResult> tickResults = runExecutionLoop();
 
-        writeTickResultsToBioAssemblyFile(tickResults);
+        return convertTickResultsToString(tickResults);
     }
 
 
