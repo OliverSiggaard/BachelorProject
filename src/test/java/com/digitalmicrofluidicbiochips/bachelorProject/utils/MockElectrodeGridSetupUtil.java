@@ -3,6 +3,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.utils;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGridFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.PlatformInformation;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class MockElectrodeGridSetupUtil {
         when(platformInformation.getSizeX()).thenReturn(sizeX * 20);
         when(platformInformation.getSizeY()).thenReturn(sizeY * 20);
 
-        return new ElectrodeGrid(programConfiguration);
+        return ElectrodeGridFactory.getElectrodeGrid(programConfiguration);
     }
 
     // Helper method to create mock electrodes for an m * n grid (x * y)

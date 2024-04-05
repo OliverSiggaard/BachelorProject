@@ -6,10 +6,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -69,9 +66,8 @@ public class MoveAction extends ActionBase {
         if(!dropletMoveChangesDropletPosition(move)) return new ActionTickResult(); // Droplet is not moving.
 
         droplet.setDropletMove(move);
-        ElectrodeGrid electrodeGridObject = new ElectrodeGrid(programConfiguration);
-        Electrode[][] electrodeGrid = electrodeGridObject.getGrid();
 
+        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ActionTickResult thisTickResult = new ActionTickResult(getCommandsToActivateAdjacentElectrodes(electrodeGrid));
         ActionTickResult nextTickResult = new ActionTickResult(getCommandsToDeactivateAbandonedElectrodes(electrodeGrid));
 
@@ -84,27 +80,27 @@ public class MoveAction extends ActionBase {
         droplet.setStatus(DropletStatus.AVAILABLE);
     }
 
-    private List<String> getCommandsToActivateAdjacentElectrodes(Electrode[][] electrodeGrid) {
+    private List<String> getCommandsToActivateAdjacentElectrodes(ElectrodeGrid electrodeGrid) {
         return droplet.getCoordinatesToEnableBeforeMove().stream()
-                .map(p -> electrodeGrid[p.x][p.y].getEnableBioAssemblyCommand())
+                .map(p -> electrodeGrid.getElectrode(p.x,p.y).getEnableBioAssemblyCommand())
                 .toList();
     }
 
-    private List<String> getCommandsToDeactivateAbandonedElectrodes(Electrode[][] electrodeGrid) {
+    private List<String> getCommandsToDeactivateAbandonedElectrodes(ElectrodeGrid electrodeGrid) {
         return droplet.getCoordinatesToDisableAfterMove().stream()
-                .map(p -> electrodeGrid[p.x][p.y].getDisableBioAssemblyCommand())
+                .map(p -> electrodeGrid.getElectrode(p.x,p.y).getDisableBioAssemblyCommand())
                 .toList();
     }
 
     private DropletMove getDropletMove(ProgramConfiguration programConfiguration) {
-        ElectrodeGrid electrodeGrid = new ElectrodeGrid(programConfiguration);
+
         List<Droplet> obstacleDroplets = programConfiguration.getDroplets().stream()
                 .filter(droplet -> droplet != this.droplet &&
                         (droplet.getStatus() == DropletStatus.AVAILABLE ||
                                 droplet.getStatus() == DropletStatus.UNAVAILABLE))
                 .toList();
-
-        Electrode[][] availableElectrodeGrid = electrodeGrid.getAvailableElectrodeGrid(droplet, obstacleDroplets);
+        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
+        ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, droplet, obstacleDroplets);
 
         IPathFinder pathFinder = programConfiguration.getPathFinder();
         return pathFinder.getMove(droplet, availableElectrodeGrid, posX, posY);

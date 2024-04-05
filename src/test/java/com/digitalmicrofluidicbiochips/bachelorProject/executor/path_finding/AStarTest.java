@@ -39,7 +39,10 @@ public class AStarTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -57,7 +60,10 @@ public class AStarTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -73,7 +79,10 @@ public class AStarTest {
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -89,7 +98,10 @@ public class AStarTest {
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -105,7 +117,10 @@ public class AStarTest {
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -121,7 +136,10 @@ public class AStarTest {
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -137,7 +155,10 @@ public class AStarTest {
 
         List<Droplet> obstacleDroplets = new ArrayList<>();
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
