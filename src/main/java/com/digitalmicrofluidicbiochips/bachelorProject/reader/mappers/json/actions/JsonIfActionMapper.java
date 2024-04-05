@@ -18,16 +18,6 @@ public class JsonIfActionMapper implements IActionMapper<JsonIfAction, IfAction>
     }
 
     @Override
-    public JsonIfAction mapToDtoModel(IfAction internalModel) {
-        return new JsonIfAction(
-                internalModel.getId(),
-                internalModel.getCondition(),
-                internalModel.getTrueNextAction().getId(),
-                internalModel.getFalseNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonIfAction dtoModel, Map<String, IfAction> internalModelMap, Map<String, Droplet> dropletMap) {
         IfAction ifAction = internalModelMap.get(dtoModel.getId());
 

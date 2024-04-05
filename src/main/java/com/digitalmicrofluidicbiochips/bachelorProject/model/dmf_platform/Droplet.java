@@ -39,7 +39,7 @@ public class Droplet {
     @Setter
     private DropletStatus status;
 
-    @Getter @Setter
+    @Setter
     DropletMove dropletMove;
 
     public Droplet(
@@ -53,7 +53,8 @@ public class Droplet {
         this.positionY = positionY;
         this.volume = volume;
         this.diameter = getDiameterFromVol();
-        this.status = DropletStatus.NOT_CREATED;
+        setStatus(DropletStatus.NOT_CREATED);
+        setDropletMove(DropletMove.NONE);
     }
 
     // We need a custom method for setting volume as this will also affect the droplets diameter
@@ -71,6 +72,7 @@ public class Droplet {
         return (int) Math.ceil(diameterInCorrectUnit); // Return rounded (up) diameter
 
     }
+
 
     //TODO: Rethink this method
     public List<Point> getCoordinatesToEnableBeforeMove() {

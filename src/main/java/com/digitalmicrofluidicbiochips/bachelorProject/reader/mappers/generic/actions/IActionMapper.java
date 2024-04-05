@@ -9,10 +9,6 @@ import java.util.Map;
 public interface IActionMapper<T extends DtoActionBase, U extends ActionBase> {
     U mapToInternalModel(T dtoModel);
 
-    // Currently not used. Implemented for JSON, but the internal models is not mapped to a mapper in the Mapper Factory.
-    // If anything, this method should probably be moved to a separate interface.
-    T mapToDtoModel(U internalModel);
-
     /**
      * Resolves references for ID strings to objects. This is done for both "next" actions and for droplets.
      * @param dtoModel DtoModel for which we want to resolve the references for the respective internal model.

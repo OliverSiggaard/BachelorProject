@@ -17,13 +17,6 @@ public class JsonEndActionMapper implements IActionMapper<JsonEndAction, EndActi
     }
 
     @Override
-    public JsonEndAction mapToDtoModel(EndAction internalModel) {
-        return new JsonEndAction(
-                internalModel.getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonEndAction dtoModel, Map<String, EndAction> internalModelMap, Map<String, Droplet> dropletMap) {
         // No next actions on EndAction
         // No droplets to resolve on EndAction

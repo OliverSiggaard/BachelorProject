@@ -18,17 +18,6 @@ public class JsonMoveActionMapper implements IActionMapper<JsonMoveAction, MoveA
     }
 
     @Override
-    public JsonMoveAction mapToDtoModel(MoveAction internalModel) {
-        return new JsonMoveAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonMoveAction dtoModel, Map<String, MoveAction> internalModelMap, Map<String, Droplet> dropletMap) {
         MoveAction moveAction = internalModelMap.get(dtoModel.getId());
 

@@ -1,5 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,5 +44,35 @@ public class DropletTest {
 
         assertEquals(3, droplet.getVolume());
         assertEquals(28, droplet.getDiameter());
+    }
+
+    @Test
+    void testDropletStatusStatus() {
+        Droplet droplet = new Droplet("1", 20, 40, 1);
+        Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
+
+        droplet.setStatus(DropletStatus.AVAILABLE);
+        Assertions.assertEquals(DropletStatus.AVAILABLE, droplet.getStatus());
+    }
+
+    @Test
+    void testDropletMoveStatus() {
+        Droplet droplet = new Droplet("1", 20, 40, 1);
+        Assertions.assertEquals(DropletMove.NONE, droplet.getDropletMove());
+
+        droplet.setDropletMove(DropletMove.RIGHT);
+        Assertions.assertEquals(DropletMove.RIGHT, droplet.getDropletMove());
+    }
+
+    @Test
+    void testDropletPosition() {
+        Droplet droplet = new Droplet("1", 20, 40, 1);
+        Assertions.assertEquals(20, droplet.getPositionX());
+        Assertions.assertEquals(40, droplet.getPositionY());
+
+        droplet.setPositionX(30);
+        droplet.setPositionY(50);
+        Assertions.assertEquals(30, droplet.getPositionX());
+        Assertions.assertEquals(50, droplet.getPositionY());
     }
 }

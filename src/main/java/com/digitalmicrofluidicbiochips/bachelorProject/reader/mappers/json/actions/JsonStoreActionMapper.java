@@ -19,18 +19,6 @@ public class JsonStoreActionMapper implements IActionMapper<JsonStoreAction, Sto
     }
 
     @Override
-    public JsonStoreAction mapToDtoModel(StoreAction internalModel) {
-        return new JsonStoreAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getTime(),
-                internalModel.getNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonStoreAction dtoModel, Map<String, StoreAction> internalModelMap, Map<String, Droplet> dropletMap) {
         StoreAction storeAction = internalModelMap.get(dtoModel.getId());
 

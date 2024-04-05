@@ -28,11 +28,6 @@ public class JsonMixActionMapper implements IActionMapper<JsonMixAction, ActionQ
     }
 
     @Override
-    public JsonMixAction mapToDtoModel(ActionQueue internalModel) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
     public void resolveReferences(JsonMixAction dtoModel, Map<String, ActionQueue> internalModelMap, Map<String, Droplet> dropletMap) {
         ActionQueue actionQueue = internalModelMap.get(dtoModel.getId());
 

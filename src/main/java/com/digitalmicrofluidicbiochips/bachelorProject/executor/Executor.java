@@ -27,6 +27,12 @@ public class Executor {
         this.schedule = Compiler.compile(programConfiguration.getProgramActions());
     }
 
+    public void startExecution() {
+        List<ActionTickResult> tickResults = runExecutionLoop();
+
+        writeTickResultsToBioAssemblyFile(tickResults);
+    }
+
     public List<ActionTickResult> runExecutionLoop() {
         List<ActionTickResult> tickResults = new ArrayList<>();
         while(true) {
@@ -57,7 +63,7 @@ public class Executor {
     }
 
 
-    public ActionTickResult tickAction(ActionBase action) {
+    private ActionTickResult tickAction(ActionBase action) {
         if(action.getStatus() == ActionStatus.NOT_STARTED) {
             action.beforeExecution();
         }
@@ -85,12 +91,6 @@ public class Executor {
         }
     }
 
-
-    public void startExecution() {
-        List<ActionTickResult> tickResults = runExecutionLoop();
-
-        writeTickResultsToBioAssemblyFile(tickResults);
-    }
 
 
 
