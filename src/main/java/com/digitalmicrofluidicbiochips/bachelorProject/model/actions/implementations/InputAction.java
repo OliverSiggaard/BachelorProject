@@ -40,7 +40,8 @@ public class InputAction extends ActionBase {
 
     @Override
     public Set<Droplet> affectedDroplets() {
-        return new HashSet<>(Set.of(droplet));
+        return new HashSet<>();
+        //return new HashSet<>(Set.of(droplet));
     }
 
     @Override
