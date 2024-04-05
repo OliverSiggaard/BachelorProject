@@ -19,17 +19,6 @@ public class JsonOutputActionMapper implements IActionMapper<JsonOutputAction, O
     }
 
     @Override
-    public JsonOutputAction mapToDtoModel(OutputAction internalModel) {
-        return new JsonOutputAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonOutputAction dtoModel, Map<String, OutputAction> internalModelMap, Map<String, Droplet> dropletMap) {
         OutputAction outputAction = internalModelMap.get(dtoModel.getId());
 

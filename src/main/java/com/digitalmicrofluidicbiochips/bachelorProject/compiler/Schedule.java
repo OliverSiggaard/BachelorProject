@@ -3,6 +3,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 
 import java.util.*;
 
@@ -20,8 +21,7 @@ public class Schedule {
 
     public void updateSchedule() {
         for ( Queue<ActionBase> actions : dropletActions.values() ) {
-            if(actions.isEmpty()) continue;
-            if(actions.peek().getStatus() == ActionStatus.COMPLETED) {
+            while(!actions.isEmpty() && actions.peek().getStatus() == ActionStatus.COMPLETED) {
                 actions.poll();
             }
         }
@@ -30,27 +30,26 @@ public class Schedule {
     public List<ActionBase> getActionsToBeTicked() {
         List<ActionBase> actionsToBeTicked = new ArrayList<>();
         for ( Queue<ActionBase> actions : dropletActions.values() ) {
-            if(actions.isEmpty()) continue;
+            if(actions.isEmpty()) {
+                continue;
+            }
+            ActionBase action = actions.peek();
+
+            if(action.getStatus() == ActionStatus.COMPLETED) {
+                throw new IllegalStateException("Action should have been removed from queue");
+            }
+
+            if(action.getStatus() == ActionStatus.NOT_STARTED && !allDropletsAvailable(action.affectedDroplets())) {
+                continue;
+            }
+
             actionsToBeTicked.add(actions.peek());
         }
 
         return actionsToBeTicked;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private boolean allDropletsAvailable(Set<Droplet> droplets) {
+        return droplets.stream().allMatch(droplet -> droplet.getStatus().equals(DropletStatus.AVAILABLE));
+    }
 }

@@ -3,6 +3,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,7 @@ public class ActionTickResult {
 
     public ActionTickResult(String command) {
         this.tickCommands = new ArrayList<>();
+        tickCommands.add(command);
     }
 
     public ActionTickResult(List<String> commands) {
@@ -28,8 +30,6 @@ public class ActionTickResult {
     }
 
     public void addTickResult(ActionTickResult tickResult) {
-        tickCommands.addAll(tickResult.getTickCommands());
+        this.tickCommands.addAll(tickResult.getTickCommands());
     }
-
-
 }

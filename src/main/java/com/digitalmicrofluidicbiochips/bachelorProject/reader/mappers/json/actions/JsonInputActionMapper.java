@@ -20,18 +20,6 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
     }
 
     @Override
-    public JsonInputAction mapToDtoModel(InputAction internalModel) {
-        return new JsonInputAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getVolume(),
-                internalModel.getNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonInputAction dtoModel, Map<String, InputAction> internalModelMap, Map<String, Droplet> dropletMap) {
         InputAction inputAction = internalModelMap.get(dtoModel.getId());
 

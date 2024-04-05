@@ -22,22 +22,6 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
     }
 
     @Override
-    public JsonSplitAction mapToDtoModel(SplitAction internalModel) {
-        return new JsonSplitAction(
-                internalModel.getId(),
-                internalModel.getOriginDroplet().getID(),
-                internalModel.getResultDroplet1().getID(),
-                internalModel.getResultDroplet2().getID(),
-                internalModel.getRatio(),
-                internalModel.getPosX1(),
-                internalModel.getPosY1(),
-                internalModel.getPosX2(),
-                internalModel.getPosY2(),
-                internalModel.getNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonSplitAction dtoModel, Map<String, SplitAction> internalModelMap, Map<String, Droplet> dropletMap) {
         SplitAction splitAction = internalModelMap.get(dtoModel.getId());
 

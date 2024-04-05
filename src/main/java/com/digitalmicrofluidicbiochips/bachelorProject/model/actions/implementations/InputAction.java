@@ -5,10 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,14 +56,15 @@ public class InputAction extends ActionBase {
         droplet.setDropletMove(DropletMove.NONE);
         droplet.setStatus(DropletStatus.AVAILABLE);
 
-        ElectrodeGrid electrodeGridObject = new ElectrodeGrid(programConfiguration);
-        Electrode[][] electrodeGrid = electrodeGridObject.getGrid();
-
+        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ActionTickResult actionTickResult = new ActionTickResult();
         int diameterInElectrodes = (int) Math.ceil((double)droplet.getDiameter() / 20);
         for(int x = 0; x < diameterInElectrodes ; x++) {
             for (int y = 0; y < diameterInElectrodes; y++) {
-                String command = electrodeGrid[droplet.getPositionX() + x][droplet.getPositionY() + y].getEnableBioAssemblyCommand();
+                String command = electrodeGrid.getElectrode(
+                        droplet.getPositionX() + x,
+                        droplet.getPositionY() + y)
+                        .getEnableBioAssemblyCommand();
                 actionTickResult.addCommand(command);
             }
         }

@@ -21,6 +21,12 @@ public class Executor {
         this.schedule = Compiler.compile(programConfiguration.getProgramActions());
     }
 
+    public String startExecution() {
+        List<ActionTickResult> tickResults = runExecutionLoop();
+
+        return convertTickResultsToString(tickResults);
+    }
+
     public List<ActionTickResult> runExecutionLoop() {
         List<ActionTickResult> tickResults = new ArrayList<>();
         while(true) {
@@ -51,7 +57,7 @@ public class Executor {
     }
 
 
-    public ActionTickResult tickAction(ActionBase action) {
+    private ActionTickResult tickAction(ActionBase action) {
         if(action.getStatus() == ActionStatus.NOT_STARTED) {
             action.beforeExecution();
         }
@@ -72,20 +78,4 @@ public class Executor {
 
         return programStringBuilder.toString();
     }
-
-
-    public String startExecution() {
-        List<ActionTickResult> tickResults = runExecutionLoop();
-
-        return convertTickResultsToString(tickResults);
-    }
-
-
-
-
-
-
-
-
-
 }

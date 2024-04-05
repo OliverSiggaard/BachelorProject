@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ElectrodeGridTest {
+class ElectrodeGridFactoryTest {
 
     private ElectrodeGrid electrodeGrid;
     private ElectrodeGridVisualizer electrodeGridVisualizer;
@@ -19,7 +19,7 @@ class ElectrodeGridTest {
 
     @BeforeEach
     void setUp() {
-        electrodeGrid = MockElectrodeGridSetupUtil.createMockElectrodeGrid(SIZE_X, SIZE_Y);
+        electrodeGrid= MockElectrodeGridSetupUtil.createMockElectrodeGrid(SIZE_X, SIZE_Y);
         electrodeGridVisualizer = new ElectrodeGridVisualizer();
     }
 
@@ -27,8 +27,8 @@ class ElectrodeGridTest {
     @Test
     void testGridHasCorrectDimensions() {
         // Assume SIZE_X * SIZE_Y grid
-        assertEquals(SIZE_X, electrodeGrid.getGrid().length);
-        assertEquals(SIZE_Y, electrodeGrid.getGrid()[0].length);
+        assertEquals(SIZE_X, electrodeGrid.getXSize());
+        assertEquals(SIZE_Y, electrodeGrid.getYSize());
     }
 
 
@@ -40,7 +40,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -56,7 +56,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 2, 3);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -72,7 +72,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 0, 0, 3);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -88,7 +88,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 9, 7, 3);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -104,7 +104,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -120,7 +120,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 4, 1);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -136,7 +136,7 @@ class ElectrodeGridTest {
         Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
         obstacleDroplets.add(obstacleDroplet);
 
-        Electrode[][] availableGrid = electrodeGrid.getAvailableElectrodeGrid(activeDroplet, obstacleDroplets);
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
 
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
@@ -146,12 +146,12 @@ class ElectrodeGridTest {
 
 
     // Helper method for checking that a square of electrodes is null
-    private boolean electrodeSquareIsNull(int x1, int x2, int y1, int y2, Electrode[][] grid) {
+    private boolean electrodeSquareIsNull(int x1, int x2, int y1, int y2, ElectrodeGrid grid) {
         boolean isNull = true;
 
         for (int y = y1; y <= y2; y++) {
             for (int x = x1; x <= x2; x++) {
-                if(grid[x][y] != null) {
+                if(grid.getElectrode(x,y) != null) {
                     isNull = false;
                     break;
                 }
@@ -163,20 +163,20 @@ class ElectrodeGridTest {
 
 
     // Helper method for checking that the borders of the bottom and right side are null with a given width
-    private boolean borderIsNull(int width, Electrode[][] grid) {
+    private boolean borderIsNull(int width, ElectrodeGrid grid) {
         boolean isNull = true;
 
         for (int i = 1; i <= width; i++) {
             // Remove right border
             for (int y = 0; y < SIZE_Y; y++) {
-                if (grid[SIZE_X - i][y] != null) {
+                if (grid.getElectrode(SIZE_X - i,y) != null) {
                     isNull = false;
                     break;
                 }
             }
             // Remove bottom border
             for (int x = 0; x < SIZE_X; x++) {
-                if (grid[x][SIZE_Y - i] != null) {
+                if (grid.getElectrode(x,SIZE_Y - i) != null) {
                     isNull = false;
                     break;
                 }

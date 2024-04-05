@@ -4,6 +4,8 @@ import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.ASt
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGridFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.PlatformInformation;
 import lombok.Getter;
 
@@ -19,6 +21,7 @@ public class ProgramConfiguration {
     private final List<ActionBase> programActions;
     private final List<Droplet> droplets;
     private final IPathFinder pathFinder;
+    private final ElectrodeGrid electrodeGrid;
 
     public ProgramConfiguration(PlatformInformation platformInformation, List<ActionBase> programActions) {
         this.platformInformation = platformInformation;
@@ -31,5 +34,6 @@ public class ProgramConfiguration {
                 .distinct()
                 .collect(Collectors.toList());
         this.pathFinder = new AStar();
+        this.electrodeGrid = ElectrodeGridFactory.getElectrodeGrid(this);
     }
 }

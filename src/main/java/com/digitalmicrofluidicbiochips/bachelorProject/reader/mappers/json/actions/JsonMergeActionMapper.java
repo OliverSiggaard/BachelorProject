@@ -18,19 +18,6 @@ public class JsonMergeActionMapper implements IActionMapper<JsonMergeAction, Mer
     }
 
     @Override
-    public JsonMergeAction mapToDtoModel(MergeAction internalModel) {
-        return new JsonMergeAction(
-                internalModel.getId(),
-                internalModel.getResultDroplet().getID(),
-                internalModel.getDroplet1().getID(),
-                internalModel.getDroplet2().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getNextAction().getId()
-        );
-    }
-
-    @Override
     public void resolveReferences(JsonMergeAction dtoModel, Map<String, MergeAction> internalModelMap, Map<String, Droplet> dropletMap) {
         MergeAction mergeAction = internalModelMap.get(dtoModel.getId());
 
