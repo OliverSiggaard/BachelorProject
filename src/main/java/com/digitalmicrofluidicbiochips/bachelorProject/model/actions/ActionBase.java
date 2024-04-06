@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import lombok.Getter;
 
@@ -19,7 +20,7 @@ public abstract class ActionBase {
         status = ActionStatus.NOT_STARTED;
     }
 
-    public abstract Set<Droplet> affectedDroplets();
+    public abstract Set<Droplet> dropletsRequiredForExecution();
 
     public abstract void beforeExecution();
 

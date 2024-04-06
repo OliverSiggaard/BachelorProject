@@ -3,12 +3,10 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGridFactory;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.PlatformInformation;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ public class ProgramConfiguration {
         this.programActions = programActions;
         this.droplets = programActions.stream()
                 .flatMap(action -> {
-                    Set<Droplet> affectedDroplets = action.affectedDroplets();
+                    Set<Droplet> affectedDroplets = action.dropletsRequiredForExecution();
                     return affectedDroplets != null ? affectedDroplets.stream() : Stream.empty();
                 })
                 .distinct()
@@ -36,4 +34,12 @@ public class ProgramConfiguration {
         this.pathFinder = new AStar();
         this.electrodeGrid = ElectrodeGridFactory.getElectrodeGrid(this);
     }
+
+    public Collection<Droplet> getDropletsOnDmfPlatform() {
+        return droplets.stream()
+                .filter(droplet -> droplet.getStatus() != DropletStatus.NOT_CREATED)
+                .collect(Collectors.toSet());
+    }
+
+
 }

@@ -4,7 +4,9 @@ import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.Dro
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.IDmfCommand;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.SetElectrodeCommand;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +41,7 @@ public class InputAction extends ActionBase {
     }
 
     @Override
-    public Set<Droplet> affectedDroplets() {
+    public Set<Droplet> dropletsRequiredForExecution() {
         return new HashSet<>();
         //return new HashSet<>(Set.of(droplet));
     }
@@ -55,17 +57,16 @@ public class InputAction extends ActionBase {
         droplet.setPositionX(posX);
         droplet.setPositionY(posY);
         droplet.setDropletMove(DropletMove.NONE);
-        droplet.setStatus(DropletStatus.AVAILABLE);
 
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ActionTickResult actionTickResult = new ActionTickResult();
         int diameterInElectrodes = (int) Math.ceil((double)droplet.getDiameter() / 20);
-        for(int x = 0; x < diameterInElectrodes ; x++) {
-            for (int y = 0; y < diameterInElectrodes; y++) {
-                String command = electrodeGrid.getElectrode(
-                        droplet.getPositionX() + x,
-                        droplet.getPositionY() + y)
-                        .getEnableBioAssemblyCommand();
+        for(int dx = 0; dx < diameterInElectrodes ; dx++) {
+            for (int dy = 0; dy < diameterInElectrodes; dy++) {
+                int x = droplet.getPositionX() + dx;
+                int y = droplet.getPositionY() + dy;
+                IDmfCommand command = new SetElectrodeCommand(electrodeGrid.getElectrode(x, y));
+
                 actionTickResult.addCommand(command);
             }
         }
@@ -76,6 +77,6 @@ public class InputAction extends ActionBase {
 
     @Override
     public void afterExecution() {
-
+        droplet.setStatus(DropletStatus.AVAILABLE);
     }
 }

@@ -47,13 +47,10 @@ public class ElectrodeTest {
     }
 
     @Test
-    public void electrodeSetCommandTest() {
-        String expectedCommand = "SETELI " + elementID + ";";
-        Assertions.assertEquals(expectedCommand, sut.getEnableBioAssemblyCommand());
-    }
-    @Test
-    public void electrodeClearCommandTest() {
-        String expectedCommand = "CLRELI " + elementID + ";";
-        Assertions.assertEquals(expectedCommand, sut.getDisableBioAssemblyCommand());
+    public void electrodeStatusTest() {
+        sut.setStatus(0);
+        Assertions.assertEquals(0, sut.getStatus());
+        sut.setStatus(1);
+        Assertions.assertEquals(1, sut.getStatus());
     }
 }
