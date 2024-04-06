@@ -5,7 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Schedule;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class Executor {
         StringBuilder programStringBuilder = new StringBuilder();
 
         for (ActionTickResult tickResult : tickResults) {
-            for (String command : tickResult.getTickCommands()) {
+            for (String command : tickResult.getTickCommandsAsStrings()) {
                 System.out.println(command);
                 programStringBuilder.append(command).append(System.lineSeparator());
             }
