@@ -70,11 +70,14 @@ public class Executor {
 
         for (ActionTickResult tickResult : tickResults) {
             for (String command : tickResult.getTickCommands()) {
+                System.out.println(command);
                 programStringBuilder.append(command).append(System.lineSeparator());
             }
             programStringBuilder.append("TICK;").append(System.lineSeparator());
         }
         programStringBuilder.append("TSTOP;");
+
+        System.out.println(programStringBuilder);
 
         return programStringBuilder.toString();
     }

@@ -13,12 +13,6 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/api")
 public class ProgramDataController {
 
-    // Temporary POC
-    @GetMapping("/test")
-    public String apiRoot() {
-        return "Hello from Spring Boot!";
-    }
-
     @PostMapping("/compile")
     public ResponseEntity<String> dataFromFrontend(@RequestBody String data) {
         try {
