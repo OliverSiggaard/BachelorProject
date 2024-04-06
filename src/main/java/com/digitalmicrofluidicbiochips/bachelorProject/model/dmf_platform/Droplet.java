@@ -63,6 +63,23 @@ public class Droplet {
         this.diameter = getDiameterFromVol();
     }
 
+    public void moveDropletInDirection(DropletMove dropletMove) {
+        switch (dropletMove) {
+            case UP -> setPositionY(getPositionY() - 1);
+            case DOWN -> setPositionY(getPositionY() + 1);
+            case LEFT -> setPositionX(getPositionX() - 1);
+            case RIGHT -> setPositionX(getPositionX() + 1);
+        }
+    }
+
+    public static boolean dropletMoveChangesDropletPosition(DropletMove dropletMove) {
+        return dropletMove == DropletMove.UP ||
+                dropletMove == DropletMove.LEFT ||
+                dropletMove == DropletMove.DOWN ||
+                dropletMove == DropletMove.RIGHT;
+    }
+
+
     private int getDiameterFromVol() {
         double volumeInCubicMeters = volume * Math.pow(10, -9); // Convert volume from microliters to cubic meters
 
@@ -74,7 +91,6 @@ public class Droplet {
     }
 
 
-    //TODO: Rethink this method
     public List<Point> getCoordinatesToEnableBeforeMove() {
         List<Point> electrodePositions = new ArrayList<>();
         int diameterInElectrodes = (int) Math.ceil((double)diameter / 20);
@@ -101,7 +117,6 @@ public class Droplet {
         return electrodePositions;
     }
 
-    //TODO: Rethink this method
     public List<Point> getCoordinatesToDisableAfterMove() {
         List<Point> electrodePositions = new ArrayList<>();
         int diameterInElectrodes = (int) Math.ceil((double)diameter / 20);

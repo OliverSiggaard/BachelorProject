@@ -1,5 +1,9 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ElectrodeGrid implements Cloneable {
     private Electrode[][] grid;
 
@@ -30,6 +34,23 @@ public class ElectrodeGrid implements Cloneable {
 
     public int getYSize() {
         return grid[0].length;
+    }
+
+    public Electrode[][] getGridAs2dArray() {
+        return grid;
+    }
+
+    public List<Electrode> getElectrodesInGridAt(List<Point> points) {
+        List<Electrode> electrodes = new ArrayList<>();
+        for (Point point : points) {
+            if(point.getX() < 0 || point.getX() >= grid.length ||
+                    point.getY() < 0 || point.getY() >= grid[0].length) {
+                throw new IllegalArgumentException("Point is out of bounds");
+            }
+
+            electrodes.add(grid[point.x][point.y]);
+        }
+        return electrodes;
     }
 
 }

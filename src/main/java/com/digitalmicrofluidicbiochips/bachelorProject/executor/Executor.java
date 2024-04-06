@@ -5,7 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Schedule;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -48,6 +48,7 @@ public class Executor {
             for(ActionBase action : actionsToBeTicked) {
                 ActionTickResult actionResult = tickAction(action);
                 tickResult.addTickResult(actionResult);
+                actionResult.updateModelWithCommands();
             }
 
             for(ActionBase action : actionsToBeTicked) {
@@ -79,7 +80,7 @@ public class Executor {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             for (ActionTickResult tickResult : tickResults) {
-                for (String command : tickResult.getTickCommands()) {
+                for (String command : tickResult.getTickCommandsAsStrings()) {
                     writer.write(command);
                     writer.newLine();
                 }

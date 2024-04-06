@@ -5,7 +5,10 @@ import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPa
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ClearElectrodeCommand;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.IDmfCommand;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.SetElectrodeCommand;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,14 +16,14 @@ import lombok.Setter;
 import java.util.*;
 import java.util.List;
 
-@Getter
 public class MoveAction extends ActionBase {
-
+    @Getter
     private final int posX;
+    @Getter
     private final int posY;
-    @Setter
+    @Getter @Setter
     private ActionBase nextAction = null;
-    @Setter
+    @Getter @Setter
     private Droplet droplet = null;
 
     private final Queue<ActionTickResult> tickQueue;
@@ -39,7 +42,7 @@ public class MoveAction extends ActionBase {
     }
 
     @Override
-    public Set<Droplet> affectedDroplets() {
+    public Set<Droplet> dropletsRequiredForExecution() {
         return new HashSet<>(Set.of(droplet));
     }
 
@@ -52,10 +55,15 @@ public class MoveAction extends ActionBase {
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
 
+        if(droplet.getPositionX() == posX && droplet.getPositionY() == posY) {
+            setStatus(ActionStatus.COMPLETED);
+            return new ActionTickResult();
+        }
+
         if(!tickQueue.isEmpty()) {
             ActionTickResult tickResult = tickQueue.poll();
             if(tickQueue.isEmpty()) {
-                moveDropletPosition(droplet.getDropletMove());
+                droplet.moveDropletInDirection(droplet.getDropletMove());
                 droplet.setDropletMove(DropletMove.NONE);
                 if(dropletIsAtTargetPosition()) setStatus(ActionStatus.COMPLETED);
             }
@@ -63,7 +71,7 @@ public class MoveAction extends ActionBase {
         }
 
         DropletMove move = getDropletMove(programConfiguration);
-        if(!dropletMoveChangesDropletPosition(move)) return new ActionTickResult(); // Droplet is not moving.
+        if(!Droplet.dropletMoveChangesDropletPosition(move)) return new ActionTickResult(); // Droplet is not moving.
 
         droplet.setDropletMove(move);
 
@@ -80,46 +88,30 @@ public class MoveAction extends ActionBase {
         droplet.setStatus(DropletStatus.AVAILABLE);
     }
 
-    private List<String> getCommandsToActivateAdjacentElectrodes(ElectrodeGrid electrodeGrid) {
-        return droplet.getCoordinatesToEnableBeforeMove().stream()
-                .map(p -> electrodeGrid.getElectrode(p.x,p.y).getEnableBioAssemblyCommand())
+    private List<IDmfCommand> getCommandsToActivateAdjacentElectrodes(ElectrodeGrid electrodeGrid) {
+        List<Electrode> electrodesToEnable =  electrodeGrid.getElectrodesInGridAt(droplet.getCoordinatesToEnableBeforeMove());
+        return electrodesToEnable.stream()
+                .map(e -> (IDmfCommand) new SetElectrodeCommand(e))
                 .toList();
     }
 
-    private List<String> getCommandsToDeactivateAbandonedElectrodes(ElectrodeGrid electrodeGrid) {
-        return droplet.getCoordinatesToDisableAfterMove().stream()
-                .map(p -> electrodeGrid.getElectrode(p.x,p.y).getDisableBioAssemblyCommand())
+    private List<IDmfCommand> getCommandsToDeactivateAbandonedElectrodes(ElectrodeGrid electrodeGrid) {
+        List<Electrode> electrodesToEnable =  electrodeGrid.getElectrodesInGridAt(droplet.getCoordinatesToDisableAfterMove());
+        return electrodesToEnable.stream()
+                .map(e -> (IDmfCommand) new ClearElectrodeCommand(e))
                 .toList();
     }
 
     private DropletMove getDropletMove(ProgramConfiguration programConfiguration) {
 
-        List<Droplet> obstacleDroplets = programConfiguration.getDroplets().stream()
-                .filter(droplet -> droplet != this.droplet &&
-                        (droplet.getStatus() == DropletStatus.AVAILABLE ||
-                                droplet.getStatus() == DropletStatus.UNAVAILABLE))
+        List<Droplet> obstacleDroplets = programConfiguration.getDropletsOnDmfPlatform().stream()
+                .filter(d -> !d.equals(droplet))
                 .toList();
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, droplet, obstacleDroplets);
 
         IPathFinder pathFinder = programConfiguration.getPathFinder();
         return pathFinder.getMove(droplet, availableElectrodeGrid, posX, posY);
-    }
-
-    private void moveDropletPosition(DropletMove dropletMove) {
-        switch (dropletMove) {
-            case UP -> droplet.setPositionY(droplet.getPositionY() - 1);
-            case DOWN -> droplet.setPositionY(droplet.getPositionY() + 1);
-            case LEFT -> droplet.setPositionX(droplet.getPositionX() - 1);
-            case RIGHT -> droplet.setPositionX(droplet.getPositionX() + 1);
-        }
-    }
-
-    private boolean dropletMoveChangesDropletPosition(DropletMove dropletMove) {
-        return dropletMove == DropletMove.UP ||
-                dropletMove == DropletMove.LEFT ||
-                dropletMove == DropletMove.DOWN ||
-                dropletMove == DropletMove.RIGHT;
     }
 
     private boolean dropletIsAtTargetPosition() {

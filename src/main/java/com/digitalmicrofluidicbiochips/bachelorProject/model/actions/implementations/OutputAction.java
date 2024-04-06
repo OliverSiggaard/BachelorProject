@@ -2,9 +2,8 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementa
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +32,7 @@ public class OutputAction extends ActionBase {
     }
 
     @Override
-    public Set<Droplet> affectedDroplets() {
+    public Set<Droplet> dropletsRequiredForExecution() {
         return new HashSet<>();
     }
 

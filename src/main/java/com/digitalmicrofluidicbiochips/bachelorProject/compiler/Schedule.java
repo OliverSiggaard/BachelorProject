@@ -39,7 +39,7 @@ public class Schedule {
                 throw new IllegalStateException("Action should have been removed from queue");
             }
 
-            if(action.getStatus() == ActionStatus.NOT_STARTED && !allDropletsAvailable(action.affectedDroplets())) {
+            if(action.getStatus() == ActionStatus.NOT_STARTED && !allDropletsAvailable(action.dropletsRequiredForExecution())) {
                 continue;
             }
 

@@ -18,7 +18,7 @@ public class Compiler {
         Map<Droplet, Queue<ActionBase>> dropletActions = new HashMap<>();
 
         actions.forEach(action -> {
-            Set<Droplet> affectedDroplets = action.affectedDroplets();
+            Set<Droplet> affectedDroplets = action.dropletsRequiredForExecution();
             if(affectedDroplets == null) return;
             affectedDroplets.forEach(droplet -> {
                 if (!dropletActions.containsKey(droplet)) {
