@@ -1,4 +1,4 @@
-package com.digitalmicrofluidicbiochips.bachelorProject.utils;
+package com.digitalmicrofluidicbiochips.bachelorProject.testUtils;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;

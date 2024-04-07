@@ -6,14 +6,9 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.TickResultsToStringConverter;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Executor {
@@ -27,10 +22,10 @@ public class Executor {
         this.schedule = Compiler.compile(programConfiguration.getProgramActions());
     }
 
-    public void startExecution() {
+    public String startExecution() {
         List<ActionTickResult> tickResults = runExecutionLoop();
 
-        writeTickResultsToBioAssemblyFile(tickResults);
+        return TickResultsToStringConverter.convertTickResultsToString(tickResults);
     }
 
     public List<ActionTickResult> runExecutionLoop() {
@@ -48,7 +43,6 @@ public class Executor {
             for(ActionBase action : actionsToBeTicked) {
                 ActionTickResult actionResult = tickAction(action);
                 tickResult.addTickResult(actionResult);
-                actionResult.updateModelWithCommands();
             }
 
             for(ActionBase action : actionsToBeTicked) {
@@ -71,34 +65,4 @@ public class Executor {
 
         return action.executeTick(programConfiguration);
     }
-
-    private void writeTickResultsToBioAssemblyFile(List<ActionTickResult> tickResults) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String timeStamp = dateFormat.format(new Date());
-        String fileName = "src/main/resources/output/" + timeStamp + ".basm";
-        File outputFile = new File(fileName);
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            for (ActionTickResult tickResult : tickResults) {
-                for (String command : tickResult.getTickCommandsAsStrings()) {
-                    writer.write(command);
-                    writer.newLine();
-                }
-                writer.write("TICK;");
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-
-
-
-
-
 }
