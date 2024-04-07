@@ -15,6 +15,8 @@ public class TickResultsToStringConverter {
             programStringBuilder.append("TICK;").append(System.lineSeparator());
         }
         programStringBuilder.append("TSTOP;");
+        programStringBuilder.append("TICK;");
+        programStringBuilder.append("TICK;");
 
         return programStringBuilder.toString();
     }
