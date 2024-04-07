@@ -6,6 +6,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.ProgramConfigurationToDmfAsJson;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.TickResultsToStringConverter;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class Executor {
     }
 
     public String startExecution() {
+        ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration);
+
         List<ActionTickResult> tickResults = runExecutionLoop();
 
         return TickResultsToStringConverter.convertTickResultsToString(tickResults);

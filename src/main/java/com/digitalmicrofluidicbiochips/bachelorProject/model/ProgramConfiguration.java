@@ -24,13 +24,7 @@ public class ProgramConfiguration {
     public ProgramConfiguration(PlatformInformation platformInformation, List<ActionBase> programActions) {
         this.platformInformation = platformInformation;
         this.programActions = programActions;
-        this.droplets = programActions.stream()
-                .flatMap(action -> {
-                    Set<Droplet> affectedDroplets = action.dropletsRequiredForExecution();
-                    return affectedDroplets != null ? affectedDroplets.stream() : Stream.empty();
-                })
-                .distinct()
-                .collect(Collectors.toList());
+        this.droplets = getDropletsFromInputActions();
         this.pathFinder = new AStar();
         this.electrodeGrid = ElectrodeGridFactory.getElectrodeGrid(this);
     }
@@ -39,6 +33,16 @@ public class ProgramConfiguration {
         return droplets.stream()
                 .filter(droplet -> droplet.getStatus() != DropletStatus.NOT_CREATED)
                 .collect(Collectors.toSet());
+    }
+
+    public List<Droplet> getDropletsFromInputActions() {
+        return programActions.stream()
+                .flatMap(action -> {
+                    Set<Droplet> affectedDroplets = action.dropletsRequiredForExecution();
+                    return affectedDroplets != null ? affectedDroplets.stream() : Stream.empty();
+                })
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 
