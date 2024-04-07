@@ -24,8 +24,8 @@ public class JsonMixAction extends JsonActionBase {
             @JsonProperty("next") String nextActionId,
             @JsonProperty("posX") int posX,
             @JsonProperty("posY") int posY,
-            @JsonProperty("sizeX") int sizeX,
-            @JsonProperty("sizeY") int sizeY
+            @JsonProperty("xSize") int sizeX,
+            @JsonProperty("ySize") int sizeY
     ) {
         super(id);
         this.dropletId = dropletId;

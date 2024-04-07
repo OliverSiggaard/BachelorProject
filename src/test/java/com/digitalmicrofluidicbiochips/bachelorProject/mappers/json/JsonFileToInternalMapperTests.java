@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-// TODO: Add tests for droplets.
 public class JsonFileToInternalMapperTests {
     private final String filePath = "src/test/resources/reader/simpleActionModel.JSON"; // Adjust the file name if needed
     private ProgramConfiguration programConfiguration;
@@ -100,8 +99,8 @@ public class JsonFileToInternalMapperTests {
                 .findFirst()
                 .orElseThrow();
 
-        OutputAction outputAction = (OutputAction) actions.get(jsonOutputAction.getId());
-        Assertions.assertEquals(jsonOutputAction.getNextActionId(), outputAction.getNextAction().getId());
+        ActionQueue actionQueue = (ActionQueue) actions.get(jsonOutputAction.getId());
+        Assertions.assertEquals(jsonOutputAction.getNextActionId(), actionQueue.getNextAction().getId());
     }
 
     @Test
@@ -162,6 +161,7 @@ public class JsonFileToInternalMapperTests {
 
     @Test
     public void StoreActionNextActionsAreResolvedCorrectly() {
+
         Map<String,ActionBase> actions = programConfiguration.getProgramActions().stream()
                 .collect(Collectors.toMap(ActionBase::getId, action -> action));
 
@@ -170,8 +170,8 @@ public class JsonFileToInternalMapperTests {
                 .findFirst()
                 .orElseThrow();
 
-        StoreAction storeAction = (StoreAction) actions.get(jsonStoreAction.getId());
-        Assertions.assertEquals(jsonStoreAction.getNextActionId(), storeAction.getNextAction().getId());
+        ActionQueue actionQueue = (ActionQueue) actions.get(jsonStoreAction.getId());
+        Assertions.assertEquals(jsonStoreAction.getNextActionId(), actionQueue.getNextAction().getId());
     }
 
     @Test

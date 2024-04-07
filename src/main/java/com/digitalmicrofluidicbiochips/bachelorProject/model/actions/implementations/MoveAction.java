@@ -43,7 +43,7 @@ public class MoveAction extends ActionBase {
 
     @Override
     public Set<Droplet> dropletsRequiredForExecution() {
-        return new HashSet<>(Set.of(droplet));
+        return Set.of(droplet);
     }
 
     @Override

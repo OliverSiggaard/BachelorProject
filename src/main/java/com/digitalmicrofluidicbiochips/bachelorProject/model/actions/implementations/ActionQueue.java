@@ -36,42 +36,46 @@ public class ActionQueue extends ActionBase {
     @Override
     public void beforeExecution() {
         setStatus(ActionStatus.IN_PROGRESS);
+        // Droplets status is handled in the individual actions in the queue.
     }
 
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
+        ActionTickResult actionTickResult = new ActionTickResult();
         if(currentActionIndex >= actions.size()) return new ActionTickResult();
 
-        ActionBase currentAction = actions.get(currentActionIndex);
-        if(currentAction.getStatus() == ActionStatus.COMPLETED) {
-            throw new IllegalStateException("Current action can not be completed. Has to be Not Started or In Progress.");
+        ActionBase action = actions.get(currentActionIndex);
+        ActionStatus actionStatus = action.getStatus();
+        // Start or tick already running action
+        if(actionStatus == ActionStatus.NOT_STARTED) {
+            action.beforeExecution();
+            actionTickResult = action.executeTick(programConfiguration);
+        } else if (actionStatus == ActionStatus.IN_PROGRESS) {
+            actionTickResult = action.executeTick(programConfiguration);
         }
 
-        switch (currentAction.getStatus()) {
-            case NOT_STARTED -> {
-                currentAction.executeTick(programConfiguration);
-            }
-            case IN_PROGRESS -> currentAction.executeTick(programConfiguration);
-            case FAILED -> {
-                setStatus(ActionStatus.FAILED);
-                return new ActionTickResult();
-            }
-        }
-
-        //Was the action completed in this tick?
-        if(currentAction.getStatus() == ActionStatus.COMPLETED) {
-            currentAction.afterExecution();
+        // Check if it is completed
+        if(action.getStatus() == ActionStatus.COMPLETED) {
+            action.afterExecution();
             currentActionIndex++;
-            if (currentActionIndex < actions.size()) return new ActionTickResult();;
+            if (currentActionIndex == actions.size()) {
+                setStatus(ActionStatus.COMPLETED);
+            };
 
-            //If the last action was completed, the action list is also completed.
-            setStatus(ActionStatus.COMPLETED);
+            return actionTickResult;
         }
-        return new ActionTickResult();
+
+        // Check if it failed
+        if(action.getStatus() == ActionStatus.FAILED) {
+            setStatus(ActionStatus.FAILED);
+            return new ActionTickResult();
+        }
+
+        return actionTickResult;
     }
 
     @Override
     public void afterExecution() {
-
+        // Droplets status is handled in the individual actions in the queue.
     }
 }

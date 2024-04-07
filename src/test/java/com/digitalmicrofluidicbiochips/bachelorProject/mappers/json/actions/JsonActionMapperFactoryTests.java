@@ -84,15 +84,22 @@ public class JsonActionMapperFactoryTests {
         ActionBase action = getInternalAction(jsonOutputAction);
 
         // Assert
-        if (!(action instanceof OutputAction)) {
+        if (!(action instanceof ActionQueue)) {
             Assertions.fail("jsonAction was not converted correctly to internal model");
         }
+        ActionQueue actionQueue = (ActionQueue) action;
 
-        OutputAction outputAction = (OutputAction) action;
-        Assertions.assertEquals(id, outputAction.getId());
+        Assertions.assertEquals(2, actionQueue.getActions().size());
+        Assertions.assertTrue(actionQueue.getActions().get(0) instanceof MoveAction);
+        Assertions.assertTrue(actionQueue.getActions().get(1) instanceof OutputAction);
+        MoveAction moveAction = (MoveAction) actionQueue.getActions().get(0);
+        OutputAction outputAction = (OutputAction) actionQueue.getActions().get(1);
+
+        Assertions.assertEquals(posX, moveAction.getPosX());
+        Assertions.assertEquals(posY, moveAction.getPosY());
+        Assertions.assertNull(moveAction.getDroplet());
         Assertions.assertEquals(posX, outputAction.getPosX());
         Assertions.assertEquals(posY, outputAction.getPosY());
-        Assertions.assertNull(outputAction.getNextAction());
         Assertions.assertNull(outputAction.getDroplet());
     }
 
@@ -261,16 +268,23 @@ public class JsonActionMapperFactoryTests {
         ActionBase action = getInternalAction(jsonStoreAction);
 
         // Assert
-        if (!(action instanceof StoreAction)) {
+        if (!(action instanceof ActionQueue)) {
             Assertions.fail("jsonAction was not converted correctly to internal model");
         }
+        ActionQueue actionQueue = (ActionQueue) action;
 
-        StoreAction storeAction = (StoreAction) action;
-        Assertions.assertEquals(id, storeAction.getId());
+        Assertions.assertEquals(2, actionQueue.getActions().size());
+        Assertions.assertTrue(actionQueue.getActions().get(0) instanceof MoveAction);
+        Assertions.assertTrue(actionQueue.getActions().get(1) instanceof StoreAction);
+        MoveAction moveAction = (MoveAction) actionQueue.getActions().get(0);
+        StoreAction storeAction = (StoreAction) actionQueue.getActions().get(1);
+
+        Assertions.assertEquals(posX, moveAction.getPosX());
+        Assertions.assertEquals(posY, moveAction.getPosY());
+        Assertions.assertNull(moveAction.getDroplet());
         Assertions.assertEquals(posX, storeAction.getPosX());
         Assertions.assertEquals(posY, storeAction.getPosY());
-        Assertions.assertEquals(time, storeAction.getTime());
-        Assertions.assertNull(storeAction.getNextAction());
+        Assertions.assertEquals(time, storeAction.getTicksLeft());
         Assertions.assertNull(storeAction.getDroplet());
     }
 
