@@ -6,6 +6,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.TickResultsToStringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Executor {
     public String startExecution() {
         List<ActionTickResult> tickResults = runExecutionLoop();
 
-        return convertTickResultsToString(tickResults);
+        return TickResultsToStringConverter.convertTickResultsToString(tickResults);
     }
 
     public List<ActionTickResult> runExecutionLoop() {
@@ -63,22 +64,5 @@ public class Executor {
         }
 
         return action.executeTick(programConfiguration);
-    }
-
-    public String convertTickResultsToString(List<ActionTickResult> tickResults) {
-        StringBuilder programStringBuilder = new StringBuilder();
-
-        for (ActionTickResult tickResult : tickResults) {
-            for (String command : tickResult.getTickCommandsAsStrings()) {
-                System.out.println(command);
-                programStringBuilder.append(command).append(System.lineSeparator());
-            }
-            programStringBuilder.append("TICK;").append(System.lineSeparator());
-        }
-        programStringBuilder.append("TSTOP;");
-
-        System.out.println(programStringBuilder);
-
-        return programStringBuilder.toString();
     }
 }

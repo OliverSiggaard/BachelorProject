@@ -1,6 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.MockElectrodeGridSetupUtil;
+import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
