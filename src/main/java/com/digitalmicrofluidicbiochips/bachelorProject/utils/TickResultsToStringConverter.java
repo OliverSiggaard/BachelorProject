@@ -10,14 +10,11 @@ public class TickResultsToStringConverter {
 
         for (ActionTickResult tickResult : tickResults) {
             for (String command : tickResult.getTickCommandsAsStrings()) {
-                System.out.println(command);
                 programStringBuilder.append(command).append(System.lineSeparator());
             }
             programStringBuilder.append("TICK;").append(System.lineSeparator());
         }
         programStringBuilder.append("TSTOP;");
-
-        System.out.println(programStringBuilder);
 
         return programStringBuilder.toString();
     }
