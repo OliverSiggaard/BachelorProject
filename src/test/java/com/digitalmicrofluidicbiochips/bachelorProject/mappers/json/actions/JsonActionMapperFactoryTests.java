@@ -1,11 +1,14 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.factory.JsonActionMapperFactory;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class JsonActionMapperFactoryTests {
 
@@ -205,18 +208,41 @@ public class JsonActionMapperFactoryTests {
         ActionBase action = getInternalAction(jsonMixAction);
 
         // Assert
-        if (!(action instanceof MixAction)) {
+        if (!(action instanceof ActionQueue)) {
             Assertions.fail("jsonAction was not converted correctly to internal model");
         }
 
-        MixAction mixAction = (MixAction) action;
-        Assertions.assertEquals(id, mixAction.getId());
-        Assertions.assertEquals(posX, mixAction.getPosX());
-        Assertions.assertEquals(posY, mixAction.getPosY());
-        Assertions.assertEquals(sizeX, mixAction.getSizeX());
-        Assertions.assertEquals(sizeY, mixAction.getSizeY());
-        Assertions.assertNull(mixAction.getNextAction());
-        Assertions.assertNull(mixAction.getDroplet());
+        // There should be 5 tasks in the list. 1 to move to start position, and 4 to mix in a square.
+        ActionQueue actionQueue = (ActionQueue) action;
+        Assertions.assertEquals(5, actionQueue.getActions().size());
+
+        List<ActionBase> actions = actionQueue.getActions();
+
+        // Check that the tasks are MoveTasks and that they are placed correctly.
+        Assertions.assertTrue(actions.get(0) instanceof MoveAction);
+        MoveAction a0 = (MoveAction) actions.get(0);
+        Assertions.assertEquals(jsonMixAction.getPosX(), a0.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosY(), a0.getPosY());
+
+        Assertions.assertTrue(actions.get(1) instanceof MoveAction);
+        MoveAction a1 = (MoveAction) actions.get(1);
+        Assertions.assertEquals(jsonMixAction.getPosX() + jsonMixAction.getSizeX(), a1.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosY(), a1.getPosY());
+
+        Assertions.assertTrue(actions.get(2) instanceof MoveAction);
+        MoveAction a2 = (MoveAction) actions.get(2);
+        Assertions.assertEquals(jsonMixAction.getPosX() + jsonMixAction.getSizeX(), a2.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosY() + jsonMixAction.getSizeY(), a2.getPosY());
+
+        Assertions.assertTrue(actions.get(3) instanceof MoveAction);
+        MoveAction a3 = (MoveAction) actions.get(3);
+        Assertions.assertEquals(jsonMixAction.getPosX(), a3.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosY() + jsonMixAction.getSizeY(), a3.getPosY());
+
+        Assertions.assertTrue(actions.get(4) instanceof MoveAction);
+        MoveAction a4 = (MoveAction) actions.get(4);
+        Assertions.assertEquals(jsonMixAction.getPosX(), a4.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosY(), a4.getPosY());
     }
 
     @Test

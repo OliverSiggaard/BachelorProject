@@ -13,7 +13,7 @@ public class JsonInputAction extends JsonActionBase {
     private final String dropletId;
     private final int posX;
     private final int posY;
-    private final int volume;
+    private final double volume;
     private final String nextActionId;
 
     @JsonCreator
@@ -22,7 +22,7 @@ public class JsonInputAction extends JsonActionBase {
             @JsonProperty("dropletId") String dropletId,
             @JsonProperty("posX") int posX,
             @JsonProperty("posY") int posY,
-            @JsonProperty("volume") int volume,
+            @JsonProperty("volume") double volume,
             @JsonProperty("next") String nextActionId
     ) {
         super(id);

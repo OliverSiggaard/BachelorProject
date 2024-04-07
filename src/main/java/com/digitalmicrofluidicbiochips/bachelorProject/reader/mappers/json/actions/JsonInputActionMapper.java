@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.InputAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonInputAction;
 
@@ -16,18 +16,6 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
                 dtoModel.getPosX(),
                 dtoModel.getPosY(),
                 dtoModel.getVolume()
-        );
-    }
-
-    @Override
-    public JsonInputAction mapToDtoModel(InputAction internalModel) {
-        return new JsonInputAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getVolume(),
-                internalModel.getNextAction().getId()
         );
     }
 

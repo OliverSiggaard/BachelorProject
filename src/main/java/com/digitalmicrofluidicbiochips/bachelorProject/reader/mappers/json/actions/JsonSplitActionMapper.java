@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.SplitAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.SplitAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonSplitAction;
 
@@ -18,22 +18,6 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
                 dtoModel.getPosY1(),
                 dtoModel.getPosX2(),
                 dtoModel.getPosY2()
-        );
-    }
-
-    @Override
-    public JsonSplitAction mapToDtoModel(SplitAction internalModel) {
-        return new JsonSplitAction(
-                internalModel.getId(),
-                internalModel.getOriginDroplet().getID(),
-                internalModel.getResultDroplet1().getID(),
-                internalModel.getResultDroplet2().getID(),
-                internalModel.getRatio(),
-                internalModel.getPosX1(),
-                internalModel.getPosY1(),
-                internalModel.getPosX2(),
-                internalModel.getPosY2(),
-                internalModel.getNextAction().getId()
         );
     }
 

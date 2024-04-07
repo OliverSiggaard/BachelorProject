@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class represents an electrode in the DMF platform.
@@ -35,8 +36,9 @@ public class Electrode {
     // The Y size of the electrode for rectangle shape.
     private final int sizeY;
 
+    @Setter
     // The current status of the electrode - 0=off , 1=on - (in the future a number from 0 to 100 shall be supported)
-    private final int status;
+    private int status;
 
     public Electrode(
             String name,

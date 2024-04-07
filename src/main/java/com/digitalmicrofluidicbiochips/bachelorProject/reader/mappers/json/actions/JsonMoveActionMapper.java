@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.MoveAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MoveAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMoveAction;
 
@@ -14,17 +14,6 @@ public class JsonMoveActionMapper implements IActionMapper<JsonMoveAction, MoveA
                 dtoModel.getId(),
                 dtoModel.getPosX(),
                 dtoModel.getPosY()
-        );
-    }
-
-    @Override
-    public JsonMoveAction mapToDtoModel(MoveAction internalModel) {
-        return new JsonMoveAction(
-                internalModel.getId(),
-                internalModel.getDroplet().getID(),
-                internalModel.getPosX(),
-                internalModel.getPosY(),
-                internalModel.getNextAction().getId()
         );
     }
 

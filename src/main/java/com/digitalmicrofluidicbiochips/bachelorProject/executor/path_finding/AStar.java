@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class AStar implements IPathFinder {
     }
 
     @Override
-    public DropletMove getMove(Droplet activeDroplet, Electrode[][] availableGrid, int goalX, int goalY) {
+    public DropletMove getMove(Droplet activeDroplet, ElectrodeGrid availableGrid, int goalX, int goalY) {
         // Start and goal nodes
         Node start = new Node(activeDroplet.getPositionX(), activeDroplet.getPositionY());
         Node goal = new Node(goalX, goalY);
@@ -34,7 +35,7 @@ public class AStar implements IPathFinder {
         return getMoveFromPath(start, path);
     }
 
-    public static class Node implements Comparable<Node> {
+    private static class Node implements Comparable<Node> {
         // Position
         int x, y;
 
@@ -64,7 +65,7 @@ public class AStar implements IPathFinder {
         }
     }
 
-    private List<Node> findPath(Electrode[][] grid, Node start, Node goal) {
+    private List<Node> findPath(ElectrodeGrid grid, Node start, Node goal) {
             PriorityQueue<Node> openList = new PriorityQueue<>(); // Nodes to be examined
             ArrayList<Node> closedList = new ArrayList<>(); // Nodes that have been examined
 
@@ -106,7 +107,7 @@ public class AStar implements IPathFinder {
     }
 
 
-    private List<Node> getNeighborNodes(Node node, Electrode[][] grid) {
+    private List<Node> getNeighborNodes(Node node, ElectrodeGrid grid) {
         List<Node> neighbors = new ArrayList<>();
 
         // Possible movements (up, down, left, right)
@@ -123,8 +124,8 @@ public class AStar implements IPathFinder {
     }
 
     // Checks if the position is within bounds and if electrode is available
-    private boolean isValidPosition(int x, int y, Electrode[][] grid) {
-        return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length && grid[x][y] != null;
+    private boolean isValidPosition(int x, int y, ElectrodeGrid grid) {
+        return x >= 0 && x < grid.getXSize() && y >= 0 && y < grid.getYSize() && grid.getElectrode(x, y) != null;
     }
 
     // Heuristic is calculated as Manhattan distance

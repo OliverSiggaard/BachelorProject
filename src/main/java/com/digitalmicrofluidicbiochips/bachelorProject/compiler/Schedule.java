@@ -1,8 +1,9 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-
-import com.digitalmicrofluidicbiochips.bachelorProject.model.task.TaskBase;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 
 import java.util.*;
 
@@ -12,34 +13,43 @@ import java.util.*;
  */
 public class Schedule {
 
-    private final Map<Droplet, Queue<TaskBase>> dropletTasks;
+    private final Map<Droplet, Queue<ActionBase>> dropletActions;
 
-    public Schedule(List<TaskBase> tasks) {
-        this.dropletTasks = new HashMap<>();
-
-        tasks.forEach(task -> {
-            task.affectedDroplets().forEach(droplet -> {
-                if (!dropletTasks.containsKey(droplet)) {
-                    dropletTasks.put(droplet, new LinkedList<>());
-                }
-
-                dropletTasks.get(droplet).add(task);
-            });
-        });
+    public Schedule(Map<Droplet, Queue<ActionBase>> dropletActions) {
+        this.dropletActions = dropletActions;
     }
 
+    public void updateSchedule() {
+        for ( Queue<ActionBase> actions : dropletActions.values() ) {
+            while(!actions.isEmpty() && actions.peek().getStatus() == ActionStatus.COMPLETED) {
+                actions.poll();
+            }
+        }
+    }
 
+    public List<ActionBase> getActionsToBeTicked() {
+        List<ActionBase> actionsToBeTicked = new ArrayList<>();
+        for ( Queue<ActionBase> actions : dropletActions.values() ) {
+            if(actions.isEmpty()) {
+                continue;
+            }
+            ActionBase action = actions.peek();
 
+            if(action.getStatus() == ActionStatus.COMPLETED) {
+                throw new IllegalStateException("Action should have been removed from queue");
+            }
 
+            if(action.getStatus() == ActionStatus.NOT_STARTED && !allDropletsAvailable(action.dropletsRequiredForExecution())) {
+                continue;
+            }
 
+            actionsToBeTicked.add(actions.peek());
+        }
 
+        return actionsToBeTicked;
+    }
 
-
-
-
-
-
-
-
-
+    private boolean allDropletsAvailable(Set<Droplet> droplets) {
+        return droplets.stream().allMatch(droplet -> droplet.getStatus().equals(DropletStatus.AVAILABLE));
+    }
 }

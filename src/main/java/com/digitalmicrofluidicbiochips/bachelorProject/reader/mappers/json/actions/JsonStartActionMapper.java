@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.StartAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.StartAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonStartAction;
 
@@ -12,14 +12,6 @@ public class JsonStartActionMapper implements IActionMapper<JsonStartAction, Sta
     @Override
     public StartAction mapToInternalModel(JsonStartAction dtoModel) {
         return new StartAction(dtoModel.getId());
-    }
-
-    @Override
-    public JsonStartAction mapToDtoModel(StartAction internalModel) {
-        return new JsonStartAction(
-                internalModel.getId(),
-                internalModel.getNextAction().getId()
-        );
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.IfAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.IfAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonIfAction;
 
@@ -14,16 +14,6 @@ public class JsonIfActionMapper implements IActionMapper<JsonIfAction, IfAction>
         return new IfAction(
                 dtoModel.getId(),
                 dtoModel.getCondition()
-        );
-    }
-
-    @Override
-    public JsonIfAction mapToDtoModel(IfAction internalModel) {
-        return new JsonIfAction(
-                internalModel.getId(),
-                internalModel.getCondition(),
-                internalModel.getTrueNextAction().getId(),
-                internalModel.getFalseNextAction().getId()
         );
     }
 

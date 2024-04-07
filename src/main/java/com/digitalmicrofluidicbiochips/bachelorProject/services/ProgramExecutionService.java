@@ -28,5 +28,7 @@ public class ProgramExecutionService {
 
         // Execute the program
         executor.startExecution();
+
+        System.out.println("Program executed successfully");
     }
 }

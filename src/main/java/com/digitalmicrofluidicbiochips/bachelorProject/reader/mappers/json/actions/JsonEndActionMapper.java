@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.EndAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.EndAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonEndAction;
 
@@ -13,13 +13,6 @@ public class JsonEndActionMapper implements IActionMapper<JsonEndAction, EndActi
     public EndAction mapToInternalModel(JsonEndAction dtoModel) {
         return new EndAction(
                 dtoModel.getId()
-        );
-    }
-
-    @Override
-    public JsonEndAction mapToDtoModel(EndAction internalModel) {
-        return new JsonEndAction(
-                internalModel.getId()
         );
     }
 
