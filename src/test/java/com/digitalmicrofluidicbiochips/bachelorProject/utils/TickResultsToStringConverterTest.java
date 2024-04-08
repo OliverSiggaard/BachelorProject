@@ -30,7 +30,10 @@ public class TickResultsToStringConverterTest {
                                 "TICK;" + System.lineSeparator() +
                                 "COMMAND 3;" + System.lineSeparator() +
                                 "TICK;" + System.lineSeparator() +
-                                "TSTOP;";
+                                "TSTOP;" + System.lineSeparator() +
+                                "TICK;" + System.lineSeparator() +
+                                "TICK;";
+
 
         String resultString = TickResultsToStringConverter.convertTickResultsToString(tickResultList);
 
