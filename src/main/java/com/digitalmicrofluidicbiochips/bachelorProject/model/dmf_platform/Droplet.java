@@ -63,6 +63,11 @@ public class Droplet {
         this.diameter = getDiameterFromVol();
     }
 
+    // todo: Implement this method
+    public int getElectrodeDiameter() {
+        return (int) Math.ceil((double)diameter / 20);
+    }
+
     public void moveDropletInDirection(DropletMove dropletMove) {
         switch (dropletMove) {
             case UP -> setPositionY(getPositionY() - 1);

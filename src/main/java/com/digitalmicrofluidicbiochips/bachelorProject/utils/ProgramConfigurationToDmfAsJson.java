@@ -40,15 +40,19 @@ public class ProgramConfigurationToDmfAsJson {
             List<String> colors = generateHexColors(dropletsList.size());
             int id = 0;
             for (Droplet droplet : dropletsList) {
-
                 Electrode electrode = electrodeGrid.getElectrode(droplet.getPositionX(), droplet.getPositionY());
+                int offsetToCenter = (droplet.getElectrodeDiameter() * 20) / 2;
+                int centerX = droplet.getPositionX() * 20 + offsetToCenter + 120 - 10; // 120 is resovoir width
+                int centerY = droplet.getPositionY() * 20 + offsetToCenter; // 120 is resovoir width
+                System.out.println(offsetToCenter);
+
 
                 ObjectNode dropletNode = mapper.createObjectNode();
                 dropletNode.put("name", droplet.getID());
                 dropletNode.put("ID", id);
                 dropletNode.put("substance_name", droplet.getID());
-                dropletNode.put("positionX", droplet.getPositionX() * electrode.getSizeX() + 120); // 120 is resovoir width
-                dropletNode.put("positionY", droplet.getPositionY() * electrode.getSizeY() + droplet.getDiameter() / 2);
+                dropletNode.put("positionX", centerX); // 120 is resovoir width
+                dropletNode.put("positionY", centerY);
                 dropletNode.put("sizeX", droplet.getDiameter());
                 dropletNode.put("sizeY", droplet.getDiameter());
                 dropletNode.put("color", colors.get(id));

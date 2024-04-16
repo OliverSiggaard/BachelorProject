@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -80,6 +81,11 @@ public class ElectrodeGridFactory {
         int y2 = Math.min(maxYCoord, (obstacleDroplet.getPositionY() + obstacleDropletDiameter));
 
         removeObstacleDropletElectrodes(availableGrid, x1, y1, x2, y2);
+
+        for (Point point : obstacleDroplet.getCoordinatesToEnableBeforeMove()) {
+            availableGrid.removeElectrode(point.x, point.y);
+        }
+
         removeInaccessibleBorderElectrodes(availableGrid, activeDropletSize);
     }
 
@@ -92,6 +98,7 @@ public class ElectrodeGridFactory {
                 availableGrid.removeElectrode(x, y);
             }
         }
+
     }
 
 
