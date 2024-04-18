@@ -89,14 +89,14 @@ public class MoveAction extends ActionBase {
     }
 
     private List<IDmfCommand> getCommandsToActivateAdjacentElectrodes(ElectrodeGrid electrodeGrid) {
-        List<Electrode> electrodesToEnable =  electrodeGrid.getElectrodesInGridAt(droplet.getCoordinatesToEnableBeforeMove());
+        List<Electrode> electrodesToEnable =  droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid);
         return electrodesToEnable.stream()
                 .map(e -> (IDmfCommand) new SetElectrodeCommand(e))
                 .toList();
     }
 
     private List<IDmfCommand> getCommandsToDeactivateAbandonedElectrodes(ElectrodeGrid electrodeGrid) {
-        List<Electrode> electrodesToEnable =  electrodeGrid.getElectrodesInGridAt(droplet.getCoordinatesToDisableAfterMove());
+        List<Electrode> electrodesToEnable =  droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid);
         return electrodesToEnable.stream()
                 .map(e -> (IDmfCommand) new ClearElectrodeCommand(e))
                 .toList();

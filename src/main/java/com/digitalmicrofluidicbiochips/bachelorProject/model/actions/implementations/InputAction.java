@@ -8,6 +8,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResul
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.IDmfCommand;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.SetElectrodeCommand;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,8 +60,9 @@ public class InputAction extends ActionBase {
         droplet.setDropletMove(DropletMove.NONE);
 
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
+        int electrodeWidth = electrodeGrid.getElectrode(0, 0).getSizeX();
         ActionTickResult actionTickResult = new ActionTickResult();
-        int diameterInElectrodes = (int) Math.ceil((double)droplet.getDiameter() / 20);
+        int diameterInElectrodes = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(droplet, electrodeWidth);
         for(int dx = 0; dx < diameterInElectrodes ; dx++) {
             for (int dy = 0; dy < diameterInElectrodes; dy++) {
                 int x = droplet.getPositionX() + dx;

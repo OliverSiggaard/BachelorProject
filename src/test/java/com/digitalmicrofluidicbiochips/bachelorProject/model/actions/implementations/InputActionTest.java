@@ -9,7 +9,8 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfCommandUtils;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtilsTest;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,14 +75,14 @@ public class InputActionTest {
         SetElectrodeCommand command = (SetElectrodeCommand) tickResult.getTickCommands().get(0);
         Electrode electrodeUnderDroplet = electrodeGrid.getElectrode(droplet.getPositionX(), droplet.getPositionY());
         Assertions.assertEquals(
-                DmfCommandUtils.getSetElectrodeCommand(electrodeUnderDroplet.getID()),
+                DmfPlatformUtils.getSetElectrodeCommand(electrodeUnderDroplet.getID()),
                 command.getDmfCommand());
     }
 
     @Test
     public void testExecuteTickWithDropletSpanning3x3() {
 
-        droplet = new Droplet("droplet1", 0,0, 7.0);
+        droplet = new Droplet("droplet1", 0,0, 15.0);
         sut.setDroplet(droplet);
 
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
@@ -106,7 +107,7 @@ public class InputActionTest {
             for (int dy = 0; dy < 3; dy++) {
                 Electrode electrodeUnderDroplet = electrodeGrid.getElectrode(droplet.getPositionX() + dx, droplet.getPositionY() + dy);
                 Assertions.assertEquals(
-                        DmfCommandUtils.getSetElectrodeCommand(electrodeUnderDroplet.getID()),
+                        DmfPlatformUtils.getSetElectrodeCommand(electrodeUnderDroplet.getID()),
                         tickResult.getTickCommands().get(dx * 3 + dy).getDmfCommand());
             }
         }

@@ -22,37 +22,31 @@ public class ProgramConfigurationToDmfAsJson {
 
         // File paths
         String originalFilePath = "src/main/resources/simulator_platform640.json";
-        String newFilePath = "src/main/resources/output/latest_program_platform640.json";;
+        String newFilePath = "src/main/resources/output/simulator_platform640.json";;
 
         // Create ObjectMapper instance
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // Enable indentation for better readability
 
         try {
-            // Read original JSON file
             JsonNode originalData = mapper.readTree(new File(originalFilePath));
-
-            // Retrieve the "droplets" array from the JSON data
             ArrayNode dropletsArray = (ArrayNode) originalData.get("droplets");
 
-            // Convert list of Droplet objects to JSON and append to "droplets" array
-            List<Droplet> dropletsList = programConfiguration.getDropletsFromInputActions(); // Assuming you have a method to get the list of Droplets
+            List<Droplet> dropletsList = programConfiguration.getDropletsFromInputActions();
             List<String> colors = generateHexColors(dropletsList.size());
             int id = 0;
             for (Droplet droplet : dropletsList) {
                 Electrode electrode = electrodeGrid.getElectrode(droplet.getPositionX(), droplet.getPositionY());
-                int offsetToCenter = (droplet.getElectrodeDiameter() * 20) / 2;
-                int centerX = droplet.getPositionX() * 20 + offsetToCenter + 120 - 10; // 120 is resovoir width
-                int centerY = droplet.getPositionY() * 20 + offsetToCenter; // 120 is resovoir width
-                System.out.println(offsetToCenter);
-
+                int electrodeWidth = electrode.getSizeX();
+                int dropletDiameterElectrodeSpan = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(droplet, electrodeWidth);
+                int offsetToCenter = dropletDiameterElectrodeSpan * electrodeWidth / 2;
 
                 ObjectNode dropletNode = mapper.createObjectNode();
                 dropletNode.put("name", droplet.getID());
                 dropletNode.put("ID", id);
                 dropletNode.put("substance_name", droplet.getID());
-                dropletNode.put("positionX", centerX); // 120 is resovoir width
-                dropletNode.put("positionY", centerY);
+                dropletNode.put("positionX", droplet.getPositionX() * electrodeWidth + offsetToCenter);
+                dropletNode.put("positionY", droplet.getPositionY() * electrodeWidth + offsetToCenter);
                 dropletNode.put("sizeX", droplet.getDiameter());
                 dropletNode.put("sizeY", droplet.getDiameter());
                 dropletNode.put("color", colors.get(id));
@@ -74,8 +68,7 @@ public class ProgramConfigurationToDmfAsJson {
     private static List<String> generateHexColors(int numberOfColors) {
         List<String> colors = new ArrayList<>();
 
-        // Add pure Red, Green, and Blue
-        colors.add("#FF0000"); // Red
+        // Add pure Green, and Blue initially. Electrodes are red, so we want to avoid that color.
         colors.add("#00FF00"); // Green
         colors.add("#0000FF"); // Blue
 

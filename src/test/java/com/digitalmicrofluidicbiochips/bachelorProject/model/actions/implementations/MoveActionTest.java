@@ -10,7 +10,8 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfCommandUtils;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtilsTest;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,7 +116,7 @@ public class MoveActionTest {
         Assertions.assertTrue(result.getTickCommands().get(0) instanceof SetElectrodeCommand);
         Electrode expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 4);
         Assertions.assertEquals(
-                DmfCommandUtils.getSetElectrodeCommand(expectedElectrode.getID()),
+                DmfPlatformUtils.getSetElectrodeCommand(expectedElectrode.getID()),
                 (result.getTickCommands().get(0)).getDmfCommand());
 
         result = sut.executeTick(programConfigurationMock);
@@ -126,7 +127,7 @@ public class MoveActionTest {
         Assertions.assertEquals(1, result.getTickCommands().size());
         expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 3);
         Assertions.assertEquals(
-                DmfCommandUtils.getClearElectrodeCommand(expectedElectrode.getID()),
+                DmfPlatformUtils.getClearElectrodeCommand(expectedElectrode.getID()),
                 (result.getTickCommands().get(0)).getDmfCommand());
 
         result = sut.executeTick(programConfigurationMock);
@@ -137,7 +138,7 @@ public class MoveActionTest {
         Assertions.assertEquals(1, result.getTickCommands().size());
         expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 5);
         Assertions.assertEquals(
-                DmfCommandUtils.getSetElectrodeCommand(expectedElectrode.getID()),
+                DmfPlatformUtils.getSetElectrodeCommand(expectedElectrode.getID()),
                 (result.getTickCommands().get(0)).getDmfCommand());
 
         result = sut.executeTick(programConfigurationMock);
@@ -148,7 +149,7 @@ public class MoveActionTest {
         Assertions.assertEquals(1, result.getTickCommands().size());
         expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 4);
         Assertions.assertEquals(
-                DmfCommandUtils.getClearElectrodeCommand(expectedElectrode.getID()),
+                DmfPlatformUtils.getClearElectrodeCommand(expectedElectrode.getID()),
                 (result.getTickCommands().get(0)).getDmfCommand());
     }
 
