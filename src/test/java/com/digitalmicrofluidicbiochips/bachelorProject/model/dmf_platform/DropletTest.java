@@ -1,14 +1,22 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
+import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DropletTest {
+
+    private ElectrodeGrid electrodeGrid;
+
+    @BeforeEach
+    void setUp() {
+        electrodeGrid = MockElectrodeGridSetupUtil.createMockElectrodeGrid(32, 20);
+    }
+
     @Test
     void testConstructorInitialization() {
         Droplet droplet = new Droplet("1", 20, 40, 2);
@@ -78,17 +86,6 @@ public class DropletTest {
         Assertions.assertEquals(50, droplet.getPositionY());
     }
 
-    /*
-        private void moveDropletInDirection(DropletMove dropletMove) {
-        switch (dropletMove) {
-            case UP -> setPositionY(getPositionY() - 1);
-            case DOWN -> setPositionY(getPositionY() + 1);
-            case LEFT -> setPositionX(getPositionX() - 1);
-            case RIGHT -> setPositionX(getPositionX() + 1);
-        }
-    }
-     */
-
     @Test
     void testMoveDropletInDirectionUp() {
         Droplet droplet = new Droplet("1", 10, 10, 1);
@@ -142,49 +139,49 @@ public class DropletTest {
         Droplet droplet = new Droplet("1", 10, 10, 1);// volume 1 = 1 electrode diameter
 
         droplet.setDropletMove(DropletMove.UP);
-        Assertions.assertEquals(1, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(10,9)));
+        Assertions.assertEquals(1, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,9)));
 
         droplet.setDropletMove(DropletMove.DOWN);
-        Assertions.assertEquals(1, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(10,11)));
+        Assertions.assertEquals(1, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,11)));
 
         droplet.setDropletMove(DropletMove.LEFT);
-        Assertions.assertEquals(1, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(9,10)));
+        Assertions.assertEquals(1, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(9,10)));
 
         droplet.setDropletMove(DropletMove.RIGHT);
-        Assertions.assertEquals(1, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(11,10)));
+        Assertions.assertEquals(1, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(11,10)));
     }
 
     @Test
     void testGetCoordinatesToEnableBeforeMove3x3Droplet() {
-        Droplet droplet = new Droplet("1", 10, 10, 7); // volume 7 = 3 electrodes diameter
+        Droplet droplet = new Droplet("1", 10, 10, 15); // volume 15 = 2 electrodes diameter
 
         droplet.setDropletMove(DropletMove.UP);
-        Assertions.assertEquals(3, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(10,9)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(11,9)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(12,9)));
+        Assertions.assertEquals(3, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,9)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(11,9)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,9)));
 
         droplet.setDropletMove(DropletMove.DOWN);
-        Assertions.assertEquals(3, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(10,13)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(11,13)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(12,13)));
+        Assertions.assertEquals(3, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,13)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(11,13)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,13)));
 
         droplet.setDropletMove(DropletMove.LEFT);
-        Assertions.assertEquals(3, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(9,10)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(9,11)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(9,12)));
+        Assertions.assertEquals(3, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(9,10)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(9,11)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(9,12)));
 
         droplet.setDropletMove(DropletMove.RIGHT);
-        Assertions.assertEquals(3, droplet.getCoordinatesToEnableBeforeMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(13,10)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(13,11)));
-        Assertions.assertTrue(droplet.getCoordinatesToEnableBeforeMove().contains(new Point(13,12)));
+        Assertions.assertEquals(3, droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(13,10)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(13,11)));
+        Assertions.assertTrue(droplet.getElectrodesToEnableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(13,12)));
     }
 
     @Test
@@ -192,49 +189,49 @@ public class DropletTest {
         Droplet droplet = new Droplet("1", 10, 10, 1);// volume 1 = 1 electrode diameter
 
         droplet.setDropletMove(DropletMove.UP);
-        Assertions.assertEquals(1, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,10)));
+        Assertions.assertEquals(1, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,10)));
 
         droplet.setDropletMove(DropletMove.DOWN);
-        Assertions.assertEquals(1, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,10)));
+        Assertions.assertEquals(1, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,10)));
 
         droplet.setDropletMove(DropletMove.LEFT);
-        Assertions.assertEquals(1, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,10)));
+        Assertions.assertEquals(1, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,10)));
 
         droplet.setDropletMove(DropletMove.RIGHT);
-        Assertions.assertEquals(1, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,10)));
+        Assertions.assertEquals(1, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,10)));
     }
 
     @Test
     void testGetCoordinatesToDisableBeforeMove3x3Droplet() {
-        Droplet droplet = new Droplet("1", 10, 10, 7); // volume 7 = 3 electrodes diameter
+        Droplet droplet = new Droplet("1", 10, 10, 15); // volume 15 = 3 electrodes diameter
 
         droplet.setDropletMove(DropletMove.UP);
-        Assertions.assertEquals(3, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,12)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(11,12)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(12,12)));
+        Assertions.assertEquals(3, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,12)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(11,12)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,12)));
 
         droplet.setDropletMove(DropletMove.DOWN);
-        Assertions.assertEquals(3, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,10)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(11,10)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(12,10)));
+        Assertions.assertEquals(3, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,10)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(11,10)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,10)));
 
         droplet.setDropletMove(DropletMove.LEFT);
-        Assertions.assertEquals(3, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(12,10)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(12,11)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(12,12)));
+        Assertions.assertEquals(3, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,10)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,11)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(12,12)));
 
         droplet.setDropletMove(DropletMove.RIGHT);
-        Assertions.assertEquals(3, droplet.getCoordinatesToDisableAfterMove().size());
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,10)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,11)));
-        Assertions.assertTrue(droplet.getCoordinatesToDisableAfterMove().contains(new Point(10,12)));
+        Assertions.assertEquals(3, droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).size());
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,10)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,11)));
+        Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,12)));
     }
 
 

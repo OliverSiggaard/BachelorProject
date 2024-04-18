@@ -57,9 +57,9 @@ public class Electrode {
         this.driverID = driverID;
         this.positionX = positionX;
         this.positionY = positionY;
+        this.status = status;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.status = status;
     }
 
 }

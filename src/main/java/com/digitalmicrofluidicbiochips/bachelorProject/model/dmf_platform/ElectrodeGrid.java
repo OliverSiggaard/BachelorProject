@@ -40,17 +40,19 @@ public class ElectrodeGrid implements Cloneable {
         return grid;
     }
 
-    public List<Electrode> getElectrodesInGridAt(List<Point> points) {
-        List<Electrode> electrodes = new ArrayList<>();
-        for (Point point : points) {
-            if(point.getX() < 0 || point.getX() >= grid.length ||
-                    point.getY() < 0 || point.getY() >= grid[0].length) {
-                throw new IllegalArgumentException("Point is out of bounds");
-            }
+    public int getElectrodeSizeOfElectrodeInGrid() {
+        return getFirstNonNullElectrodeInGrid().getSizeX();
+    }
 
-            electrodes.add(grid[point.x][point.y]);
+    private Electrode getFirstNonNullElectrodeInGrid() {
+        for (Electrode[] electrodes : grid) {
+            for (Electrode electrode : electrodes) {
+                if (electrode != null) {
+                    return electrode;
+                }
+            }
         }
-        return electrodes;
+        throw new IllegalStateException("No electrode found in grid");
     }
 
 }

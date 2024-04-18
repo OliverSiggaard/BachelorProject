@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,8 @@ class ElectrodeGridFactoryTest {
 
     private ElectrodeGrid electrodeGrid;
     private ElectrodeGridVisualizer electrodeGridVisualizer;
-    private static final int SIZE_X = 10;
-    private static final int SIZE_Y = 8;
+    private static final int SIZE_X = 12;
+    private static final int SIZE_Y = 10;
 
 
     @BeforeEach
@@ -141,6 +142,74 @@ class ElectrodeGridFactoryTest {
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
         assertTrue(electrodeSquareIsNull(2, 6, 2, 6, availableGrid));
+        assertTrue(borderIsNull(1, availableGrid));
+    }
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia2MovingUp() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
+        obstacleDroplet.setDropletMove(DropletMove.UP); // Set the move of the obstacle droplet to UP
+        obstacleDroplets.add(obstacleDroplet);
+
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(2, 6, 1, 6, availableGrid));
+        assertTrue(borderIsNull(1, availableGrid));
+    }
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia2MovingDown() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
+        obstacleDroplet.setDropletMove(DropletMove.DOWN); // Set the move of the obstacle droplet to UP
+        obstacleDroplets.add(obstacleDroplet);
+
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(2, 6, 2, 7, availableGrid));
+        assertTrue(borderIsNull(1, availableGrid));
+    }
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia2MovingLeft() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
+        obstacleDroplet.setDropletMove(DropletMove.LEFT); // Set the move of the obstacle droplet to UP
+        obstacleDroplets.add(obstacleDroplet);
+
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(1, 6, 2, 6, availableGrid));
+        assertTrue(borderIsNull(1, availableGrid));
+    }
+
+    @Test
+    void testAvailableElectrodesRetrievedCorrectly_activeDia2_obstacleDia2MovingRight() {
+        Droplet activeDroplet = new Droplet("1", 0, 0, 3);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 4, 4, 3);
+        obstacleDroplet.setDropletMove(DropletMove.RIGHT); // Set the move of the obstacle droplet to UP
+        obstacleDroplets.add(obstacleDroplet);
+
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, activeDroplet, obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        assertTrue(electrodeSquareIsNull(2, 7, 2, 6, availableGrid));
         assertTrue(borderIsNull(1, availableGrid));
     }
 

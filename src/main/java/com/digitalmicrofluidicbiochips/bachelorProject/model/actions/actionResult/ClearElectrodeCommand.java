@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfCommandUtils;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 
 public class ClearElectrodeCommand implements IDmfCommand {
 
@@ -13,7 +13,7 @@ public class ClearElectrodeCommand implements IDmfCommand {
 
     @Override
     public String getDmfCommand() {
-        return DmfCommandUtils.getClearElectrodeCommand(electrode.getID());
+        return DmfPlatformUtils.getClearElectrodeCommand(electrode.getID());
     }
 
     @Override

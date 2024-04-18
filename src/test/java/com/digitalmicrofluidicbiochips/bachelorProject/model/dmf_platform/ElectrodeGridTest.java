@@ -86,24 +86,4 @@ public class ElectrodeGridTest {
         }
     }
 
-    @Test
-    void testGetElectrodesInGridAt() {
-        List<Point> points = new ArrayList<>();
-        points.add(new Point(0,0));
-        points.add(new Point(1,3));
-        points.add(new Point(12,7));
-        points.add(new Point(31,19));
-        points.add(new Point(15,10));
-        points.add(new Point(10,15));
-
-        List<Electrode> electrodes = sut.getElectrodesInGridAt(points);
-        Assertions.assertEquals(6, electrodes.size());
-        Assertions.assertTrue(electrodes.contains(electrode2dArray[0][0]));
-        Assertions.assertTrue(electrodes.contains(electrode2dArray[1][3]));
-        Assertions.assertTrue(electrodes.contains(electrode2dArray[12][7]));
-        Assertions.assertTrue(electrodes.contains(electrode2dArray[31][19]));
-        Assertions.assertTrue(electrodes.contains(electrode2dArray[15][10]));
-        Assertions.assertTrue(electrodes.contains(electrode2dArray[10][15]));
-    }
-
 }

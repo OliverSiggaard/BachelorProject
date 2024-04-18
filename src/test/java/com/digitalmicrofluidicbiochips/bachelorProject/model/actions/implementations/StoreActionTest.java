@@ -105,5 +105,13 @@ public class StoreActionTest {
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }
 
+    @Test
+    public void testNextAction() {
+        Assertions.assertNull(sut.getNextAction());
+        StoreAction nextAction = new StoreAction("id", 1, 2, 3);
+        sut.setNextAction(nextAction);
+        Assertions.assertEquals(nextAction, sut.getNextAction());
+    }
+
 
 }

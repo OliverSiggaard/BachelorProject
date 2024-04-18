@@ -1,10 +1,10 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,60 +87,65 @@ public class Droplet {
         double diameterInCorrectUnit = diameterInMeters * 10000; // Convert from m to 1/10th of a mm
 
         return (int) Math.ceil(diameterInCorrectUnit); // Return rounded (up) diameter
-
     }
 
 
-    public List<Point> getCoordinatesToEnableBeforeMove() {
-        List<Point> electrodePositions = new ArrayList<>();
-        int diameterInElectrodes = (int) Math.ceil((double)diameter / 20);
+    public List<Electrode> getElectrodesToEnableDuringDropletMove(ElectrodeGrid electrodeGrid) {
+        int electrodeWidth = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
+        int diameterInElectrodes = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(this, electrodeWidth);
+        List<Electrode> electrodes = new ArrayList<>();
         if(dropletMove == DropletMove.UP) {
             for (int i = 0; i < diameterInElectrodes ; i++) {
-                electrodePositions.add(new Point(positionX + i, positionY - 1));
+                electrodes.add(electrodeGrid.getElectrode(positionX + i, positionY - 1));
             }
         }
         if(dropletMove == DropletMove.DOWN) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX + i, positionY + diameterInElectrodes));
+                electrodes.add(electrodeGrid.getElectrode(positionX + i, positionY + diameterInElectrodes));
             }
         }
         if(dropletMove == DropletMove.LEFT) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX - 1, positionY + i));
+                electrodes.add(electrodeGrid.getElectrode(positionX - 1, positionY + i));
             }
         }
         if(dropletMove == DropletMove.RIGHT) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX + diameterInElectrodes, positionY + i));
+                electrodes.add(electrodeGrid.getElectrode(positionX + diameterInElectrodes, positionY + i));
             }
         }
-        return electrodePositions;
+
+        // Filter out electrodes that are null, and only return electrodes that are currently off.
+        return electrodes.stream().filter(o -> o != null && o.getStatus() == 0).toList();
     }
 
-    public List<Point> getCoordinatesToDisableAfterMove() {
-        List<Point> electrodePositions = new ArrayList<>();
-        int diameterInElectrodes = (int) Math.ceil((double)diameter / 20);
+    public List<Electrode> getElectrodesToDisableDuringDropletMove(ElectrodeGrid electrodeGrid) {
+        int electrodeWidth = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
+        int diameterInElectrodes = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(this, electrodeWidth);
+
+        List<Electrode> electrodes = new ArrayList<>();
         if(dropletMove == DropletMove.UP) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX + i, positionY + diameterInElectrodes - 1));
+                electrodes.add(electrodeGrid.getElectrode(positionX + i, positionY + diameterInElectrodes - 1));
             }
         }
         if(dropletMove == DropletMove.DOWN) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX + i, positionY));
+                electrodes.add(electrodeGrid.getElectrode(positionX + i, positionY));
             }
         }
         if(dropletMove == DropletMove.LEFT) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX + diameterInElectrodes - 1, positionY + i));
+                electrodes.add(electrodeGrid.getElectrode(positionX + diameterInElectrodes - 1, positionY + i));
             }
         }
         if(dropletMove == DropletMove.RIGHT) {
             for (int i = 0; i < diameterInElectrodes; i++) {
-                electrodePositions.add(new Point(positionX, positionY + i));
+                electrodes.add(electrodeGrid.getElectrode(positionX, positionY + i));
             }
         }
-        return electrodePositions;
-    }
 
+        // Filter out electrodes that are null, and only return electrodes that are currently active.
+        return electrodes.stream().filter(o -> o != null && o.getStatus() >= 0).toList();
+    }
 }
