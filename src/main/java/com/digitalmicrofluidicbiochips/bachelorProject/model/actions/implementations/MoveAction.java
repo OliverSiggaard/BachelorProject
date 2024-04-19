@@ -26,8 +26,8 @@ public class MoveAction extends ActionBase {
     @Getter @Setter
     private Droplet droplet = null;
 
+    private final Set<Droplet> ExemptObstacleDroplets;
     private final Queue<ActionTickResult> tickQueue;
-
 
     public MoveAction(
             String id,
@@ -39,6 +39,7 @@ public class MoveAction extends ActionBase {
         this.posY = posY;
 
         this.tickQueue = new LinkedList<>();
+        ExemptObstacleDroplets = new HashSet<>();
     }
 
     @Override
@@ -103,10 +104,12 @@ public class MoveAction extends ActionBase {
     }
 
     private DropletMove getDropletMove(ProgramConfiguration programConfiguration) {
+        List<Droplet> obstacleDroplets = new ArrayList<>(
+                programConfiguration.getDropletsOnDmfPlatform().stream()
+                     .filter(d -> !d.equals(droplet))
+                     .toList());
+        obstacleDroplets.removeAll(ExemptObstacleDroplets);
 
-        List<Droplet> obstacleDroplets = programConfiguration.getDropletsOnDmfPlatform().stream()
-                .filter(d -> !d.equals(droplet))
-                .toList();
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, droplet, obstacleDroplets);
 
@@ -116,6 +119,10 @@ public class MoveAction extends ActionBase {
 
     private boolean dropletIsAtTargetPosition() {
         return droplet.getPositionX() == posX && droplet.getPositionY() == posY;
+    }
+
+    public void addExemptObstacleDroplet(Droplet ExemptObstacleDroplet) {
+        ExemptObstacleDroplets.add(ExemptObstacleDroplet);
     }
 
 

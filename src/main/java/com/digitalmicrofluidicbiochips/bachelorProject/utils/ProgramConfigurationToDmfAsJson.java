@@ -74,7 +74,7 @@ public class ProgramConfigurationToDmfAsJson {
 
         // Generate rest of the colors randomly
         Random random = new Random();
-        for (int i = 3; i < numberOfColors; i++) {
+        for (int i = 3; i <= numberOfColors; i++) {
             String color = String.format("#%06X", random.nextInt(0xFFFFFF + 1));
             colors.add(color);
         }

@@ -43,10 +43,32 @@ public class Schedule {
                 continue;
             }
 
+            if(!allRequiredDropletsHasActionAsCurrentAction(action)) {
+                continue;
+            }
+
             actionsToBeTicked.add(actions.peek());
         }
 
-        return actionsToBeTicked;
+        return actionsToBeTicked.stream().distinct().toList();
+    }
+
+    private boolean allRequiredDropletsHasActionAsCurrentAction(ActionBase actionBase) {
+        for (Droplet droplet : actionBase.dropletsRequiredForExecution()) {
+            if(!dropletActions.containsKey(droplet)) {
+                throw new IllegalStateException("Droplet should have been in the map");
+            }
+
+            if(dropletActions.get(droplet).isEmpty()) {
+                throw new IllegalStateException("Droplet should have an action in the queue");
+            }
+
+            if(!dropletActions.get(droplet).peek().equals(actionBase)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private boolean allDropletsAvailable(Set<Droplet> droplets) {
