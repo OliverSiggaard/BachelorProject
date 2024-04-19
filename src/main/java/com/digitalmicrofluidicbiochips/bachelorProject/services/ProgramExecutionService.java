@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.services;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.Executor;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonToInternalMapper;
@@ -13,7 +14,7 @@ public class ProgramExecutionService {
      *
      * @param jsonString - the data received from the frontend (the program)
      */
-    public static String executeProgram(String jsonString) {
+    public static ExecutionResult executeProgram(String jsonString) {
 
         // Get the JsonFileToInternalMapper, and use it to get the program configuration.
         JsonToInternalMapper dataMapper = new JsonToInternalMapper(jsonString);

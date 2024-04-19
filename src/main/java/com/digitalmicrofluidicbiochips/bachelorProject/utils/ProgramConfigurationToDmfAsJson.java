@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Random;
 
 public class ProgramConfigurationToDmfAsJson {
-    public static void convertProgramConfigurationToDmfAsJson(ProgramConfiguration programConfiguration) {
+    public static JsonNode convertProgramConfigurationToDmfAsJson(ProgramConfiguration programConfiguration) {
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
 
         // File paths
         String originalFilePath = "src/main/resources/simulator_platform640.json";
-        String newFilePath = "src/main/resources/output/simulator_platform640.json";;
+        String newFilePath = "src/main/resources/output/simulator_platform640.json";
 
         // Create ObjectMapper instance
         ObjectMapper mapper = new ObjectMapper();
@@ -60,9 +60,13 @@ public class ProgramConfigurationToDmfAsJson {
             mapper.writeValue(new File(newFilePath), originalData);
 
             System.out.println("Droplets added and saved to " + newFilePath);
+
+            return originalData;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     private static List<String> generateHexColors(int numberOfColors) {

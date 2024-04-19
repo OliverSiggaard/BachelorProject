@@ -8,6 +8,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatu
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.ProgramConfigurationToDmfAsJson;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.TickResultsToStringConverter;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,13 @@ public class Executor {
         this.schedule = Compiler.compile(programConfiguration.getProgramActions());
     }
 
-    public String startExecution() {
-        ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration);
+    public ExecutionResult startExecution() {
+        JsonNode dmfConfiguration = ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration);
 
         List<ActionTickResult> tickResults = runExecutionLoop();
+        String stringTickResults = TickResultsToStringConverter.convertTickResultsToString(tickResults);
 
-        return TickResultsToStringConverter.convertTickResultsToString(tickResults);
+        return new ExecutionResult(stringTickResults, dmfConfiguration);
     }
 
     public List<ActionTickResult> runExecutionLoop() {
