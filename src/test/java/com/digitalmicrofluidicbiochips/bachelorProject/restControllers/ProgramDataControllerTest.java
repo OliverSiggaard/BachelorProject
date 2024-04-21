@@ -1,6 +1,9 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.restControllers;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.services.ProgramExecutionService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +11,10 @@ import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -33,13 +39,19 @@ public class ProgramDataControllerTest {
     @Test
     void dataRetrievedFromFrontend_Success() {
         String testProgram = "{\"program_actions\":[{\"action\":\"input\",\"id\":1,\"next\":-1,\"dropletId\":\"2\",\"posX\":\"2\",\"posY\":\"2\",\"volume\":\"1\"},{\"action\":\"move\",\"id\":0,\"next\":1,\"dropletId\":\"2\",\"posX\":\"10\",\"posY\":\"2\"}]}";
-        String compiledProgram = "compiled program";
-        when(ProgramExecutionService.executeProgram(anyString())).thenReturn(compiledProgram);
+        String testProgramConfiguration = "{\"key\":\"value\"}";
 
-        ResponseEntity<String> response = programDataController.dataFromFrontend(testProgram);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode mockProgramConfigurationJsonNode = objectMapper.valueToTree(testProgramConfiguration);
+
+        ExecutionResult executionResult = new ExecutionResult("compiled program", mockProgramConfigurationJsonNode);
+        when(ProgramExecutionService.executeProgram(anyString())).thenReturn(executionResult);
+
+        ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(compiledProgram, response.getBody());
+        assertEquals(executionResult.getCompiledProgram(), Objects.requireNonNull(response.getBody()).getCompiledProgram());
+        assertEquals(executionResult.getDmfConfiguration(), Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }
 
     @Test
@@ -49,9 +61,10 @@ public class ProgramDataControllerTest {
         when(ProgramExecutionService.executeProgram(anyString()))
                 .thenThrow(new RuntimeException(errorMessage));
 
-        ResponseEntity<String> response = programDataController.dataFromFrontend(testProgram);
+        ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Error processing data: " + errorMessage, response.getBody());
+        assertEquals("Error processing data: " + errorMessage, Objects.requireNonNull(response.getBody()).getCompiledProgram());
+        assertNull(Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }
 }
