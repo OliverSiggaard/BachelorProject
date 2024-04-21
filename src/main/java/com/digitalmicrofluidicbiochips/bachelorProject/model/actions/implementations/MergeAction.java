@@ -6,9 +6,13 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatu
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGridFactory;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -30,6 +34,8 @@ public class MergeAction extends ActionBase {
     private final MoveAction moveAction2;
     private InputAction inputAction; // Not final. Volume of origin droplets is only known when action is reached.
 
+    private boolean resultDropletInserted;
+
     public MergeAction(
             String id,
             int posX,
@@ -41,6 +47,7 @@ public class MergeAction extends ActionBase {
 
         this.moveAction1 = new MoveAction(id, posX, posY);
         this.moveAction2 = new MoveAction(id, posX, posY);
+        this.resultDropletInserted = false;
     }
 
     @Override
@@ -67,20 +74,20 @@ public class MergeAction extends ActionBase {
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
 
-        // TODO: Ensure that there is space for the input droplet before running inputAction.
-        //  (Input is larger than the 2 droplets, so it could in theory overlap with other things that the 2 origin droplets do not)
         // TODO: Ensure that 1 of the droplets safe-area is touching the target position, before allowing the merge.
         //  Currently, the droplets will be able to merge far away from the target position, if they cant pathfind to the target position, with eachother as obstacles.
         // TODO: When above is fixed. What to do if they are blocking each-other, on the way to the target position?
         //  They should still not be able to merge before they are on the target position. (One of them should move away?)
 
         ActionTickResult actionTickResult = new ActionTickResult();
+
+        // Are the Action
         if(moveAction1.getStatus() == ActionStatus.COMPLETED && moveAction2.getStatus() == ActionStatus.COMPLETED) {
             // Consume both droplets.
             droplet1.setStatus(DropletStatus.CONSUMED);
             droplet2.setStatus(DropletStatus.CONSUMED);
 
-            // Create the result droplet.
+            // At this point, the result droplet can be safely inserted.
             inputAction.beforeExecution();
             actionTickResult = inputAction.executeTick(programConfiguration);
             inputAction.afterExecution();
@@ -90,30 +97,31 @@ public class MergeAction extends ActionBase {
             return actionTickResult;
         }
 
-
-        if(moveAction1.getStatus() == ActionStatus.IN_PROGRESS) {
-            actionTickResult.addTickResult(moveAction1.executeTick(programConfiguration));
-        }
-        if(moveAction2.getStatus() == ActionStatus.IN_PROGRESS) {
-            actionTickResult.addTickResult(moveAction2.executeTick(programConfiguration));
-        }
+        actionTickResult.addTickResult(attemptToMoveDroplets(programConfiguration));
 
         // Check if one or both droplets are able to move to towards the target position.
         if(!actionTickResult.getTickCommandsAsStrings().isEmpty()) {
             return actionTickResult;
         }
 
-        // If this point is reached, neither of the droplets are able to move towards the target position.
-        // This means that there are either no paths to the target position, or that they are blocked by each-other.
-        // In this case, all droplets to merge, by not seeing each-other as obstacles.
-        moveAction1.addExemptObstacleDroplet(droplet2);
-        moveAction2.addExemptObstacleDroplet(droplet1);
-
-        if(moveAction1.getStatus() == ActionStatus.IN_PROGRESS) {
-            actionTickResult.addTickResult(moveAction1.executeTick(programConfiguration));
+        // At this point, merging of the droplets is allowed, but only if the result droplet can be safely inserted.
+        if(!resultDropletCanBeSafelyInserted(programConfiguration)) {
+            return actionTickResult; // The result droplet cannot be safely inserted. Do not merge (yet).
         }
-        if(moveAction2.getStatus() == ActionStatus.IN_PROGRESS) {
-            actionTickResult.addTickResult(moveAction2.executeTick(programConfiguration));
+
+        if(!resultDropletInserted) {
+            resultDroplet.setStatus(DropletStatus.UNAVAILABLE); // The result droplet is not yet physically available, till merge is completed.
+            resultDroplet.setPositionX(posX);
+            resultDroplet.setPositionY(posY);
+
+            // Allow droplets to merge internally between eachother.
+            moveAction1.addExemptObstacleDroplet(droplet2);
+            moveAction1.addExemptObstacleDroplet(resultDroplet);
+            moveAction2.addExemptObstacleDroplet(droplet1);
+            moveAction2.addExemptObstacleDroplet(resultDroplet);
+
+            resultDropletInserted = true;
+            actionTickResult.setTickShouldBeExecuted(true);
         }
 
         return actionTickResult;
@@ -141,5 +149,26 @@ public class MergeAction extends ActionBase {
     public void setDroplet2(Droplet droplet2) {
         this.droplet2 = droplet2;
         moveAction2.setDroplet(droplet2);
+    }
+
+    private boolean resultDropletCanBeSafelyInserted(ProgramConfiguration programConfiguration) {
+        List<Droplet> obstacleDroplets = new ArrayList<>(
+                programConfiguration.getDropletsOnDmfPlatform().stream()
+                        .filter(d -> !d.equals(resultDroplet) && !d.equals(droplet1) && !d.equals(droplet2))
+                        .toList());
+        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
+        ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, resultDroplet, obstacleDroplets);
+        return availableElectrodeGrid.getElectrode(posX, posY) != null;
+    }
+
+    private ActionTickResult attemptToMoveDroplets(ProgramConfiguration programConfiguration) {
+        ActionTickResult actionTickResult = new ActionTickResult();
+        if(moveAction1.getStatus() == ActionStatus.IN_PROGRESS) {
+            actionTickResult.addTickResult(moveAction1.executeTick(programConfiguration));
+        }
+        if(moveAction2.getStatus() == ActionStatus.IN_PROGRESS) {
+            actionTickResult.addTickResult(moveAction2.executeTick(programConfiguration));
+        }
+        return actionTickResult;
     }
 }

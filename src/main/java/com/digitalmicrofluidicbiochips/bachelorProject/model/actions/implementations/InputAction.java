@@ -12,7 +12,9 @@ import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -55,13 +57,15 @@ public class InputAction extends ActionBase {
 
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
+        ActionTickResult actionTickResult = new ActionTickResult();
+
+        // Droplet can be placed on the platform
         droplet.setPositionX(posX);
         droplet.setPositionY(posY);
         droplet.setDropletMove(DropletMove.NONE);
 
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         int electrodeWidth = electrodeGrid.getElectrode(0, 0).getSizeX();
-        ActionTickResult actionTickResult = new ActionTickResult();
         int diameterInElectrodes = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(droplet, electrodeWidth);
         for(int dx = 0; dx < diameterInElectrodes ; dx++) {
             for (int dy = 0; dy < diameterInElectrodes; dy++) {
@@ -81,4 +85,6 @@ public class InputAction extends ActionBase {
     public void afterExecution() {
         droplet.setStatus(DropletStatus.AVAILABLE);
     }
+
+
 }

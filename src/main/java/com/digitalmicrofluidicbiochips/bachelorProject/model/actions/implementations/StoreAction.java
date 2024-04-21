@@ -57,7 +57,9 @@ public class StoreAction extends ActionBase {
             setStatus(ActionStatus.COMPLETED);
         }
 
-        return new ActionTickResult();
+        ActionTickResult actionTickResult = new ActionTickResult();
+        actionTickResult.setTickShouldBeExecuted(true);
+        return actionTickResult;
     }
 
     @Override

@@ -55,7 +55,12 @@ public class Executor {
                 }
             }
 
-            if(!tickResult.getTickCommands().isEmpty()) tickResults.add(tickResult);
+            if(!tickResult.isTickShouldBeExecuted()) {
+                //return tickResults;
+                throw new RuntimeException("The program got stuck. A tick was reached, that was not able to execute any actions.");
+            }
+
+            tickResults.add(tickResult);
         }
         return tickResults;
     }

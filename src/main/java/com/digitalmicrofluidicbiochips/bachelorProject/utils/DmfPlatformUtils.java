@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.utils;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 
 public class DmfPlatformUtils {
     /**
@@ -29,4 +30,6 @@ public class DmfPlatformUtils {
         int diameterInElectrodes = droplet.getDiameter() / electrodeWidth; // Always round down.
         return diameterInElectrodes == 0 ? 1 : diameterInElectrodes; // If rounded down to 0, return 1 electrode.
     }
+
+
 }
