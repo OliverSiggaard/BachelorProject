@@ -56,6 +56,7 @@ public class MoveAction extends ActionBase {
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
 
+        // If the droplet is already at the target position, then it is completed.
         if(droplet.getPositionX() == posX && droplet.getPositionY() == posY) {
             setStatus(ActionStatus.COMPLETED);
             return new ActionTickResult();

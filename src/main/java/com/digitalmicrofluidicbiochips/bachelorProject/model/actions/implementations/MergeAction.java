@@ -81,7 +81,6 @@ public class MergeAction extends ActionBase {
 
         ActionTickResult actionTickResult = new ActionTickResult();
 
-        // Are the Action
         if(moveAction1.getStatus() == ActionStatus.COMPLETED && moveAction2.getStatus() == ActionStatus.COMPLETED) {
             // Consume both droplets.
             droplet1.setStatus(DropletStatus.CONSUMED);
@@ -114,7 +113,7 @@ public class MergeAction extends ActionBase {
             resultDroplet.setPositionX(posX);
             resultDroplet.setPositionY(posY);
 
-            // Allow droplets to merge internally between eachother.
+            // Allow droplets to merge internally between each-other.
             moveAction1.addExemptObstacleDroplet(droplet2);
             moveAction1.addExemptObstacleDroplet(resultDroplet);
             moveAction2.addExemptObstacleDroplet(droplet1);
