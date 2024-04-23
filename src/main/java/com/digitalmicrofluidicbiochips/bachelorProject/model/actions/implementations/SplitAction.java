@@ -34,8 +34,6 @@ public class SplitAction extends ActionBase {
     @Setter
     private Droplet resultDroplet2 = null;
 
-    private MoveAction moveAction1;
-    private MoveAction moveAction2;
     private final Queue<ActionTickResult> tickQueue;
 
     public SplitAction(
@@ -89,9 +87,16 @@ public class SplitAction extends ActionBase {
         // When splitting, 2 droplets split out from the origin droplets in 2 ticks, resulting in the droplets being 3 or 4 cells apart.
 
         // Horizontal split
-        splitHorizontally(programConfiguration);
 
+        if(originDropletCanSplitHorizontally(programConfiguration)) {
+            splitHorizontally(programConfiguration);
+        } else if(originDropletCanSplitVertically(programConfiguration)) {
+            splitVertically(programConfiguration);
+        }
 
+        if(tickQueue.isEmpty()) {
+            return new ActionTickResult();
+        }
 
         return tickQueue.poll();
     }
@@ -280,5 +285,56 @@ public class SplitAction extends ActionBase {
             tickQueue.add(getClearElectrodeCommands(electrodeGrid, x, y + yWidth - 1, x + xWidth - 1, y + yWidth - 1));
             yWidth -= 1;
         }
+    }
+
+    private boolean originDropletCanSplitHorizontally(ProgramConfiguration programConfiguration) {
+        ElectrodeGrid availableGrid = getAvailableGridForOriginDroplet(programConfiguration);
+        int originDropletSize = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(originDroplet, availableGrid.getElectrodeSizeOfElectrodeInGrid());
+        int y = originDroplet.getPositionY();
+        int x1 = originDroplet.getPositionX() - 2;
+        int x2 = (originDroplet.getPositionX() * 2 + originDropletSize)/2 + 2;
+
+        // Boundary check to the left.
+        if(x1 <= 2 || x2 + originDropletSize >= availableGrid.getXSize()) {
+            return false;
+        }
+
+        // Check that origin droplet can move 2 to the left.
+        return isAllElectrodesAvailableWithinBounds(availableGrid, x1, y, x2, y);
+    }
+
+    private boolean originDropletCanSplitVertically(ProgramConfiguration programConfiguration) {
+        ElectrodeGrid availableGrid = getAvailableGridForOriginDroplet(programConfiguration);
+        int originDropletSize = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(originDroplet, availableGrid.getElectrodeSizeOfElectrodeInGrid());
+        int x = originDroplet.getPositionX();
+        int y1 = originDroplet.getPositionY() - 2;
+        int y2 = (originDroplet.getPositionY() * 2 + originDropletSize)/2 + 2;
+
+        // Boundary check
+        if(y1 <= 2 || y2 + originDropletSize >= availableGrid.getYSize()) {
+            return false;
+        }
+
+        // Check that origin droplet can move 2 to the left.
+        return isAllElectrodesAvailableWithinBounds(availableGrid, x, y1, x, y2);
+    }
+
+    private ElectrodeGrid getAvailableGridForOriginDroplet(ProgramConfiguration programConfiguration) {
+        List<Droplet> obstacleDroplets = programConfiguration.getDropletsOnDmfPlatform().stream()
+                .filter(d -> !Set.of(originDroplet, resultDroplet1, resultDroplet2).contains(d))
+                .toList();
+        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
+        return ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, originDroplet, obstacleDroplets);
+    }
+
+    private boolean isAllElectrodesAvailableWithinBounds(ElectrodeGrid electrodeGrid, int x1, int y1, int x2, int y2) {
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                if(electrodeGrid.getElectrode(x, y) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
