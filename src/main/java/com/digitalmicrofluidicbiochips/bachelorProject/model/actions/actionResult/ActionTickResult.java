@@ -32,6 +32,15 @@ public class ActionTickResult {
         tickShouldBeExecuted = true;
     }
 
+    public void addCommands(List<IDmfCommand> commands) {
+        if(commands.isEmpty()) {
+            return;
+        }
+
+        tickCommands.addAll(commands);
+        tickShouldBeExecuted = true;
+    }
+
     public void addTickResult(ActionTickResult tickResult) {
         this.tickCommands.addAll(tickResult.getTickCommands());
         this.tickShouldBeExecuted = tickShouldBeExecuted || tickResult.tickShouldBeExecuted;

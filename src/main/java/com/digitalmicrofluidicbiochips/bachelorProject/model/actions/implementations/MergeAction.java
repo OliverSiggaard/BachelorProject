@@ -4,10 +4,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGridFactory;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -73,12 +70,6 @@ public class MergeAction extends ActionBase {
 
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
-
-        // TODO: Ensure that 1 of the droplets safe-area is touching the target position, before allowing the merge.
-        //  Currently, the droplets will be able to merge far away from the target position, if they cant pathfind to the target position, with eachother as obstacles.
-        // TODO: When above is fixed. What to do if they are blocking each-other, on the way to the target position?
-        //  They should still not be able to merge before they are on the target position. (One of them should move away?)
-
         ActionTickResult actionTickResult = new ActionTickResult();
 
         if(moveAction1.getStatus() == ActionStatus.COMPLETED && moveAction2.getStatus() == ActionStatus.COMPLETED) {
@@ -91,24 +82,12 @@ public class MergeAction extends ActionBase {
             actionTickResult = inputAction.executeTick(programConfiguration);
             inputAction.afterExecution();
 
-            // Set the status of this action to completed.
+            // Set the status of this action as completed.
             setStatus(ActionStatus.COMPLETED);
             return actionTickResult;
         }
 
-        actionTickResult.addTickResult(attemptToMoveDroplets(programConfiguration));
-
-        // Check if one or both droplets are able to move to towards the target position.
-        if(!actionTickResult.getTickCommandsAsStrings().isEmpty()) {
-            return actionTickResult;
-        }
-
-        // At this point, merging of the droplets is allowed, but only if the result droplet can be safely inserted.
-        if(!resultDropletCanBeSafelyInserted(programConfiguration)) {
-            return actionTickResult; // The result droplet cannot be safely inserted. Do not merge (yet).
-        }
-
-        if(!resultDropletInserted) {
+        if(!resultDropletInserted && isDropletsAllowedToMerge(programConfiguration)) {
             resultDroplet.setStatus(DropletStatus.UNAVAILABLE); // The result droplet is not yet physically available, till merge is completed.
             resultDroplet.setPositionX(posX);
             resultDroplet.setPositionY(posY);
@@ -120,8 +99,9 @@ public class MergeAction extends ActionBase {
             moveAction2.addExemptObstacleDroplet(resultDroplet);
 
             resultDropletInserted = true;
-            actionTickResult.setTickShouldBeExecuted(true);
         }
+
+        actionTickResult.addTickResult(attemptToMoveDroplets(programConfiguration));
 
         return actionTickResult;
     }
@@ -133,33 +113,36 @@ public class MergeAction extends ActionBase {
         resultDroplet.setStatus(DropletStatus.AVAILABLE);
     }
 
-    private boolean dropletIsAtTargetPosition(Droplet droplet) {
-        return droplet.getPositionX() == posX && droplet.getPositionY() == posY;
-    }
-
-
-
-
-    public void setDroplet1(Droplet droplet1) {
-        this.droplet1 = droplet1;
-        moveAction1.setDroplet(droplet1);
-    }
-
-    public void setDroplet2(Droplet droplet2) {
-        this.droplet2 = droplet2;
-        moveAction2.setDroplet(droplet2);
-    }
-
-    private boolean resultDropletCanBeSafelyInserted(ProgramConfiguration programConfiguration) {
+    /**
+     * The droplets are allowed to merge if:
+     * 1. The result droplet can be inserted at the target position, without touching any other obstacle droplets.
+     * 2. The safe area of either droplet1 or droplet2 contains the target position.
+     * @param programConfiguration Program configuration.
+     * @return True if droplets are allowed to merge.
+     */
+    private boolean isDropletsAllowedToMerge(ProgramConfiguration programConfiguration) {
         List<Droplet> obstacleDroplets = new ArrayList<>(
                 programConfiguration.getDropletsOnDmfPlatform().stream()
-                        .filter(d -> !d.equals(resultDroplet) && !d.equals(droplet1) && !d.equals(droplet2))
+                        .filter(d -> !Set.of(resultDroplet, droplet1, droplet2).contains(d))
                         .toList());
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
-        ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, resultDroplet, obstacleDroplets);
-        return availableElectrodeGrid.getElectrode(posX, posY) != null;
+        ElectrodeGrid resultAvailableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, resultDroplet, obstacleDroplets);
+        boolean resultDropletCanBeInserted = resultAvailableGrid.getElectrode(posX, posY) != null;
+
+        GridArea droplet1SafeArea = droplet1.getDropletSafeArea(programConfiguration.getElectrodeGrid(), droplet2);
+        GridArea droplet2SafeArea = droplet2.getDropletSafeArea(programConfiguration.getElectrodeGrid(), droplet1);
+        boolean eitherDropletSafeAreaContainsTargetPosition = droplet1SafeArea.contains(posX, posY) || droplet2SafeArea.contains(posX, posY);
+
+        return resultDropletCanBeInserted && eitherDropletSafeAreaContainsTargetPosition;
     }
 
+    /**
+     * If either of the two move actions are in progress, attempt to move the droplets,
+     * by executing a tick on the move actions, and return the combined tick results from both.
+     * Droplet1 will be prioritized over droplet2, in case the movement of droplet 1 blocks the movement of droplet 2.
+     * @param programConfiguration Program configuration.
+     * @return Action tick result.
+     */
     private ActionTickResult attemptToMoveDroplets(ProgramConfiguration programConfiguration) {
         ActionTickResult actionTickResult = new ActionTickResult();
         if(moveAction1.getStatus() == ActionStatus.IN_PROGRESS) {
@@ -169,5 +152,25 @@ public class MergeAction extends ActionBase {
             actionTickResult.addTickResult(moveAction2.executeTick(programConfiguration));
         }
         return actionTickResult;
+    }
+
+    /**
+     * Set droplet1 that will be merged.
+     * This method is used in the object mapper, when mapping from JSON to Java objects.
+     * @param droplet Droplet to be merged.
+     */
+    public void setDroplet1(Droplet droplet) {
+        this.droplet1 = droplet;
+        moveAction1.setDroplet(droplet);
+    }
+
+    /**
+     * Set droplet2 that will be merged.
+     * This method is used in the object mapper, when mapping from JSON to Java objects.
+     * @param droplet (other) Droplet to be merged.
+     */
+    public void setDroplet2(Droplet droplet) {
+        this.droplet2 = droplet;
+        moveAction2.setDroplet(droplet);
     }
 }

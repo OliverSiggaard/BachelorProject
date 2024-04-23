@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.utils;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
 
 public class DmfPlatformUtils {
     /**
@@ -29,6 +29,17 @@ public class DmfPlatformUtils {
     public static int electrodeSpanRequiredToMoveDroplet(Droplet droplet, int electrodeWidth) {
         int diameterInElectrodes = droplet.getDiameter() / electrodeWidth; // Always round down.
         return diameterInElectrodes == 0 ? 1 : diameterInElectrodes; // If rounded down to 0, return 1 electrode.
+    }
+
+    /**
+     * Returns the diameter of the droplet in electrodes, rounded up.
+     * This is used when working with the safe-area of the droplet, since the droplet can be moved by a smaller span.
+     * @param droplet the droplet
+     * @param electrodeWidth the width of an electrode
+     * @return the diameter of the droplet in electrodes, rounded up
+     */
+    public static int dropletDiameterInElectrodesCeil(Droplet droplet, int electrodeWidth) {
+        return (int) Math.ceil((double) droplet.getDiameter() / electrodeWidth);
     }
 
 

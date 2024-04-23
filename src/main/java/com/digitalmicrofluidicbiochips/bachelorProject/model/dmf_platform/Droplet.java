@@ -148,4 +148,81 @@ public class Droplet {
         // Filter out electrodes that are null, and only return electrodes that are currently active.
         return electrodes.stream().filter(o -> o != null && o.getStatus() >= 0).toList();
     }
+
+    /**
+     * Returns the area that the active droplet can't access due to the obstacle droplet.
+     * @param electrodeGrid The electrode grid.
+     * @param obstacleDroplet The obstacle droplet.
+     * @return The area of the grid, that the active droplet can't access due to the obstacle droplet.
+     */
+    public GridArea getDropletSafeArea(ElectrodeGrid electrodeGrid, Droplet obstacleDroplet) {
+        // Diameter of droplet rounded up to nearest electrode.
+        int electrodeWidth = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
+        int thisDropletDiameter = DmfPlatformUtils.dropletDiameterInElectrodesCeil(this, electrodeWidth);
+        int obstacleDropletDiameter = DmfPlatformUtils.dropletDiameterInElectrodesCeil(obstacleDroplet, electrodeWidth);
+
+        // Electrode at top left corner of droplet + padding and safe area determined by the active droplet's size - ensure no out of bounds
+        int x1 = Math.max(obstacleDroplet.getPositionX() - thisDropletDiameter, 0);
+        int y1 = Math.max(obstacleDroplet.getPositionY() - thisDropletDiameter, 0);
+
+        // Maximum coordinates for x and y in the grid
+        int maxX = electrodeGrid.getXSize() - 1;
+        int maxY = electrodeGrid.getYSize() - 1;
+
+        // Electrode at bottom right corner of droplet + safe area - ensure no out of bounds
+        int x2 = Math.min(maxX, (obstacleDroplet.getPositionX() + obstacleDropletDiameter));
+        int y2 = Math.min(maxY, (obstacleDroplet.getPositionY() + obstacleDropletDiameter));
+
+        GridArea gridArea = new GridArea(x1, y1, x2, y2);
+        return extendedGridAreaInDropletMoveDirection(gridArea);
+    }
+
+    /**
+     * Return the area (electrodes) beneath the droplet, that is currently occupied by the droplet,
+     * and is used to move the droplet around. The width of this span is often less than the diameter of the droplet.
+     * @param electrodeGrid
+     * @return
+     */
+    public GridArea getDropletElectrodeArea(ElectrodeGrid electrodeGrid) {
+        // Diameter of droplet rounded up to nearest electrode.
+        int electrodeWidth = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
+        int electrodeSpan = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(this, electrodeWidth);
+
+        // Electrode at top left corner of droplet + padding and safe area determined by the active droplet's size - ensure no out of bounds
+        int x1 = Math.max(getPositionX(), 0);
+        int y1 = Math.max(getPositionY(), 0);
+
+        // Maximum coordinates for x and y in the grid
+        int maxX = electrodeGrid.getXSize() - 1;
+        int maxY = electrodeGrid.getYSize() - 1;
+
+        // Electrode at bottom right corner of droplet + safe area - ensure no out of bounds
+        int x2 = Math.min(maxX, getPositionX() + electrodeSpan - 1);
+        int y2 = Math.min(maxY, getPositionY() + electrodeSpan - 1);
+
+        GridArea gridArea = new GridArea(x1, y1, x2, y2);
+        return extendedGridAreaInDropletMoveDirection(gridArea);
+    }
+
+    private GridArea extendedGridAreaInDropletMoveDirection(GridArea gridArea) {
+        switch (getDropletMove()) {
+            case DOWN -> {
+                return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2(), gridArea.getY2() + 1);
+            }
+            case UP -> {
+                return new GridArea(gridArea.getX1(), gridArea.getY1() - 1, gridArea.getX2(), gridArea.getY2());
+            }
+            case RIGHT -> {
+                return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2() + 1, gridArea.getY2());
+            }
+            case LEFT -> {
+                return new GridArea(gridArea.getX1() - 1, gridArea.getY1(), gridArea.getX2(), gridArea.getY2() + 1);
+            }
+        }
+        return gridArea;
+    }
+
+
+
+
 }

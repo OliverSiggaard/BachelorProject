@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 
 import java.awt.*;
 import java.util.List;
@@ -53,10 +54,12 @@ public class ElectrodeGridFactory {
     public static ElectrodeGrid getAvailableElectrodeGrid(ElectrodeGrid electrodeGrid, Droplet activeDroplet, List<Droplet> obstacleDroplets) {
         ElectrodeGrid electrodeGridClone = electrodeGrid.clone();
 
-        int activeDropletDiameter = getRoundedDropletDiameterInFullElectrodes(activeDroplet, electrodeGrid);
+        // Diameter of droplet rounded up to nearest electrode.
+        int electrodeWidth = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
+        int activeDropletDiameter = DmfPlatformUtils.dropletDiameterInElectrodesCeil(activeDroplet, electrodeWidth);
 
         for (Droplet obstacleDroplet : obstacleDroplets) {
-            removeElectrodesForObstacleDroplet(electrodeGridClone, obstacleDroplet, activeDropletDiameter);
+            removeElectrodesForObstacleDroplet(electrodeGridClone, obstacleDroplet, activeDroplet);
         }
 
         removeInaccessibleBorderElectrodes(electrodeGridClone, activeDropletDiameter);
@@ -64,46 +67,12 @@ public class ElectrodeGridFactory {
         return electrodeGridClone;
     }
 
+    private static void removeElectrodesForObstacleDroplet(ElectrodeGrid electrodeGrid, Droplet obstacleDroplet, Droplet activeDroplet) {
+        // Getting the area that the active droplet can't access due to the obstacle droplet
+        GridArea safeArea = activeDroplet.getDropletSafeArea(electrodeGrid, obstacleDroplet);
 
-    // Returns the electrodes
-    private static void removeElectrodesForObstacleDroplet(ElectrodeGrid availableGrid, Droplet obstacleDroplet, int activeDropletDiameter) {
-
-        // Diameter of droplets ceiled to nearest electrode.
-        int obstacleDropletDiameter = getRoundedDropletDiameterInFullElectrodes(obstacleDroplet, availableGrid);
-
-        // Electrode at top left corner of droplet + padding and safe area determined by the active droplet's size - ensure no out of bounds
-        int x1 = Math.max(obstacleDroplet.getPositionX() - activeDropletDiameter, 0);
-        int y1 = Math.max(obstacleDroplet.getPositionY() - activeDropletDiameter, 0);
-
-        // Maximum coordinates for x and y in the grid
-        int maxXCoord = availableGrid.getXSize() - 1;
-        int maxYCoord = availableGrid.getYSize() - 1;
-
-        // Electrode at bottom right corner of droplet + safe area - ensure no out of bounds
-        int x2 = Math.min(maxXCoord, (obstacleDroplet.getPositionX() + obstacleDropletDiameter));
-        int y2 = Math.min(maxYCoord, (obstacleDroplet.getPositionY() + obstacleDropletDiameter));
-
-        // In case obstacle-droplet is mid-move, it has enabled electrodes, that should also be considered as unavailable.
-        switch (obstacleDroplet.getDropletMove()) {
-            case DOWN -> y2 = Math.min(maxYCoord, y2 + 1);
-            case UP -> y1 = Math.max(0, y1 - 1);
-            case RIGHT -> x2 = Math.min(maxXCoord, x2 + 1);
-            case LEFT -> x1 = Math.max(0, x1 - 1);
-        }
-
-        removeObstacleDropletElectrodes(availableGrid, x1, y1, x2, y2);
-    }
-
-
-    // Removes electrodes in a rectangular area
-    // (x1,y1) is the top left corner and (x2,y2) is the bottom right corner
-    private static void removeObstacleDropletElectrodes(ElectrodeGrid availableGrid, int x1, int y1, int x2, int y2) {
-        for (int y = y1; y <= y2; y++) {
-            for (int x = x1; x <= x2; x++) {
-                availableGrid.removeElectrode(x, y);
-            }
-        }
-
+        // Removing the electrodes in the safe area, from the electrode grid
+        electrodeGrid.removeElectrodes(safeArea);
     }
 
 
@@ -121,13 +90,5 @@ public class ElectrodeGridFactory {
                 availableGrid.removeElectrode(x, yMax - i);
             }
         }
-    }
-
-
-    // Gets the width of the droplet in full electrodes from the diameter
-    private static int getRoundedDropletDiameterInFullElectrodes(Droplet droplet, ElectrodeGrid electrodeGrid) {
-        int electrodeSizeX = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
-
-        return (int) Math.ceil((double) droplet.getDiameter() / electrodeSizeX);
     }
 }

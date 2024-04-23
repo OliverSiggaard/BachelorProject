@@ -1,5 +1,10 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ClearElectrodeCommand;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.IDmfCommand;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.SetElectrodeCommand;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,5 +59,46 @@ public class ElectrodeGrid implements Cloneable {
         }
         throw new IllegalStateException("No electrode found in grid");
     }
+
+    public void removeElectrodes(GridArea gridArea) {
+        for (int x = gridArea.getX1(); x <= gridArea.getX2(); x++) {
+            for (int y = gridArea.getY1(); y <= gridArea.getY2(); y++) {
+                grid[x][y] = null;
+            }
+        }
+    }
+
+    public List<IDmfCommand> getSetElectrodeCommands(GridArea gridArea) {
+        List<IDmfCommand> setElectrodeCommands = new ArrayList<>();
+        for (int x = gridArea.getX1(); x <= gridArea.getX2(); x++) {
+            for (int y = gridArea.getY1(); y <= gridArea.getY2(); y++) {
+                setElectrodeCommands.add(new SetElectrodeCommand(getElectrode(x, y)));
+            }
+        }
+        return setElectrodeCommands;
+    }
+
+    public List<IDmfCommand> getClearElectrodeCommands(GridArea gridArea) {
+        List<IDmfCommand> clearElectrodeCommands = new ArrayList<>();
+        for (int x = gridArea.getX1(); x <= gridArea.getX2(); x++) {
+            for (int y = gridArea.getY1(); y <= gridArea.getY2(); y++) {
+                clearElectrodeCommands.add(new ClearElectrodeCommand(getElectrode(x, y)));
+            }
+        }
+        return clearElectrodeCommands;
+    }
+
+    public boolean isAllElectrodesAvailableWithinArea(GridArea gridArea) {
+        for (int x = gridArea.getX1(); x <= gridArea.getX2(); x++) {
+            for (int y = gridArea.getY1(); y <= gridArea.getY2(); y++) {
+                if(getElectrode(x, y) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 
 }

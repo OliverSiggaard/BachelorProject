@@ -6,10 +6,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatu
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ClearElectrodeCommand;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.SetElectrodeCommand;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGridFactory;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,22 +82,20 @@ public class SplitAction extends ActionBase {
         }
 
 
+        // Boundaries of origin droplet
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         int electrodeSize = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
         int originDropletSize = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(originDroplet, electrodeSize);
-
-        // Boundaries of origin droplet
-        int x1 = originDroplet.getPositionX();
-        int x2 = originDroplet.getPositionX() + originDropletSize - 1;
-        int y1 = originDroplet.getPositionY();
-        int y2 = originDroplet.getPositionY() + originDropletSize - 1;
-
-
+        GridArea originDropletArea = new GridArea(
+                originDroplet.getPositionX(),
+                originDroplet.getPositionY(),
+                originDroplet.getPositionX() + originDropletSize - 1,
+                originDroplet.getPositionY() + originDropletSize - 1);
 
         if(originDropletCanSplitHorizontally(programConfiguration)) {
-            splitHorizontally(electrodeGrid, originDropletSize, x1, y1, x2, y2);
+            splitHorizontally(electrodeGrid, originDropletArea);
         } else if(originDropletCanSplitVertically(programConfiguration)) {
-            splitVertically(electrodeGrid, originDropletSize, x1, y1, x2, y2);
+            splitVertically(electrodeGrid, originDropletArea);
         }
 
         return tickQueue.isEmpty() ? new ActionTickResult() : tickQueue.poll();
@@ -113,17 +108,22 @@ public class SplitAction extends ActionBase {
         resultDroplet2.setStatus(DropletStatus.AVAILABLE);
     }
 
-    private void splitHorizontally(ElectrodeGrid electrodeGrid, int originDropletSize, int x1, int y1, int x2, int y2) {
+    private void splitHorizontally(ElectrodeGrid electrodeGrid, GridArea originDropletArea) {
         ActionTickResult actionTickResult = new ActionTickResult();
+        int x1 = originDropletArea.getX1();
+        int y1 = originDropletArea.getY1();
+        int x2 = originDropletArea.getX2();
+        int y2 = originDropletArea.getY2();
+        int originDropletSize = x2 - x1 + 1;
 
         if(originDropletSize >= 2) {
             // Clear bottom row of electrodes in origin droplet
-            actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, x1, y2, x2, y2));
+            actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(x1, y2, x2, y2)));
             y2 -= 1;
 
             //If origin droplet has an even number of electrodes vertically, add a column to the right of the origin droplet.
             if(originDropletSize % 2 == 0) {
-                actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x2 + 1, y1, x2 + 1, y2));
+                actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x2 + 1, y1, x2 + 1, y2)));
                 x2 += 1;
             }
             tickQueue.add(actionTickResult);
@@ -132,18 +132,18 @@ public class SplitAction extends ActionBase {
 
         int middleX = (x1 + x2)/2;
         // Remove middle, expand horizontally
-        actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, middleX, y1, middleX, y2));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1 - 1, y1, x1 - 1, y2));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x2 + 1, y1, x2 + 1, y2));
+        actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(middleX, y1, middleX, y2)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1 - 1, y1, x1 - 1, y2)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x2 + 1, y1, x2 + 1, y2)));
 
         tickQueue.add(actionTickResult);
         actionTickResult = new ActionTickResult();
 
         // Remove additional columns from middle, add to the sides
-        actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, middleX - 1, y1, middleX - 1, y2));
-        actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, middleX + 1, y1, middleX + 1, y2));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1 - 2, y1, x1 - 2, y2));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x2 + 2, y1, x2 + 2, y2));
+        actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(middleX - 1, y1, middleX - 1, y2)));
+        actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(middleX + 1, y1, middleX + 1, y2)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1 - 2, y1, x1 - 2, y2)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x2 + 2, y1, x2 + 2, y2)));
         tickQueue.add(actionTickResult);
 
 
@@ -159,17 +159,22 @@ public class SplitAction extends ActionBase {
         constrainElectrodesBelowDropletToDropletSize(resultDroplet2, electrodeGrid, resDropletWidth, resDropletHeight);
     }
 
-    private void splitVertically(ElectrodeGrid electrodeGrid, int originDropletSize, int x1, int y1, int x2, int y2) {
+    private void splitVertically(ElectrodeGrid electrodeGrid, GridArea originDropletArea) {
         ActionTickResult actionTickResult = new ActionTickResult();
+        int x1 = originDropletArea.getX1();
+        int y1 = originDropletArea.getY1();
+        int x2 = originDropletArea.getX2();
+        int y2 = originDropletArea.getY2();
+        int originDropletSize = x2 - x1 + 1;
 
         if(originDropletSize >= 2) {
             // Clear right-most column of electrodes in origin droplet
-            actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, x2, y1, x2, y2));
+            actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(x2, y1, x2, y2)));
             x2 -= 1;
 
             //If origin droplet has an even number of electrodes vertically, add a row to the bottom of the origin droplet.
             if(originDropletSize % 2 == 0) {
-                actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1, y2 + 1, x2, y2 + 1));
+                actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1, y2 + 1, x2, y2 + 1)));
                 y2 += 1;
             }
             tickQueue.add(actionTickResult);
@@ -178,17 +183,17 @@ public class SplitAction extends ActionBase {
         actionTickResult = new ActionTickResult();
         int middleY = (y1 + y2)/2;
         // Remove middle, expand vertically
-        actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, x1, middleY, x2, middleY));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1, y1 - 1, x2, y1 - 1));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1, y2 + 1, x2, y2 + 1));
+        actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(x1, middleY, x2, middleY)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1, y1 - 1, x2, y1 - 1)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1, y2 + 1, x2, y2 + 1)));
         tickQueue.add(actionTickResult);
 
         // Remove additional rows from middle, add to the sides
         actionTickResult = new ActionTickResult();
-        actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, x1, middleY - 1, x2, middleY - 1));
-        actionTickResult.addTickResult(getClearElectrodeCommands(electrodeGrid, x1, middleY + 1, x2, middleY + 1));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1, y1 - 2, x2, y1 - 2));
-        actionTickResult.addTickResult(getSetElectrodeCommands(electrodeGrid, x1, y2 + 2, x2, y2 + 2));
+        actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(x1, middleY - 1, x2, middleY - 1)));
+        actionTickResult.addCommands(electrodeGrid.getClearElectrodeCommands(new GridArea(x1, middleY + 1, x2, middleY + 1)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1, y1 - 2, x2, y1 - 2)));
+        actionTickResult.addCommands(electrodeGrid.getSetElectrodeCommands(new GridArea(x1, y2 + 2, x2, y2 + 2)));
         tickQueue.add(actionTickResult);
 
         // The droplets are now split. Last step is to constrain the electrodes below the droplets to the correct size.
@@ -202,26 +207,6 @@ public class SplitAction extends ActionBase {
         constrainElectrodesBelowDropletToDropletSize(resultDroplet1, electrodeGrid, splitXWidth, splitYHeight);
         constrainElectrodesBelowDropletToDropletSize(resultDroplet2, electrodeGrid, splitXWidth, splitYHeight);
 
-    }
-
-    private ActionTickResult getSetElectrodeCommands(ElectrodeGrid electrodeGrid, int x1, int y1, int x2, int y2) {
-        ActionTickResult actionTickResult = new ActionTickResult();
-        for (int x = x1; x <= x2; x++) {
-            for (int y = y1; y <= y2; y++) {
-                actionTickResult.addCommand(new SetElectrodeCommand(electrodeGrid.getElectrode(x, y)));
-            }
-        }
-        return actionTickResult;
-    }
-
-    private ActionTickResult getClearElectrodeCommands(ElectrodeGrid electrodeGrid, int x1, int y1, int x2, int y2) {
-        ActionTickResult actionTickResult = new ActionTickResult();
-        for (int x = x1; x <= x2; x++) {
-            for (int y = y1; y <= y2; y++) {
-                actionTickResult.addCommand(new ClearElectrodeCommand(electrodeGrid.getElectrode(x, y)));
-            }
-        }
-        return actionTickResult;
     }
 
     /**
@@ -242,19 +227,23 @@ public class SplitAction extends ActionBase {
         int dropletSize = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(droplet, electrodeSize);
 
         while(xWidth < dropletSize) {
-            tickQueue.add(getSetElectrodeCommands(eGrid, x + xWidth, y, x + xWidth, y + yWidth - 1));
+            GridArea gridArea = new GridArea(x + xWidth, y, x + xWidth, y + yWidth - 1);
+            tickQueue.add(new ActionTickResult(eGrid.getSetElectrodeCommands(gridArea)));
             xWidth += 1;
         }
         while(xWidth > dropletSize) {
-            tickQueue.add(getClearElectrodeCommands(eGrid, x + xWidth - 1, y, x + xWidth - 1, y + yWidth - 1));
+            GridArea gridArea = new GridArea(x + xWidth - 1, y, x + xWidth - 1, y + yWidth - 1);
+            tickQueue.add(new ActionTickResult(eGrid.getClearElectrodeCommands(gridArea)));
             xWidth -= 1;
         }
         while(yWidth < dropletSize) {
-            tickQueue.add(getSetElectrodeCommands(eGrid, x, y + yWidth, x + xWidth - 1, y + yWidth));
+            GridArea gridArea = new GridArea(x, y + yWidth, x + xWidth - 1, y + yWidth);
+            tickQueue.add(new ActionTickResult(eGrid.getSetElectrodeCommands(gridArea)));
             yWidth += 1;
         }
         while(yWidth > dropletSize) {
-            tickQueue.add(getClearElectrodeCommands(eGrid, x, y + yWidth - 1, x + xWidth - 1, y + yWidth - 1));
+            GridArea gridArea = new GridArea(x, y + yWidth - 1, x + xWidth - 1, y + yWidth - 1);
+            tickQueue.add(new ActionTickResult(eGrid.getClearElectrodeCommands(gridArea)));
             yWidth -= 1;
         }
     }
@@ -273,7 +262,8 @@ public class SplitAction extends ActionBase {
         }
 
         // Check that origin droplet can move 2 to either side.
-        return isAllElectrodesAvailableWithinBounds(availableGrid, x1, y, x2, y);
+        GridArea gridArea = new GridArea(x1, y, x2, y);
+        return availableGrid.isAllElectrodesAvailableWithinArea(gridArea);
     }
 
     private boolean originDropletCanSplitVertically(ProgramConfiguration programConfiguration) {
@@ -290,7 +280,8 @@ public class SplitAction extends ActionBase {
         }
 
         // Check that origin droplet can move 2 up or down.
-        return isAllElectrodesAvailableWithinBounds(availableGrid, x, y1, x, y2);
+        GridArea gridArea = new GridArea(x, y1, x, y2);
+        return availableGrid.isAllElectrodesAvailableWithinArea(gridArea);
     }
 
     private ElectrodeGrid getAvailableGridForOriginDroplet(ProgramConfiguration programConfiguration) {
@@ -299,16 +290,5 @@ public class SplitAction extends ActionBase {
                 .toList();
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         return ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, originDroplet, obstacleDroplets);
-    }
-
-    private boolean isAllElectrodesAvailableWithinBounds(ElectrodeGrid electrodeGrid, int x1, int y1, int x2, int y2) {
-        for (int x = x1; x <= x2; x++) {
-            for (int y = y1; y <= y2; y++) {
-                if(electrodeGrid.getElectrode(x, y) == null) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }
