@@ -187,7 +187,6 @@ public class JsonActionMapperFactoryTests {
 
         SplitAction splitAction = (SplitAction) action;
         Assertions.assertEquals(id, splitAction.getId());
-        Assertions.assertEquals(splitRatio, splitAction.getRatio());
         Assertions.assertEquals(posX1, splitAction.getPosX1());
         Assertions.assertEquals(posY1, splitAction.getPosY1());
         Assertions.assertEquals(posX2, splitAction.getPosX2());

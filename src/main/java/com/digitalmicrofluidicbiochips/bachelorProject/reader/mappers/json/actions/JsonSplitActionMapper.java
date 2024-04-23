@@ -13,7 +13,6 @@ public class JsonSplitActionMapper implements IActionMapper<JsonSplitAction, Spl
     public SplitAction mapToInternalModel(JsonSplitAction dtoModel) {
         return new SplitAction(
                 dtoModel.getId(),
-                dtoModel.getRatio(),
                 dtoModel.getPosX1(),
                 dtoModel.getPosY1(),
                 dtoModel.getPosX2(),
