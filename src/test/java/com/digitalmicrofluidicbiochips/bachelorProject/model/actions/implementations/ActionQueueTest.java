@@ -70,21 +70,20 @@ public class ActionQueueTest {
         when(action2.executeTick(programConfiguration)).thenReturn(actionTickResult2);
         when(action3.executeTick(programConfiguration)).thenReturn(actionTickResult3);
 
-        ProgramConfiguration programConfigurationMock = mock(ProgramConfiguration.class);
-        sut.beforeExecution(programConfigurationMock);
+        sut.beforeExecution(programConfiguration);
 
         when(action1.getStatus())
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.COMPLETED);
         ActionTickResult result = sut.executeTick(programConfiguration);
-        verify(action1).beforeExecution(programConfigurationMock);
+        verify(action1).beforeExecution(programConfiguration);
         Assertions.assertEquals(actionTickResult1, result);
 
         when(action2.getStatus())
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.IN_PROGRESS);
         result = sut.executeTick(programConfiguration);
-        verify(action2).beforeExecution(programConfigurationMock);
+        verify(action2).beforeExecution(programConfiguration);
         Assertions.assertEquals(actionTickResult2, result);
 
         when(action2.getStatus())
@@ -97,7 +96,7 @@ public class ActionQueueTest {
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.COMPLETED);
         result = sut.executeTick(programConfiguration);
-        verify(action3).beforeExecution(programConfigurationMock);
+        verify(action3).beforeExecution(programConfiguration);
         Assertions.assertEquals(actionTickResult3, result);
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }
@@ -113,14 +112,13 @@ public class ActionQueueTest {
         when(action2.executeTick(programConfiguration)).thenReturn(actionTickResult2);
         when(action3.executeTick(programConfiguration)).thenReturn(actionTickResult3);
 
-        ProgramConfiguration programConfigurationMock = mock(ProgramConfiguration.class);
-        sut.beforeExecution(programConfigurationMock);
+        sut.beforeExecution(programConfiguration);
 
         when(action1.getStatus())
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.FAILED);
         ActionTickResult result = sut.executeTick(programConfiguration);
-        verify(action1).beforeExecution(programConfigurationMock);
+        verify(action1).beforeExecution(programConfiguration);
         Assertions.assertEquals(0, result.getTickCommands().size());
         Assertions.assertEquals(ActionStatus.FAILED, sut.getStatus());
     }
