@@ -50,7 +50,7 @@ public class ActionQueueTest {
     @Test
     public void testBeforeExecution() {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
         verifyNoMoreInteractions(droplet1);
@@ -70,21 +70,21 @@ public class ActionQueueTest {
         when(action2.executeTick(programConfiguration)).thenReturn(actionTickResult2);
         when(action3.executeTick(programConfiguration)).thenReturn(actionTickResult3);
 
-
-        sut.beforeExecution();
+        ProgramConfiguration programConfigurationMock = mock(ProgramConfiguration.class);
+        sut.beforeExecution(programConfigurationMock);
 
         when(action1.getStatus())
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.COMPLETED);
         ActionTickResult result = sut.executeTick(programConfiguration);
-        verify(action1).beforeExecution();
+        verify(action1).beforeExecution(programConfigurationMock);
         Assertions.assertEquals(actionTickResult1, result);
 
         when(action2.getStatus())
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.IN_PROGRESS);
         result = sut.executeTick(programConfiguration);
-        verify(action2).beforeExecution();
+        verify(action2).beforeExecution(programConfigurationMock);
         Assertions.assertEquals(actionTickResult2, result);
 
         when(action2.getStatus())
@@ -97,7 +97,7 @@ public class ActionQueueTest {
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.COMPLETED);
         result = sut.executeTick(programConfiguration);
-        verify(action3).beforeExecution();
+        verify(action3).beforeExecution(programConfigurationMock);
         Assertions.assertEquals(actionTickResult3, result);
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }
@@ -113,21 +113,21 @@ public class ActionQueueTest {
         when(action2.executeTick(programConfiguration)).thenReturn(actionTickResult2);
         when(action3.executeTick(programConfiguration)).thenReturn(actionTickResult3);
 
-
-        sut.beforeExecution();
+        ProgramConfiguration programConfigurationMock = mock(ProgramConfiguration.class);
+        sut.beforeExecution(programConfigurationMock);
 
         when(action1.getStatus())
                 .thenReturn(ActionStatus.NOT_STARTED)
                 .thenReturn(ActionStatus.FAILED);
         ActionTickResult result = sut.executeTick(programConfiguration);
-        verify(action1).beforeExecution();
+        verify(action1).beforeExecution(programConfigurationMock);
         Assertions.assertEquals(0, result.getTickCommands().size());
         Assertions.assertEquals(ActionStatus.FAILED, sut.getStatus());
     }
 
     @Test
     public void testAfterExecution() {
-        sut.afterExecution();
+        sut.afterExecution(mock(ProgramConfiguration.class));
         verifyNoMoreInteractions(droplet1);
         verifyNoMoreInteractions(droplet2);
         verifyNoMoreInteractions(droplet3);

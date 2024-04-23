@@ -26,7 +26,7 @@ public class StartAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
 
     }
 
@@ -36,7 +36,7 @@ public class StartAction extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
 
     }
 

@@ -52,7 +52,7 @@ public class Executor {
 
             for(ActionBase action : actionsToBeTicked) {
                 if(action.getStatus() == ActionStatus.COMPLETED) {
-                    action.afterExecution();
+                    action.afterExecution(programConfiguration);
                     schedule.updateSchedule();
                 }
             }
@@ -70,7 +70,7 @@ public class Executor {
 
     private ActionTickResult tickAction(ActionBase action) {
         if(action.getStatus() == ActionStatus.NOT_STARTED) {
-            action.beforeExecution();
+            action.beforeExecution(programConfiguration);
         }
 
         return action.executeTick(programConfiguration);

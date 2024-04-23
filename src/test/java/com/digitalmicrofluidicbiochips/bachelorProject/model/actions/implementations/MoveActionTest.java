@@ -61,7 +61,7 @@ public class MoveActionTest {
     public void testBeforeExecution() {
         Assertions.assertEquals(DropletStatus.AVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
     }
@@ -76,7 +76,7 @@ public class MoveActionTest {
     public void testExecuteTick_isCorrectAvailableGridParsed() {
         droplet.setPositionX(5);
         droplet.setPositionY(3);
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         ActionTickResult result = sut.executeTick(programConfigurationMock);
         ArgumentCaptor<ElectrodeGrid> electrodeGridCaptor = ArgumentCaptor.forClass(ElectrodeGrid.class);
@@ -103,7 +103,7 @@ public class MoveActionTest {
     public void testExecuteTickWithSingle1ElectrodeDropletDown() {
         droplet.setPositionX(5);
         droplet.setPositionY(3);
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         when(pathFinderMock.getMove(eq(droplet), any(ElectrodeGrid.class), eq(5), eq(5))).thenReturn(DropletMove.DOWN);
 
@@ -157,14 +157,14 @@ public class MoveActionTest {
     public void testAfterExecution() {
         droplet.setPositionX(5);
         droplet.setPositionY(5);
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         when(pathFinderMock.getMove(eq(droplet), any(ElectrodeGrid.class), eq(5), eq(5))).thenReturn(DropletMove.DOWN);
         ActionTickResult result = sut.executeTick(programConfigurationMock);
         Assertions.assertEquals(0, result.getTickCommands().size());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
 
-        sut.afterExecution();
+        sut.afterExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.AVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }

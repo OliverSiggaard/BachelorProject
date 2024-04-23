@@ -48,7 +48,7 @@ public class InputActionTest {
     public void testBeforeExecution() {
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
     }
@@ -58,7 +58,7 @@ public class InputActionTest {
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
 
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
@@ -88,7 +88,7 @@ public class InputActionTest {
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
 
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
@@ -118,14 +118,14 @@ public class InputActionTest {
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
 
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
         // Execute tick (should always run before afterExecution) - For input the action is completed in first tick.
         sut.executeTick(programConfigurationMock);
 
-        sut.afterExecution();
+        sut.afterExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.AVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }

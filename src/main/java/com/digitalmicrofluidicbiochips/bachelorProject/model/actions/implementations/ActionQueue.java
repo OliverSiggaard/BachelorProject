@@ -34,7 +34,7 @@ public class ActionQueue extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
         setStatus(ActionStatus.IN_PROGRESS);
         // Droplets status is handled in the individual actions in the queue.
     }
@@ -48,7 +48,7 @@ public class ActionQueue extends ActionBase {
         ActionStatus actionStatus = action.getStatus();
         // Start or tick already running action
         if(actionStatus == ActionStatus.NOT_STARTED) {
-            action.beforeExecution();
+            action.beforeExecution(programConfiguration);
             actionTickResult = action.executeTick(programConfiguration);
         } else if (actionStatus == ActionStatus.IN_PROGRESS) {
             actionTickResult = action.executeTick(programConfiguration);
@@ -56,7 +56,7 @@ public class ActionQueue extends ActionBase {
 
         // Check if it is completed
         if(action.getStatus() == ActionStatus.COMPLETED) {
-            action.afterExecution();
+            action.afterExecution(programConfiguration);
             currentActionIndex++;
             if (currentActionIndex == actions.size()) {
                 setStatus(ActionStatus.COMPLETED);
@@ -75,7 +75,7 @@ public class ActionQueue extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
         // Droplets status is handled in the individual actions in the queue.
     }
 }

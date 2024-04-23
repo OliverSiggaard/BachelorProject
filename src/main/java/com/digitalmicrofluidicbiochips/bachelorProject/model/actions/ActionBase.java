@@ -22,11 +22,11 @@ public abstract class ActionBase {
 
     public abstract Set<Droplet> dropletsRequiredForExecution();
 
-    public abstract void beforeExecution();
+    public abstract void beforeExecution(ProgramConfiguration programConfiguration);
 
     public abstract ActionTickResult executeTick(ProgramConfiguration programConfiguration);
 
-    public abstract void afterExecution();
+    public abstract void afterExecution(ProgramConfiguration programConfiguration);
 
     protected void setStatus(ActionStatus status) {
         this.status = status;

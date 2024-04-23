@@ -53,13 +53,13 @@ public class MergeAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
         if(resultDroplet.getStatus() != DropletStatus.NOT_CREATED) {
             throw new IllegalStateException("Result droplet must be in NOT_CREATED state.");
         }
 
-        moveAction1.beforeExecution();
-        moveAction2.beforeExecution();
+        moveAction1.beforeExecution(programConfiguration);
+        moveAction2.beforeExecution(programConfiguration);
 
         resultDroplet.setVolume(droplet1.getVolume() + droplet2.getVolume());
         inputAction = new InputAction(null, posX, posY, resultDroplet.getVolume());
@@ -78,9 +78,9 @@ public class MergeAction extends ActionBase {
             droplet2.setStatus(DropletStatus.CONSUMED);
 
             // At this point, the result droplet can be safely inserted.
-            inputAction.beforeExecution();
+            inputAction.beforeExecution(programConfiguration);
             actionTickResult = inputAction.executeTick(programConfiguration);
-            inputAction.afterExecution();
+            inputAction.afterExecution(programConfiguration);
 
             // Set the status of this action as completed.
             setStatus(ActionStatus.COMPLETED);
@@ -107,7 +107,7 @@ public class MergeAction extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
         droplet1.setStatus(DropletStatus.CONSUMED);
         droplet2.setStatus(DropletStatus.CONSUMED);
         resultDroplet.setStatus(DropletStatus.AVAILABLE);

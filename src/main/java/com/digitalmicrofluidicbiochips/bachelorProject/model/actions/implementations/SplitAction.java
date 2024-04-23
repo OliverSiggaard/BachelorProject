@@ -53,7 +53,7 @@ public class SplitAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
 
         if(resultDroplet1.getStatus() != DropletStatus.NOT_CREATED ||
                 resultDroplet2.getStatus() != DropletStatus.NOT_CREATED) {
@@ -102,7 +102,7 @@ public class SplitAction extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
         originDroplet.setStatus(DropletStatus.CONSUMED);
         resultDroplet1.setStatus(DropletStatus.AVAILABLE);
         resultDroplet2.setStatus(DropletStatus.AVAILABLE);
