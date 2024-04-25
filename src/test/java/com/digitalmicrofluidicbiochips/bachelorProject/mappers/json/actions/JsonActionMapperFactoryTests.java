@@ -18,28 +18,6 @@ public class JsonActionMapperFactoryTests {
     }
 
     @Test
-    public void MapJsonStartActionDtoModelToInternalModel() {
-
-        // Arrange
-        String id = "id";
-        String nextActionId = "nextActionId";
-
-        JsonStartAction jsonStartAction = new JsonStartAction(id, nextActionId);
-
-        // Act
-        ActionBase action = getInternalAction(jsonStartAction);
-
-        // Assert
-        if(!(action instanceof StartAction)) {
-            Assertions.fail("jsonAction was not converted correctly to internal model");
-        }
-
-        StartAction startAction = (StartAction) action;
-        Assertions.assertEquals(id, startAction.getId());
-        Assertions.assertNull(startAction.getNextAction());
-    }
-
-    @Test
     public void MapsJsonInputActionDtoModelToInternalModel() {
 
         // Arrange
@@ -288,31 +266,6 @@ public class JsonActionMapperFactoryTests {
     }
 
     @Test
-    public void MapsJsonIfActionDtoModelToInternalModel() {
-        // Arrange
-        String id = "id";
-        String condition = "condition";
-        String nextActionId = "nextActionId";
-        String elseActionId = "elseActionId";
-
-        JsonIfAction jsonIfAction = new JsonIfAction(id, condition, nextActionId, elseActionId);
-
-        // Act
-        ActionBase action = getInternalAction(jsonIfAction);
-
-        // Assert
-        if (!(action instanceof IfAction)) {
-            Assertions.fail("jsonAction was not converted correctly to internal model");
-        }
-
-        IfAction ifAction = (IfAction) action;
-        Assertions.assertEquals(id, ifAction.getId());
-        Assertions.assertEquals(condition, ifAction.getCondition());
-        Assertions.assertNull(ifAction.getTrueNextAction());
-        Assertions.assertNull(ifAction.getFalseNextAction());
-    }
-
-    @Test
     public void MapsJsonRepeatActionDtoModelToInternalModel() {
         // Arrange
         String id = "id";
@@ -335,25 +288,6 @@ public class JsonActionMapperFactoryTests {
         Assertions.assertEquals(times, repeatAction.getTimes());
         Assertions.assertNull(repeatAction.getNextRepeatAction());
         Assertions.assertNull(repeatAction.getNextExitAction());
-    }
-
-    @Test
-    public void MapsJsonEndActionDtoModelToInternalModel() {
-        // Arrange
-        String id = "id";
-
-        JsonEndAction jsonEndAction = new JsonEndAction(id);
-
-        // Act
-        ActionBase action = getInternalAction(jsonEndAction);
-
-        // Assert
-        if (!(action instanceof EndAction)) {
-            Assertions.fail("jsonAction was not converted correctly to internal model");
-        }
-
-        EndAction endAction = (EndAction) action;
-        Assertions.assertEquals(id, endAction.getId());
     }
 
 }

@@ -19,7 +19,6 @@ import lombok.Getter;
 //All the different action types are listed here.
 // This is required for Jackson to be able to map the JSON file to the correct ActionBase object.
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = JsonStartAction.class, name = "start"),
         @JsonSubTypes.Type(value = JsonInputAction.class, name = "input"),
         @JsonSubTypes.Type(value = JsonOutputAction.class, name = "output"),
         @JsonSubTypes.Type(value = JsonMoveAction.class, name = "move"),
@@ -27,9 +26,7 @@ import lombok.Getter;
         @JsonSubTypes.Type(value = JsonSplitAction.class, name = "split"),
         @JsonSubTypes.Type(value = JsonMixAction.class, name = "mix"),
         @JsonSubTypes.Type(value = JsonStoreAction.class, name = "store"),
-        @JsonSubTypes.Type(value = JsonIfAction.class, name = "if"),
         @JsonSubTypes.Type(value = JsonRepeatAction.class, name = "repeat"),
-        @JsonSubTypes.Type(value = JsonEndAction.class, name = "end"),
 })
 @Getter
 public class JsonActionBase extends DtoActionBase {

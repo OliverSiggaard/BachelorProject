@@ -13,11 +13,6 @@
 
   "program_actions": [
     {
-      "action": "start",
-      "id": "unique_start_id",
-      "next": "unique_input_id"
-    },
-    {
       "action": "input",
       "id": "unique_input_id",
       "dropletId": "unique_droplet_id",
@@ -82,25 +77,14 @@
       "posX": 140,
       "posY": 150,
       "time": 10,
-      "next": "unique_if_id"
-    },
-    {
-      "action": "if",
-      "id": "unique_if_id",
-      "condition": "sample_condition",
-      "trueNext": "unique_repeat_id",
-      "falseNext": "unique_end_id"
+      "next": "unique_mix_id"
     },
     {
       "action": "repeat",
       "id": "unique_repeat_id",
       "times": 5,
-      "nextRepeat": "unique_repeat_id",
-      "nextExit": "unique_end_id"
-    },
-    {
-      "action": "end",
-      "id": "unique_end_id"
+      "nextRepeat": "unique_store_id",
+      "nextExit": "unique_store_id"
     }
   ]
 }

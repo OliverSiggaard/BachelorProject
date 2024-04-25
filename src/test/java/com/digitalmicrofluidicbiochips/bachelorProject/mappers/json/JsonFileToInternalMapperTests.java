@@ -62,20 +62,6 @@ public class JsonFileToInternalMapperTests {
     */
 
     @Test
-    public void startActionNextActionsAreResolvedCorrectly() {
-        Map<String, ActionBase> actions = programConfiguration.getProgramActions().stream()
-                .collect(Collectors.toMap(ActionBase::getId, action -> action));
-
-        JsonStartAction jsonStartAction = (JsonStartAction) jsonProgramConfiguration.getProgramActions().stream()
-                .filter(action -> action instanceof JsonStartAction)
-                .findFirst()
-                .orElseThrow();
-
-        StartAction startAction = (StartAction) actions.get(jsonStartAction.getId());
-        Assertions.assertEquals(jsonStartAction.getNextActionId(), startAction.getNextAction().getId());
-    }
-
-    @Test
     public void inputActionNextActionsAreResolvedCorrectly() {
         Map<String, ActionBase> actions = programConfiguration.getProgramActions().stream()
                         .collect(Collectors.toMap(ActionBase::getId, action -> action));
@@ -172,21 +158,6 @@ public class JsonFileToInternalMapperTests {
 
         ActionQueue actionQueue = (ActionQueue) actions.get(jsonStoreAction.getId());
         Assertions.assertEquals(jsonStoreAction.getNextActionId(), actionQueue.getNextAction().getId());
-    }
-
-    @Test
-    public void IfActionNextActionsAreResolvedCorrectly() {
-        Map<String,ActionBase> actions = programConfiguration.getProgramActions().stream()
-                .collect(Collectors.toMap(ActionBase::getId, action -> action));
-
-        JsonIfAction jsonIfAction = (JsonIfAction) jsonProgramConfiguration.getProgramActions().stream()
-                .filter(action -> action instanceof JsonIfAction)
-                .findFirst()
-                .orElseThrow();
-
-        IfAction ifAction = (IfAction) actions.get(jsonIfAction.getId());
-        Assertions.assertEquals(jsonIfAction.getTrueNextActionId(), ifAction.getTrueNextAction().getId());
-        Assertions.assertEquals(jsonIfAction.getFalseNextActionId(), ifAction.getFalseNextAction().getId());
     }
 
     @Test

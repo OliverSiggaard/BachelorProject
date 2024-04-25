@@ -17,18 +17,13 @@
   },
   "program_actions": [
     {
-      "action": "start",
-      "id": "unique_start_id",
-      "next": "next_unique_id_1"
-    },
-    {
       "action": "input",
       "id": "unique_input_id",
       "dropletId": "unique_droplet_id",
       "posX": 10,
       "posY": 20,
-      "volume": 50,
-      "next": "next_unique_id_2"
+      "volume": 30,
+      "next": "unique_output_id"
     },
     {
       "action": "output",
@@ -36,7 +31,7 @@
       "dropletId": "unique_droplet_id",
       "posX": 30,
       "posY": 40,
-      "next": "next_unique_id_3"
+      "next": "unique_move_id"
     },
     {
       "action": "move",
@@ -44,36 +39,40 @@
       "dropletId": "unique_droplet_id",
       "posX": 50,
       "posY": 60,
-      "next": "next_unique_id_4"
+      "next": "unique_merge_id"
     },
     {
       "action": "merge",
       "id": "unique_merge_id",
-      "resultDropletId": "unique_droplet_id",
+      "resultDropletId": "unique_droplet_id2",
       "dropletId1": "unique_droplet_id",
       "dropletId2": "unique_droplet_id",
       "posX": 80,
       "posY": 90,
-      "next": "next_unique_id_5"
+      "next": "unique_split_id"
     },
     {
       "action": "split",
       "id": "unique_split_id",
       "originDroplet": "unique_droplet_id",
-      "resultDroplet1": "unique_droplet_id",
-      "resultDroplet2": "unique_droplet_id",
+      "resultDroplet1": "unique_droplet_id3",
+      "resultDroplet2": "unique_droplet_id4",
       "ratio": 0.2,
       "posX1": 100,
       "posY1": 110,
       "posX2": 120,
       "posY2": 130,
-      "next": "next_unique_id_6"
+      "next": "unique_mix_id"
     },
     {
       "action": "mix",
       "id": "unique_mix_id",
       "dropletId": "unique_droplet_id",
-      "next": "next_unique_id_7"
+      "posX": 1,
+      "posY": 2,
+      "sizeX": 3,
+      "sizeY": 4,
+      "next": "unique_store_id"
     },
     {
       "action": "store",
@@ -82,25 +81,14 @@
       "posX": 140,
       "posY": 150,
       "time": 10,
-      "next": "next_unique_id_8"
-    },
-    {
-      "action": "if",
-      "id": "unique_if_id",
-      "condition": "sample_condition",
-      "trueNext": "next_unique_id_10",
-      "falseNext": "next_unique_id_11"
+      "next": "unique_mix_id"
     },
     {
       "action": "repeat",
       "id": "unique_repeat_id",
       "times": 5,
-      "nextRepeat": "next_unique_id_12",
-      "nextExit": "next_unique_id_13"
-    },
-    {
-      "action": "end",
-      "id": "unique_end_id"
+      "nextRepeat": "unique_store_id",
+      "nextExit": "unique_store_id"
     }
   ]
 }
