@@ -98,7 +98,4 @@ public class ElectrodeGrid implements Cloneable {
         }
         return true;
     }
-
-
-
 }

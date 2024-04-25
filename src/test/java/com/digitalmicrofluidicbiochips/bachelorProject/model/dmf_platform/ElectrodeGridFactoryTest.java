@@ -1,7 +1,9 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ElectrodeGridFactoryTest {
 
@@ -46,6 +50,23 @@ class ElectrodeGridFactoryTest {
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
         assertTrue(electrodeSquareIsNull(3, 5, 3, 5, availableGrid));
+    }
+
+    @Test
+    void testCreateElectrodeGridElectrodeSizeAndBoardSizeMisMatch() {
+        // Create a mock electrode grid with a size that is not directly divisible by the electrode size
+
+        ProgramConfiguration programConfiguration = mock(ProgramConfiguration.class);
+        PlatformInformation platformInformation = mock(PlatformInformation.class);
+        when(programConfiguration.getPlatformInformation()).thenReturn(platformInformation);
+        when(platformInformation.getSizeX()).thenReturn(30);
+        when(platformInformation.getSizeY()).thenReturn(30);
+        Electrode electrode = new Electrode("Electrode", 0, 0, 1, 0, 0, 20, 20, 0);
+        when(platformInformation.getElectrodes()).thenReturn(List.of(electrode));
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ElectrodeGridFactory.getElectrodeGrid(programConfiguration);
+        });
     }
 
 

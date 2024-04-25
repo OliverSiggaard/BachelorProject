@@ -28,6 +28,9 @@ public class SplitAction extends ActionBase {
     @Setter
     private Droplet resultDroplet2 = null;
 
+    private MoveAction moveAction1;
+    private MoveAction moveAction2;
+
     private final Queue<ActionTickResult> tickQueue;
 
     public SplitAction(
@@ -66,6 +69,12 @@ public class SplitAction extends ActionBase {
         resultDroplet1.setVolume(originDroplet.getVolume()/2);
         resultDroplet2.setVolume(originDroplet.getVolume()/2);
 
+        moveAction1 = new MoveAction("MoveAction1", posX1, posY1);
+        moveAction1.setDroplet(resultDroplet1);
+
+        moveAction2 = new MoveAction("MoveAction2", posX2, posY2);
+        moveAction2.setDroplet(resultDroplet2);
+
         setStatus(ActionStatus.IN_PROGRESS);
     }
 
@@ -74,14 +83,24 @@ public class SplitAction extends ActionBase {
 
         if(!tickQueue.isEmpty()) {
             ActionTickResult tickResult = tickQueue.poll();
+
+            // If tickQueue is empty, the droplets are split, and the moveActions are started.
             if(tickQueue.isEmpty()) {
-                setStatus(ActionStatus.COMPLETED);
+                originDroplet.setStatus(DropletStatus.CONSUMED);
+                resultDroplet1.setStatus(DropletStatus.AVAILABLE);
+                resultDroplet2.setStatus(DropletStatus.AVAILABLE);
+                moveAction1.beforeExecution(programConfiguration);
+                moveAction2.beforeExecution(programConfiguration);
             }
             return tickResult;
         }
 
+        // if the droplets have already been split, the moveActions are ticked.
+        if(hasSplitBeenPerformed()) {
+            return attemptToMoveResultDroplets(programConfiguration);
+        }
 
-        // Boundaries of origin droplet
+        // Calculating Boundaries of origin droplet
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         int electrodeSize = electrodeGrid.getElectrodeSizeOfElectrodeInGrid();
         int originDropletSize = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(originDroplet, electrodeSize);
@@ -97,18 +116,36 @@ public class SplitAction extends ActionBase {
             splitVertically(electrodeGrid, originDropletArea);
         }
 
-        if(tickQueue.isEmpty()) {
-            throw new IllegalStateException("Split action did not find any way to split the droplet.");
-        }
-
         return tickQueue.poll();
     }
 
     @Override
     public void afterExecution(ProgramConfiguration programConfiguration) {
+        moveAction1.afterExecution(programConfiguration);
+        moveAction2.afterExecution(programConfiguration);
         originDroplet.setStatus(DropletStatus.CONSUMED);
-        resultDroplet1.setStatus(DropletStatus.AVAILABLE);
-        resultDroplet2.setStatus(DropletStatus.AVAILABLE);
+    }
+
+    private ActionTickResult attemptToMoveResultDroplets(ProgramConfiguration programConfiguration) {
+        ActionTickResult tickResult = new ActionTickResult();
+
+        if(moveAction1.getStatus() == ActionStatus.IN_PROGRESS) {
+            tickResult.addTickResult(moveAction1.executeTick(programConfiguration));
+        }
+
+        if(moveAction2.getStatus() == ActionStatus.IN_PROGRESS) {
+            tickResult.addTickResult(moveAction2.executeTick(programConfiguration));
+        }
+
+        if(moveAction1.getStatus() == ActionStatus.COMPLETED && moveAction2.getStatus() == ActionStatus.COMPLETED) {
+            setStatus(ActionStatus.COMPLETED);
+        }
+
+        return tickResult;
+    }
+
+    private boolean hasSplitBeenPerformed() {
+        return moveAction1.getStatus() != ActionStatus.NOT_STARTED || moveAction2.getStatus() != ActionStatus.NOT_STARTED;
     }
 
     private void splitHorizontally(ElectrodeGrid electrodeGrid, GridArea originDropletArea) {
@@ -260,7 +297,7 @@ public class SplitAction extends ActionBase {
         int x2 = originDroplet.getPositionX() + 2 + (originDropletShouldExpandBeforeSplitting(programConfiguration) ? 1 : 0);
 
         // Boundary check
-        if(x1 < 0 || x2 + originDropletSize >= availableGrid.getXSize()) {
+        if(x1 <= 0 || x2 + originDropletSize >= availableGrid.getXSize()) {
             return false;
         }
 
@@ -277,8 +314,8 @@ public class SplitAction extends ActionBase {
         int y1 = originDroplet.getPositionY() - 2;
         int y2 = originDroplet.getPositionY() + 2 + (originDropletShouldExpandBeforeSplitting(programConfiguration) ? 1 : 0);
 
-        // Boundary check
-        if(y1 < 0 || y2 + originDropletSize >= availableGrid.getYSize()) {
+        // Boundary check.
+        if(y1 <= 0 || y2 + originDropletSize >= availableGrid.getYSize()) {
             return false;
         }
 

@@ -174,7 +174,7 @@ public class Droplet {
         int y2 = Math.min(maxY, (obstacleDroplet.getPositionY() + obstacleDropletDiameter));
 
         GridArea gridArea = new GridArea(x1, y1, x2, y2);
-        return extendedGridAreaInDropletMoveDirection(obstacleDroplet, gridArea);
+        return getExtendedGridAreaInDropletMoveDirection(obstacleDroplet, electrodeGrid, gridArea);
     }
 
     /**
@@ -201,10 +201,10 @@ public class Droplet {
         int y2 = Math.min(maxY, getPositionY() + electrodeSpan - 1);
 
         GridArea gridArea = new GridArea(x1, y1, x2, y2);
-        return extendedGridAreaInDropletMoveDirection(this, gridArea);
+        return getExtendedGridAreaInDropletMoveDirection(this, electrodeGrid, gridArea);
     }
 
-    private static GridArea extendedGridAreaInDropletMoveDirection(Droplet movingDroplet, GridArea gridArea) {
+    private static GridArea getExtendedGridAreaInDropletMoveDirection(Droplet movingDroplet, ElectrodeGrid electrodeGrid ,GridArea gridArea) {
         switch (movingDroplet.getDropletMove()) {
             case DOWN -> {
                 return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2(), gridArea.getY2() + 1);
@@ -216,7 +216,7 @@ public class Droplet {
                 return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2() + 1, gridArea.getY2());
             }
             case LEFT -> {
-                return new GridArea(gridArea.getX1() - 1, gridArea.getY1(), gridArea.getX2(), gridArea.getY2() + 1);
+                return new GridArea(gridArea.getX1() - 1, gridArea.getY1(), gridArea.getX2(), gridArea.getY2());
             }
         }
         return gridArea;

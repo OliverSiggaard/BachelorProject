@@ -100,6 +100,29 @@ public class MoveActionTest {
     }
 
     @Test
+    public void testExecuteTick_isCorrectAvailableGridParsed_obstacleDropletIsExempt() {
+        droplet.setPositionX(5);
+        droplet.setPositionY(3);
+        sut.beforeExecution(mock(ProgramConfiguration.class));
+        sut.addExemptObstacleDroplet(obstacleDroplet);
+
+        ActionTickResult result = sut.executeTick(programConfigurationMock);
+        ArgumentCaptor<ElectrodeGrid> electrodeGridCaptor = ArgumentCaptor.forClass(ElectrodeGrid.class);
+        verify(pathFinderMock).getMove(eq(droplet), electrodeGridCaptor.capture(), eq(5), eq(5));
+        ElectrodeGrid capturedElectrodeGrid = electrodeGridCaptor.getValue();
+
+        ElectrodeGrid expectedElectrodeGrid = programConfigurationMock.getElectrodeGrid().clone();
+
+        Assertions.assertEquals(expectedElectrodeGrid.getXSize(), capturedElectrodeGrid.getXSize());
+        Assertions.assertEquals(expectedElectrodeGrid.getYSize(), capturedElectrodeGrid.getYSize());
+        for (int dx = 0; dx < expectedElectrodeGrid.getXSize(); dx++) {
+            for (int dy = 0; dy < expectedElectrodeGrid.getYSize(); dy++) {
+                Assertions.assertEquals(expectedElectrodeGrid.getElectrode(dx, dy), capturedElectrodeGrid.getElectrode(dx, dy));
+            }
+        }
+    }
+
+    @Test
     public void testExecuteTickWithSingle1ElectrodeDropletDown() {
         droplet.setPositionX(5);
         droplet.setPositionY(3);

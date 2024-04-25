@@ -22,7 +22,6 @@ public class MergeAction extends ActionBase {
     private ActionBase nextAction = null;
 
     private Droplet droplet1 = null;
-
     private Droplet droplet2 = null;
     @Setter
     private Droplet resultDroplet = null;
@@ -81,6 +80,7 @@ public class MergeAction extends ActionBase {
             inputAction.beforeExecution(programConfiguration);
             actionTickResult = inputAction.executeTick(programConfiguration);
             inputAction.afterExecution(programConfiguration);
+            resultDroplet.setStatus(DropletStatus.UNAVAILABLE);
 
             // Set the status of this action as completed.
             setStatus(ActionStatus.COMPLETED);
