@@ -26,7 +26,6 @@ import lombok.Getter;
         @JsonSubTypes.Type(value = JsonSplitAction.class, name = "split"),
         @JsonSubTypes.Type(value = JsonMixAction.class, name = "mix"),
         @JsonSubTypes.Type(value = JsonStoreAction.class, name = "store"),
-        @JsonSubTypes.Type(value = JsonRepeatAction.class, name = "repeat"),
 })
 @Getter
 public class JsonActionBase extends DtoActionBase {

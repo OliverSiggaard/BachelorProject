@@ -25,8 +25,6 @@ public class JsonActionMapperFactory {
         mappers.put(JsonSplitAction.class, new JsonSplitActionMapper());
         mappers.put(JsonMixAction.class, new JsonMixActionMapper());
         mappers.put(JsonStoreAction.class, new JsonStoreActionMapper());
-        mappers.put(JsonRepeatAction.class, new JsonRepeatActionMapper());
-
     }
 
     @SuppressWarnings("unchecked")

@@ -208,24 +208,4 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_mix_id", storeAction.getNextActionId());
     }
 
-    @Test
-    public void repeatActionIsLoadedCorrectly() {
-        String actionId = "unique_repeat_id";
-
-        if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the repeat action.");
-        }
-
-        JsonActionBase actionBase = actionMap.get(actionId);
-        if (!(actionBase instanceof JsonRepeatAction)) {
-            fail("The action: " + actionId + "is not of type RepeatAction.");
-        }
-
-        JsonRepeatAction repeatAction = (JsonRepeatAction) actionBase;
-        Assertions.assertEquals("unique_repeat_id", repeatAction.getId());
-        Assertions.assertEquals(5, repeatAction.getRepeatCount());
-        Assertions.assertEquals("unique_store_id", repeatAction.getRepeatNextActionId());
-        Assertions.assertEquals("unique_store_id", repeatAction.getExitNextActionId());
-    }
-
 }

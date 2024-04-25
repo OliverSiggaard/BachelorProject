@@ -265,29 +265,4 @@ public class JsonActionMapperFactoryTests {
         Assertions.assertNull(storeAction.getDroplet());
     }
 
-    @Test
-    public void MapsJsonRepeatActionDtoModelToInternalModel() {
-        // Arrange
-        String id = "id";
-        int times = 3;
-        String nextRepeatId = "nextActionId";
-        String nextExitId = "nextExitId";
-
-        JsonRepeatAction jsonRepeatAction = new JsonRepeatAction(id, times, nextRepeatId, nextExitId);
-
-        // Act
-        ActionBase action = getInternalAction(jsonRepeatAction);
-
-        // Assert
-        if (!(action instanceof RepeatAction)) {
-            Assertions.fail("jsonAction was not converted correctly to internal model");
-        }
-
-        RepeatAction repeatAction = (RepeatAction) action;
-        Assertions.assertEquals(id, repeatAction.getId());
-        Assertions.assertEquals(times, repeatAction.getTimes());
-        Assertions.assertNull(repeatAction.getNextRepeatAction());
-        Assertions.assertNull(repeatAction.getNextExitAction());
-    }
-
 }

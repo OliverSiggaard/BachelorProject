@@ -160,19 +160,4 @@ public class JsonFileToInternalMapperTests {
         Assertions.assertEquals(jsonStoreAction.getNextActionId(), actionQueue.getNextAction().getId());
     }
 
-    @Test
-    public void RepeatActionNextActionsAreResolvedCorrectly() {
-        Map<String,ActionBase> actions = programConfiguration.getProgramActions().stream()
-                .collect(Collectors.toMap(ActionBase::getId, action -> action));
-
-        JsonRepeatAction jsonRepeatAction = (JsonRepeatAction) jsonProgramConfiguration.getProgramActions().stream()
-                .filter(action -> action instanceof JsonRepeatAction)
-                .findFirst()
-                .orElseThrow();
-
-        RepeatAction repeatAction = (RepeatAction) actions.get(jsonRepeatAction.getId());
-        Assertions.assertEquals(jsonRepeatAction.getRepeatNextActionId(), repeatAction.getNextRepeatAction().getId());
-        Assertions.assertEquals(jsonRepeatAction.getExitNextActionId(), repeatAction.getNextExitAction().getId());
-    }
-
 }

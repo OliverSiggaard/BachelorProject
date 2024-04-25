@@ -78,13 +78,6 @@
       "posY": 150,
       "time": 10,
       "next": "unique_mix_id"
-    },
-    {
-      "action": "repeat",
-      "id": "unique_repeat_id",
-      "times": 5,
-      "nextRepeat": "unique_store_id",
-      "nextExit": "unique_store_id"
     }
   ]
 }
