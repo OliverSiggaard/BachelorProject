@@ -52,12 +52,17 @@ public class Executor {
 
             for(ActionBase action : actionsToBeTicked) {
                 if(action.getStatus() == ActionStatus.COMPLETED) {
-                    action.afterExecution();
+                    action.afterExecution(programConfiguration);
                     schedule.updateSchedule();
                 }
             }
 
-            if(!tickResult.getTickCommands().isEmpty()) tickResults.add(tickResult);
+            if(!tickResult.isTickShouldBeExecuted()) {
+                //return tickResults;
+                throw new RuntimeException("The program got stuck. A tick was reached, that was not able to execute any actions.");
+            }
+
+            tickResults.add(tickResult);
         }
         return tickResults;
     }
@@ -65,7 +70,7 @@ public class Executor {
 
     private ActionTickResult tickAction(ActionBase action) {
         if(action.getStatus() == ActionStatus.NOT_STARTED) {
-            action.beforeExecution();
+            action.beforeExecution(programConfiguration);
         }
 
         return action.executeTick(programConfiguration);

@@ -1,5 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMergeAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonSplitAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.IDtoToInternalMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.dmf_platform.JsonDmfInformationMapper;
@@ -15,10 +17,9 @@ import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoad
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Main access point for the JSON file to internal model mapping.
@@ -82,7 +83,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
         });
 
         //Creating a list of all the droplets from the json input actions.
-        List<Droplet> dropletList = getDropletsFromJsonInputActions(JsonActions);
+        List<Droplet> dropletList = deriveAllDropletsFromJsonActions(JsonActions);
         Map<String, Droplet> dropletMap = dropletList.stream()
                 .collect(Collectors.toMap(Droplet::getID, droplet -> droplet));
 
@@ -120,17 +121,42 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
 
 
 
-    private List<Droplet> getDropletsFromJsonInputActions(List<JsonActionBase> actions) {
+    private List<Droplet> deriveAllDropletsFromJsonActions(List<JsonActionBase> actions) {
+        List<Droplet> droplets = new ArrayList<>();
 
-        //TODO: Split Actions does also create droplets. This should be handled as well.
-
-        return actions.stream()
+        // Add all droplets created by the JsonInputActions to the list of droplets.
+        droplets.addAll(actions.stream()
                 .filter(a -> a instanceof JsonInputAction)
                 .map( a -> {
                     JsonInputAction jsonInputAction = (JsonInputAction) a;
                     return new Droplet(jsonInputAction.getDropletId(), jsonInputAction.getPosX(), jsonInputAction.getPosY(), jsonInputAction.getVolume());
                 })
-                .collect(Collectors.toList());
+                .toList());
+
+        // Add all droplets created by the JsonMergeActions to the list of droplets.
+        droplets.addAll(actions.stream()
+                .filter(a -> a instanceof JsonMergeAction)
+                .map( a -> {
+                    JsonMergeAction jsonMergeAction = (JsonMergeAction) a;
+                    return new Droplet(jsonMergeAction.getResultDropletId(), jsonMergeAction.getPosX(), jsonMergeAction.getPosY(), 0);
+                })
+                .toList());
+
+        // Add all droplets created by the JsonSplitActions to the list of droplets.
+        droplets.addAll(actions.stream()
+                .filter(a -> a instanceof JsonSplitAction)
+                .flatMap(a -> {
+                    JsonSplitAction jsonSplitAction = (JsonSplitAction) a;
+                    Droplet droplet1 = new Droplet(jsonSplitAction.getResultDropletId1(), jsonSplitAction.getPosX1(), jsonSplitAction.getPosY1(), 0);
+                    Droplet droplet2 = new Droplet(jsonSplitAction.getResultDropletId2(), jsonSplitAction.getPosX2(), jsonSplitAction.getPosY2(), 0);
+                    return Stream.of(droplet1, droplet2);
+                })
+                .toList());
+
+        return droplets;
+
+
+
     }
 
 

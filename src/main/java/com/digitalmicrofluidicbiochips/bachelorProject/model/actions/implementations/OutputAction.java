@@ -40,7 +40,7 @@ public class OutputAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.UNAVAILABLE);
         setStatus(ActionStatus.IN_PROGRESS);
     }
@@ -60,7 +60,7 @@ public class OutputAction extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
         // Nothing to update. Droplet is consumed.
     }
 }

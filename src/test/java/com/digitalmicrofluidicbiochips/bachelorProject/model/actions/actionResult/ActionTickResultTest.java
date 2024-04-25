@@ -14,6 +14,7 @@ public class ActionTickResultTest {
     @Test
     void testEmptyConstructorInitialization() {
         ActionTickResult sut = new ActionTickResult();
+        Assertions.assertEquals(false, sut.isTickShouldBeExecuted());
         Assertions.assertEquals(0, sut.getTickCommands().size());
     }
 
@@ -21,6 +22,7 @@ public class ActionTickResultTest {
     void testStringConstructorInitialization() {
         IDmfCommand iDmfCommand = mock(IDmfCommand.class);
         ActionTickResult sut = new ActionTickResult(iDmfCommand);
+        Assertions.assertEquals(true, sut.isTickShouldBeExecuted());
 
         Assertions.assertEquals(1, sut.getTickCommands().size());
         Assertions.assertEquals(iDmfCommand, sut.getTickCommands().get(0));
@@ -32,6 +34,7 @@ public class ActionTickResultTest {
         IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
         List<IDmfCommand> iDmfCommands = Arrays.asList(iDmfCommand1, iDmfCommand2);
         ActionTickResult sut = new ActionTickResult(iDmfCommands);
+        Assertions.assertEquals(true, sut.isTickShouldBeExecuted());
 
         Assertions.assertEquals(2, sut.getTickCommands().size());
         Assertions.assertEquals(iDmfCommands.get(0), sut.getTickCommands().get(0));
@@ -43,15 +46,17 @@ public class ActionTickResultTest {
         IDmfCommand iDmfCommand = mock(IDmfCommand.class);
         ActionTickResult sut = new ActionTickResult();
         Assertions.assertEquals(0, sut.getTickCommands().size());
+        Assertions.assertEquals(false, sut.isTickShouldBeExecuted());
 
         sut.addCommand(iDmfCommand);
+        Assertions.assertEquals(true, sut.isTickShouldBeExecuted());
         Assertions.assertEquals(1, sut.getTickCommands().size());
         Assertions.assertEquals(iDmfCommand, sut.getTickCommands().get(0));
     }
 
 
     @Test
-    void actionTickResultAddStringListString() {
+    void actionTickResultAddTickResult() {
         IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
         IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
         IDmfCommand iDmfCommand3 = mock(IDmfCommand.class);
@@ -60,8 +65,10 @@ public class ActionTickResultTest {
 
         ActionTickResult sut = new ActionTickResult(iDmfCommand1);
         Assertions.assertEquals(1, sut.getTickCommands().size());
+        Assertions.assertEquals(true, sut.isTickShouldBeExecuted());
 
         sut.addTickResult(actionTickResult);
+        Assertions.assertEquals(true, sut.isTickShouldBeExecuted());
         Assertions.assertEquals(3, sut.getTickCommands().size());
         Assertions.assertEquals(iDmfCommand1, sut.getTickCommands().get(0));
         Assertions.assertEquals(iDmfCommand2, sut.getTickCommands().get(1));
@@ -95,11 +102,40 @@ public class ActionTickResultTest {
         when(iDmfCommand3.getDmfCommand()).thenReturn("iDmfCommand3");
         List<IDmfCommand> iDmfCommands = Arrays.asList(iDmfCommand1, iDmfCommand2, iDmfCommand3);
         ActionTickResult sut = new ActionTickResult(iDmfCommands);
+        
 
         Assertions.assertEquals(3, sut.getTickCommandsAsStrings().size());
         Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand1"));
         Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand2"));
         Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand3"));
+    }
+
+    @Test
+    void testAddCommandsEmpty() {
+        ActionTickResult sut = new ActionTickResult();
+        Assertions.assertEquals(false, sut.isTickShouldBeExecuted());
+
+        sut.addCommands(Arrays.asList());
+        Assertions.assertEquals(false, sut.isTickShouldBeExecuted());
+    }
+
+    @Test
+    void testAddCommands() {
+        IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
+        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
+        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+
+        List<IDmfCommand> commands = Arrays.asList(iDmfCommand1, iDmfCommand2);
+
+        ActionTickResult sut = new ActionTickResult();
+        Assertions.assertEquals(false, sut.isTickShouldBeExecuted());
+
+        sut.addCommands(commands);
+        Assertions.assertEquals(true, sut.isTickShouldBeExecuted());
+        Assertions.assertEquals(2, sut.getTickCommandsAsStrings().size());
+        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand1"));
+        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand2"));
     }
 
 }

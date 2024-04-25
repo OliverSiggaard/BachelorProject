@@ -1,6 +1,8 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.IDmfCommand;
+import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 
 public class ElectrodeGridTest {
 
@@ -16,14 +21,18 @@ public class ElectrodeGridTest {
     Electrode[][] electrode2dArray;
     @BeforeEach
     void setUp() {
-        electrode2dArray = new Electrode[32][20];
-        for (int dx = 0; dx < 32; dx++) {
-            for (int dy = 0; dy < 20; dy++) {
-                electrode2dArray[dx][dy] = new Electrode("Electrode" + dx + dy, dx + dy * dx, dx + dy * dx, 1, dx * 20, dy * 20, 20, 20, 0);
+        sut = createElectrodeGrid(32, 20, 20);
+    }
+
+    private ElectrodeGrid createElectrodeGrid(int sizeX, int sizeY, int electrodeSize) {
+        Electrode[][] grid = new Electrode[sizeX][sizeY];
+        for (int dx = 0; dx < sizeX; dx++) {
+            for (int dy = 0; dy < sizeY; dy++) {
+                grid[dx][dy] = new Electrode("Electrode" + dx + dy, dx + dy * dx, dx + dy * dx, 1, dx * 20, dy * 20, electrodeSize, electrodeSize, 0);
             }
         }
-        sut = new ElectrodeGrid(electrode2dArray);
-
+        electrode2dArray = grid;
+        return new ElectrodeGrid(grid);
     }
 
     @Test
@@ -84,6 +93,132 @@ public class ElectrodeGridTest {
                 Assertions.assertSame(sut.getElectrode(dx, dy), cloned.getElectrode(dx, dy));
             }
         }
+    }
+
+    @Test
+    void testGetElectrodeSizeOfElectrodeInGrid() {
+        Assertions.assertEquals(20, sut.getElectrodeSizeOfElectrodeInGrid());
+
+        sut = createElectrodeGrid(2, 2, 10);
+        Assertions.assertEquals(10, sut.getElectrodeSizeOfElectrodeInGrid());
+
+        sut.removeElectrode(0,0);
+        Assertions.assertEquals(10, sut.getElectrodeSizeOfElectrodeInGrid());
+
+        sut.removeElectrode(1,0);
+        Assertions.assertEquals(10, sut.getElectrodeSizeOfElectrodeInGrid());
+
+        sut.removeElectrode(0,1);
+        Assertions.assertEquals(10, sut.getElectrodeSizeOfElectrodeInGrid());
+
+        sut.removeElectrode(1,1);
+        Assertions.assertThrows(IllegalStateException.class, () -> sut.getElectrodeSizeOfElectrodeInGrid());
+    }
+
+    @Test
+    void testRemoveElectrodes() {
+        GridArea gridArea = new GridArea(1, 2, 3, 4);
+        sut.removeElectrodes(gridArea);
+        for (int x = 1; x <= 3; x++) {
+            for (int y = 2; y <= 4; y++) {
+                Assertions.assertNull(sut.getElectrode(x, y));
+            }
+        }
+    }
+
+    @Test
+    void testGetSetElectrodeCommands() {
+        int x1 = 2;
+        int x2 = 7;
+        int y1 = 6;
+        int y2 = 8;
+
+        GridArea gridArea = mock(GridArea.class);
+        when(gridArea.getX1()).thenReturn(x1);
+        when(gridArea.getX2()).thenReturn(x2);
+        when(gridArea.getY1()).thenReturn(y1);
+        when(gridArea.getY2()).thenReturn(y2);
+
+        List<IDmfCommand> setCommands =  sut.getSetElectrodeCommands(gridArea);
+        Assertions.assertEquals(18, setCommands.size());
+
+        int i = 0;
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                String expected = DmfPlatformUtils.getSetElectrodeCommand(sut.getElectrode(x,y).getID());
+                Assertions.assertEquals(expected, setCommands.get(i).getDmfCommand());
+                i++;
+            }
+        }
+    }
+
+    @Test
+    void testGetClearElectrodeCommands() {
+        int x1 = 2;
+        int x2 = 7;
+        int y1 = 6;
+        int y2 = 8;
+
+        GridArea gridArea = mock(GridArea.class);
+        when(gridArea.getX1()).thenReturn(x1);
+        when(gridArea.getX2()).thenReturn(x2);
+        when(gridArea.getY1()).thenReturn(y1);
+        when(gridArea.getY2()).thenReturn(y2);
+
+        List<IDmfCommand> clearCommands =  sut.getClearElectrodeCommands(gridArea);
+        Assertions.assertEquals(18, clearCommands.size());
+
+        int i = 0;
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                String expected = DmfPlatformUtils.getClearElectrodeCommand(sut.getElectrode(x,y).getID());
+                Assertions.assertEquals(expected, clearCommands.get(i).getDmfCommand());
+                i++;
+            }
+        }
+    }
+
+    @Test
+    void testIsAllElectrodesAvailableWithinArea() {
+        int x1 = 2;
+        int x2 = 7;
+        int y1 = 6;
+        int y2 = 8;
+
+        GridArea gridArea = mock(GridArea.class);
+        when(gridArea.getX1()).thenReturn(x1);
+        when(gridArea.getX2()).thenReturn(x2);
+        when(gridArea.getY1()).thenReturn(y1);
+        when(gridArea.getY2()).thenReturn(y2);
+
+        Assertions.assertTrue(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(3, 6);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(5, 7);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(7, 8);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(2, 6);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(7, 6);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(2, 8);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(7, 8);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(2, 7);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
+
+        sut.removeElectrode(7, 7);
+        Assertions.assertFalse(sut.isAllElectrodesAvailableWithinArea(gridArea));
     }
 
 }

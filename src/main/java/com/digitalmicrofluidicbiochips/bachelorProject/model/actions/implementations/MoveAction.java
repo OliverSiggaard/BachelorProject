@@ -26,8 +26,8 @@ public class MoveAction extends ActionBase {
     @Getter @Setter
     private Droplet droplet = null;
 
+    private final Set<Droplet> ExemptObstacleDroplets;
     private final Queue<ActionTickResult> tickQueue;
-
 
     public MoveAction(
             String id,
@@ -39,6 +39,7 @@ public class MoveAction extends ActionBase {
         this.posY = posY;
 
         this.tickQueue = new LinkedList<>();
+        ExemptObstacleDroplets = new HashSet<>();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MoveAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.UNAVAILABLE);
         setStatus(ActionStatus.IN_PROGRESS);
     }
@@ -55,6 +56,7 @@ public class MoveAction extends ActionBase {
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
 
+        // If the droplet is already at the target position, then it is completed.
         if(droplet.getPositionX() == posX && droplet.getPositionY() == posY) {
             setStatus(ActionStatus.COMPLETED);
             return new ActionTickResult();
@@ -84,7 +86,7 @@ public class MoveAction extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.AVAILABLE);
     }
 
@@ -103,10 +105,12 @@ public class MoveAction extends ActionBase {
     }
 
     private DropletMove getDropletMove(ProgramConfiguration programConfiguration) {
+        List<Droplet> obstacleDroplets = new ArrayList<>(
+                programConfiguration.getDropletsOnDmfPlatform().stream()
+                     .filter(d -> !d.equals(droplet))
+                     .toList());
+        obstacleDroplets.removeAll(ExemptObstacleDroplets);
 
-        List<Droplet> obstacleDroplets = programConfiguration.getDropletsOnDmfPlatform().stream()
-                .filter(d -> !d.equals(droplet))
-                .toList();
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, droplet, obstacleDroplets);
 
@@ -116,6 +120,10 @@ public class MoveAction extends ActionBase {
 
     private boolean dropletIsAtTargetPosition() {
         return droplet.getPositionX() == posX && droplet.getPositionY() == posY;
+    }
+
+    public void addExemptObstacleDroplet(Droplet ExemptObstacleDroplet) {
+        ExemptObstacleDroplets.add(ExemptObstacleDroplet);
     }
 
 

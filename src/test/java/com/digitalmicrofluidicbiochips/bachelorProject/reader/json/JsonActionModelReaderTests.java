@@ -147,7 +147,7 @@ public class JsonActionModelReaderTests {
 
         JsonMergeAction mergeAction = (JsonMergeAction) actionBase;
         Assertions.assertEquals("unique_merge_id", mergeAction.getId());
-        Assertions.assertEquals("unique_droplet_id", mergeAction.getResultDropletId());
+        Assertions.assertEquals("unique_droplet_id2", mergeAction.getResultDropletId());
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId1());
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId2());
         Assertions.assertEquals(80, mergeAction.getPosX());
@@ -171,8 +171,8 @@ public class JsonActionModelReaderTests {
         JsonSplitAction splitAction = (JsonSplitAction) actionBase;
         Assertions.assertEquals("unique_split_id", splitAction.getId());
         Assertions.assertEquals("unique_droplet_id", splitAction.getOriginDropletId());
-        Assertions.assertEquals("unique_droplet_id", splitAction.getResultDropletId1());
-        Assertions.assertEquals("unique_droplet_id", splitAction.getResultDropletId2());
+        Assertions.assertEquals("unique_droplet_id3", splitAction.getResultDropletId1());
+        Assertions.assertEquals("unique_droplet_id4", splitAction.getResultDropletId2());
         Assertions.assertEquals(0.2, splitAction.getRatio());
         Assertions.assertEquals(100, splitAction.getPosX1());
         Assertions.assertEquals(110, splitAction.getPosY1());

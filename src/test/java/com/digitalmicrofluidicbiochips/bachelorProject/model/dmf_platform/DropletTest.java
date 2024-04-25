@@ -234,5 +234,30 @@ public class DropletTest {
         Assertions.assertTrue(droplet.getElectrodesToDisableDuringDropletMove(electrodeGrid).contains(electrodeGrid.getElectrode(10,12)));
     }
 
+    @Test
+    void testGetDropletElectrodeArea() {
+        Droplet droplet = new Droplet("1", 10, 11, 15); // volume 15 = 3 electrodes diameter
+
+        GridArea gridArea = droplet.getDropletElectrodeArea(electrodeGrid);
+        Assertions.assertEquals(10, gridArea.getX1());
+        Assertions.assertEquals(11, gridArea.getY1());
+        Assertions.assertEquals(12, gridArea.getX2());
+        Assertions.assertEquals(13, gridArea.getY2());
+    }
+
+    @Test
+    void testGetDropletSafeArea() {
+        ElectrodeGrid electrodeGrid = MockElectrodeGridSetupUtil.createMockElectrodeGrid(32, 20);
+
+        Droplet movingDroplet = new Droplet("1", 3, 4, 15); // volume 15 = 3 electrode diameter
+        Droplet obstacleDroplet = new Droplet("1", 10, 12, 15); // volume 15 = 3 electrode diameter
+
+        GridArea gridArea = movingDroplet.getDropletSafeArea(electrodeGrid, obstacleDroplet);
+
+        Assertions.assertEquals(6, gridArea.getX1());
+        Assertions.assertEquals(8, gridArea.getY1());
+        Assertions.assertEquals(14, gridArea.getX2());
+        Assertions.assertEquals(16, gridArea.getY2());
+    }
 
 }

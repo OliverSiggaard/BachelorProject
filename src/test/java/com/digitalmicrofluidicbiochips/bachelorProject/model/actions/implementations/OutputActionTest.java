@@ -49,7 +49,7 @@ public class OutputActionTest {
 
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
     }
@@ -57,7 +57,7 @@ public class OutputActionTest {
     @Test
     void testExecution() {
 
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
@@ -75,7 +75,7 @@ public class OutputActionTest {
         droplet.setPositionX(5);
         droplet.setPositionY(5);
 
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
@@ -88,9 +88,9 @@ public class OutputActionTest {
 
     @Test
     void testAfterExecution() {
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         sut.executeTick(mock(ProgramConfiguration.class));
-        sut.afterExecution();
+        sut.afterExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.CONSUMED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }

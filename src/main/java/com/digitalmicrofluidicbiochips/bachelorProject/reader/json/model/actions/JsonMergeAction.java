@@ -20,8 +20,8 @@ public class JsonMergeAction extends JsonActionBase {
     public JsonMergeAction(
             @JsonProperty("id") String id,
             @JsonProperty("resultDropletId") String resultDropletId,
-            @JsonProperty("dropletId1") String dropletId1,
-            @JsonProperty("dropletId2") String dropletId2,
+            @JsonProperty("originDropletId1") String dropletId1,
+            @JsonProperty("originDropletId2") String dropletId2,
             @JsonProperty("posX") int posX,
             @JsonProperty("posY") int posY,
             @JsonProperty("next") String nextActionId

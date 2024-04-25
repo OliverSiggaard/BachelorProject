@@ -33,14 +33,14 @@ public class StoreActionTest {
     public void testBeforeExecution() {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
     }
 
     @Test
     public void testExecution() {
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
@@ -61,7 +61,7 @@ public class StoreActionTest {
     public void testExecutionWithZeroTime() {
         sut = new StoreAction("id", 1, 2, 0);
         sut.setDroplet(droplet);
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
@@ -77,7 +77,7 @@ public class StoreActionTest {
         droplet.setPositionX(0);
         droplet.setPositionY(0);
         sut.setDroplet(droplet);
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
@@ -90,7 +90,7 @@ public class StoreActionTest {
     public void testAfterExecution() {
         sut = new StoreAction("id", 1, 2, 0);
         sut.setDroplet(droplet);
-        sut.beforeExecution();
+        sut.beforeExecution(mock(ProgramConfiguration.class));
 
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
@@ -100,7 +100,7 @@ public class StoreActionTest {
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
         Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
 
-        sut.afterExecution();
+        sut.afterExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.AVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }

@@ -2,6 +2,8 @@ package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MoveAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.SplitAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 
 import java.util.*;
@@ -27,8 +29,7 @@ public class Compiler {
                 dropletActions.get(droplet).add(action);
             });
 
-            if(action instanceof InputAction) {
-                InputAction inputAction = (InputAction) action;
+            if(action instanceof InputAction inputAction) {
                 Droplet droplet = inputAction.getDroplet();
                 if (!dropletActions.containsKey(droplet)) {
                     dropletActions.put(droplet, new LinkedList<>());
@@ -40,4 +41,5 @@ public class Compiler {
 
         return new Schedule(dropletActions);
     }
+
 }

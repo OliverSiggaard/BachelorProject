@@ -22,7 +22,7 @@ public class EndAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
 
     }
 
@@ -32,7 +32,7 @@ public class EndAction extends ActionBase {
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
 
     }
 

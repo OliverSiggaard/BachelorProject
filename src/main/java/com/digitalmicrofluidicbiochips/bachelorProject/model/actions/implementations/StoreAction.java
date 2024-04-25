@@ -41,7 +41,7 @@ public class StoreAction extends ActionBase {
     }
 
     @Override
-    public void beforeExecution() {
+    public void beforeExecution(ProgramConfiguration programConfiguration) {
         setStatus(ActionStatus.IN_PROGRESS);
         droplet.setStatus(DropletStatus.UNAVAILABLE);
     }
@@ -57,11 +57,13 @@ public class StoreAction extends ActionBase {
             setStatus(ActionStatus.COMPLETED);
         }
 
-        return new ActionTickResult();
+        ActionTickResult actionTickResult = new ActionTickResult();
+        actionTickResult.setTickShouldBeExecuted(true);
+        return actionTickResult;
     }
 
     @Override
-    public void afterExecution() {
+    public void afterExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.AVAILABLE);
     }
 }
