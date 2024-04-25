@@ -59,7 +59,7 @@ public class JsonDmfModelReaderTests {
         Assertions.assertEquals(360, electrode1.getElectrodeID());
         Assertions.assertEquals(0, electrode1.getDriverID());
         Assertions.assertEquals(0, electrode1.getShape());
-        Assertions.assertEquals(110, electrode1.getPositionX());
+        Assertions.assertEquals(0, electrode1.getPositionX());
         Assertions.assertEquals(0, electrode1.getPositionY());
         Assertions.assertEquals(20, electrode1.getSizeX());
         Assertions.assertEquals(20, electrode1.getSizeY());
@@ -72,7 +72,7 @@ public class JsonDmfModelReaderTests {
         Assertions.assertEquals(370, electrode2.getElectrodeID());
         Assertions.assertEquals(0, electrode2.getDriverID());
         Assertions.assertEquals(0, electrode2.getShape());
-        Assertions.assertEquals(130, electrode2.getPositionX());
+        Assertions.assertEquals(20, electrode2.getPositionX());
         Assertions.assertEquals(0, electrode2.getPositionY());
         Assertions.assertEquals(20, electrode2.getSizeX());
         Assertions.assertEquals(20, electrode2.getSizeY());

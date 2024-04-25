@@ -8,6 +8,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,6 +32,11 @@ public class ActionQueue extends ActionBase {
         return actions.stream()
                 .flatMap(action -> action.dropletsRequiredForExecution().stream())
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Droplet> dropletsProducedByExecution() {
+        return Collections.emptySet();
     }
 
     @Override

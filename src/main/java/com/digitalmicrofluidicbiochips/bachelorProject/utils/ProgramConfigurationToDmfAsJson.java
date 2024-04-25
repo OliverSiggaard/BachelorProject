@@ -21,8 +21,7 @@ public class ProgramConfigurationToDmfAsJson {
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
 
         // File paths
-        String originalFilePath = "src/main/resources/simulator_platform640.json";
-        String newFilePath = "src/main/resources/output/simulator_platform640.json";
+        String originalFilePath = "src/main/resources/simulator_platform640.JSON";
 
         // Create ObjectMapper instance
         ObjectMapper mapper = new ObjectMapper();
@@ -55,11 +54,6 @@ public class ProgramConfigurationToDmfAsJson {
                 dropletsArray.add(dropletNode);
                 id++;
             }
-
-            // Write modified data to new file
-            mapper.writeValue(new File(newFilePath), originalData);
-
-            System.out.println("Droplets added and saved to " + newFilePath);
 
             return originalData;
         } catch (IOException e) {

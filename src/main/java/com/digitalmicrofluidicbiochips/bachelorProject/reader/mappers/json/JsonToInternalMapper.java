@@ -100,11 +100,9 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
      * Get the platform information from the JSON file.
      */
     public PlatformInformation getPlatformInformation() {
-
-        //TODO: This is "hardcoded" for now. The platform information should be read from the provided JSON file.
         //For now, the platform is hardcoded to be read from the file "src/test/resources/reader/dmf_configuration.JSON".
         //This allows for us not having to deal with sending the files from the frontend to the backend (for now).
-        String dmfConfigFilePath = "src/test/resources/reader/dmf_configuration.JSON";
+        String dmfConfigFilePath = "src/main/resources/dmf_configuration.JSON";
         File dmfConfigFile = new File(dmfConfigFilePath);
 
         JsonProgramConfiguration dmfProgramConfiguration;

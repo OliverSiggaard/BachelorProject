@@ -9,6 +9,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,6 +39,11 @@ public class StoreAction extends ActionBase {
     @Override
     public Set<Droplet> dropletsRequiredForExecution() {
         return Set.of(droplet);
+    }
+
+    @Override
+    public Set<Droplet> dropletsProducedByExecution() {
+        return Collections.emptySet();
     }
 
     @Override

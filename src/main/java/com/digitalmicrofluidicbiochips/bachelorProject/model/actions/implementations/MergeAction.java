@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +50,11 @@ public class MergeAction extends ActionBase {
     @Override
     public Set<Droplet> dropletsRequiredForExecution() {
         return Set.of(droplet1, droplet2);
+    }
+
+    @Override
+    public Set<Droplet> dropletsProducedByExecution() {
+        return Set.of(resultDroplet);
     }
 
     @Override

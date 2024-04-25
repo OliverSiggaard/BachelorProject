@@ -45,6 +45,12 @@ public class InputActionTest {
     }
 
     @Test
+    public void testDropletsProducedByExecution() {
+        Assertions.assertEquals(1, sut.dropletsProducedByExecution().size());
+        Assertions.assertTrue(sut.dropletsProducedByExecution().contains(droplet));
+    }
+
+    @Test
     public void testBeforeExecution() {
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());

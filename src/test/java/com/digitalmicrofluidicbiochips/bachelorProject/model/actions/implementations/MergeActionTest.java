@@ -57,6 +57,12 @@ public class MergeActionTest {
     }
 
     @Test
+    public void testDropletsProducedByExecution() {
+        Assertions.assertEquals(1, sut.dropletsProducedByExecution().size());
+        Assertions.assertTrue(sut.dropletsProducedByExecution().contains(resultDroplet));
+    }
+
+    @Test
     public void testBeforeExecutionResult() {
         // Arrange
         resultDroplet.setStatus(DropletStatus.NOT_CREATED);

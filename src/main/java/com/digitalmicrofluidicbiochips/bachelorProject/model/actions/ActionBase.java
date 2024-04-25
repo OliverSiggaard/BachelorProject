@@ -22,6 +22,8 @@ public abstract class ActionBase {
 
     public abstract Set<Droplet> dropletsRequiredForExecution();
 
+    public abstract Set<Droplet> dropletsProducedByExecution();
+
     public abstract void beforeExecution(ProgramConfiguration programConfiguration);
 
     public abstract ActionTickResult executeTick(ProgramConfiguration programConfiguration);

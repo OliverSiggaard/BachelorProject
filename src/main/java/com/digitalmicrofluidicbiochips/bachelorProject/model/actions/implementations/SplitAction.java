@@ -54,6 +54,11 @@ public class SplitAction extends ActionBase {
     }
 
     @Override
+    public Set<Droplet> dropletsProducedByExecution() {
+        return Set.of(resultDroplet1, resultDroplet2);
+    }
+
+    @Override
     public void beforeExecution(ProgramConfiguration programConfiguration) {
 
         if(resultDroplet1.getStatus() != DropletStatus.NOT_CREATED ||

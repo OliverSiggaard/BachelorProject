@@ -45,6 +45,11 @@ public class OutputActionTest {
     }
 
     @Test
+    public void testDropletsProducedByExecution() {
+        Assertions.assertEquals(0, sut.dropletsProducedByExecution().size());
+    }
+
+    @Test
     void testBeforeExecution() {
 
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());

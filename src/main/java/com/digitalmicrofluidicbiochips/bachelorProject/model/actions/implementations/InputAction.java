@@ -12,10 +12,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 public class InputAction extends ActionBase {
@@ -46,7 +43,11 @@ public class InputAction extends ActionBase {
     @Override
     public Set<Droplet> dropletsRequiredForExecution() {
         return new HashSet<>();
-        //return new HashSet<>(Set.of(droplet));
+    }
+
+    @Override
+    public Set<Droplet> dropletsProducedByExecution() {
+        return Set.of(droplet);
     }
 
     @Override

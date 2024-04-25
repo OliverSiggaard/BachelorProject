@@ -48,6 +48,11 @@ public class ActionQueueTest {
     }
 
     @Test
+    public void testDropletsProducedByExecution() {
+        Assertions.assertEquals(0, sut.dropletsProducedByExecution().size());
+    }
+
+    @Test
     public void testBeforeExecution() {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
         sut.beforeExecution(mock(ProgramConfiguration.class));

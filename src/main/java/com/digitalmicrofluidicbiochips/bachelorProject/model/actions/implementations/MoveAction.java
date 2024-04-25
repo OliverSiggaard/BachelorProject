@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
@@ -51,6 +52,11 @@ public class MoveAction extends ActionBase {
     public void beforeExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.UNAVAILABLE);
         setStatus(ActionStatus.IN_PROGRESS);
+    }
+
+    @Override
+    public Set<Droplet> dropletsProducedByExecution() {
+        return Collections.emptySet();
     }
 
     @Override

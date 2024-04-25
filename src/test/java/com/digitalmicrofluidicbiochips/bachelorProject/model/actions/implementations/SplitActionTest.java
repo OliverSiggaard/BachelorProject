@@ -63,6 +63,13 @@ public class SplitActionTest {
     }
 
     @Test
+    public void testDropletsProducedByExecution() {
+        Assertions.assertEquals(2, sut.dropletsProducedByExecution().size());
+        Assertions.assertTrue(sut.dropletsProducedByExecution().contains(resultDroplet1));
+        Assertions.assertTrue(sut.dropletsProducedByExecution().contains(resultDroplet2));
+    }
+
+    @Test
     public void testBeforeExecutionResultDropletAlreadyCreated() {
         // Arrange
         resultDroplet1.setStatus(DropletStatus.UNAVAILABLE);
