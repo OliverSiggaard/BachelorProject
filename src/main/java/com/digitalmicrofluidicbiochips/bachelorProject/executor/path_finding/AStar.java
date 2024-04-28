@@ -69,10 +69,23 @@ public class AStar implements IPathFinder {
             PriorityQueue<Node> openList = new PriorityQueue<>(); // Nodes to be examined
             ArrayList<Node> closedList = new ArrayList<>(); // Nodes that have been examined
 
+            // Allow for moving towards the goal, even if it is not directly reachable
+            Node closestNode = start; // Start initially as the closest node
+            double closestDistance = calculateHeuristic(start, goal); // Initial distance to goal
+
             openList.add(start);
+            start.g = 0;
+            start.h = calculateHeuristic(start, goal);
+            start.f = start.g + start.h;
 
         while (!openList.isEmpty()) {
             Node current = openList.poll(); // Get first in list (one containing lowest f value)
+
+            // Update closest node if current node has a better heuristic
+            if (current.h < closestDistance) {
+                closestNode = current;
+                closestDistance = current.h;
+            }
 
             // Check if goal node has been reached
             if (current.x == goal.x && current.y == goal.y) {
@@ -103,7 +116,8 @@ public class AStar implements IPathFinder {
             }
         }
 
-        return null; // No path found
+        // If the goal is not reachable, return the path to the closest node
+        return closestNode == start ? null : reconstructPath(closestNode);
     }
 
 

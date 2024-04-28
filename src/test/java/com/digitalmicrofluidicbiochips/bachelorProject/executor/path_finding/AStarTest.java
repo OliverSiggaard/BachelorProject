@@ -51,7 +51,7 @@ public class AStarTest {
     }
 
     @Test
-    void testAStar_failure() {
+    void testAStar_targetIsObstructed_MovingCloserEndingBlocked() {
         AStar aStar = new AStar(true);
 
         Droplet activeDroplet = new Droplet("1", 0, 0, 3);
@@ -68,6 +68,27 @@ public class AStarTest {
         electrodeGridVisualizer.visualizeGrid(availableGrid);
 
         DropletMove move = aStar.getMove(activeDroplet, availableGrid, 4, 4);
+        assertEquals(DropletMove.DOWN, move);
+    }
+
+    @Test
+    void testAStar_targetIsObstructedAlreadyAtOptimalPosition_Blocked() {
+        AStar aStar = new AStar(true);
+
+        Droplet activeDroplet = new Droplet("1", 4, 4, 7);
+
+        List<Droplet> obstacleDroplets = new ArrayList<>();
+        Droplet obstacleDroplet = new Droplet("2", 8, 4, 7);
+        obstacleDroplets.add(obstacleDroplet);
+
+        ElectrodeGrid availableGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(
+                electrodeGrid,
+                activeDroplet,
+                obstacleDroplets);
+
+        electrodeGridVisualizer.visualizeGrid(availableGrid);
+
+        DropletMove move = aStar.getMove(activeDroplet, availableGrid, 8, 4);
         assertEquals(DropletMove.BLOCKED, move);
     }
 
