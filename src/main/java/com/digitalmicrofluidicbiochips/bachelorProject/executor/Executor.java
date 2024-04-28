@@ -35,6 +35,7 @@ public class Executor {
 
     public List<ActionTickResult> runExecutionLoop() {
         List<ActionTickResult> tickResults = new ArrayList<>();
+        int tick = 0;
         while(true) {
             ActionTickResult tickResult = new ActionTickResult();
 
@@ -57,12 +58,36 @@ public class Executor {
                 }
             }
 
+            // If the tickResult is not able to execute any actions, then the program is stuck.
+            // In this case, the actions are attempted again, but with the attemptToResolveDeadlock flag set to true.
+            if(!tickResult.isTickShouldBeExecuted()) {
+                for(ActionBase action : actionsToBeTicked) {
+                    action.setAttemptToResolveDeadlock(true);
+                    ActionTickResult actionResult = tickAction(action);
+                    action.setAttemptToResolveDeadlock(false);
+                    tickResult.addTickResult(actionResult);
+
+                    // As soon as an action is able to execute, the program should skip to the next tick.
+                    // If all actions are allowed run with the attemptToResolveDeadlock flag set to true,
+                    // the program might enter an infinite mirror-loop. By only allowing the first action to execute,
+                    // we break the symmetry, and the program is hopefully able to continue.
+                    if(tickResult.isTickShouldBeExecuted()) break;
+                }
+            }
+
+            // If the tickResult is still not able to execute any actions, then the program is stuck.
             if(!tickResult.isTickShouldBeExecuted()) {
                 //return tickResults;
                 throw new RuntimeException("The program got stuck. A tick was reached, that was not able to execute any actions.");
             }
 
             tickResults.add(tickResult);
+            tick++;
+
+            if(tick > 1000) {
+                return tickResults;
+                //throw new RuntimeException("The program took too long to execute. It was stopped after 1000 ticks.");
+            }
         }
         return tickResults;
     }
