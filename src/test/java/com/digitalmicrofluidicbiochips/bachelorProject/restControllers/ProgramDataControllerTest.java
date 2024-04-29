@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.restControllers;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.services.ProgramExecutionService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,6 +12,7 @@ import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,13 +46,13 @@ public class ProgramDataControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode mockProgramConfigurationJsonNode = objectMapper.valueToTree(testProgramConfiguration);
 
-        ExecutionResult executionResult = new ExecutionResult("compiled program", mockProgramConfigurationJsonNode);
+        ExecutionResult executionResult = new ExecutionResult(new ArrayList<>(), mockProgramConfigurationJsonNode);
         when(ProgramExecutionService.executeProgram(anyString())).thenReturn(executionResult);
 
         ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(executionResult.getCompiledProgram(), Objects.requireNonNull(response.getBody()).getCompiledProgram());
+        assertEquals(executionResult.getCompiledProgramString(), Objects.requireNonNull(response.getBody()).getCompiledProgramString());
         assertEquals(executionResult.getDmfConfiguration(), Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }
 
@@ -64,7 +66,8 @@ public class ProgramDataControllerTest {
         ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Error processing data: " + errorMessage, Objects.requireNonNull(response.getBody()).getCompiledProgram());
+        assertEquals(ExceptionHandler.UNKNOWN_ERROR_MESSAGE, Objects.requireNonNull(response.getBody()).getErrorMessage());
+        assertEquals("", Objects.requireNonNull(response.getBody()).getCompiledProgramString());
         assertNull(Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }
 }
