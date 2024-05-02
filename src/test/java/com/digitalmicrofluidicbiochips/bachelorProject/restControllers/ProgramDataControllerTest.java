@@ -52,7 +52,7 @@ public class ProgramDataControllerTest {
         ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(executionResult.getCompiledProgramString(), Objects.requireNonNull(response.getBody()).getCompiledProgramString());
+        assertEquals(executionResult.getCompiledProgram(), Objects.requireNonNull(response.getBody()).getCompiledProgram());
         assertEquals(executionResult.getDmfConfiguration(), Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }
 
@@ -67,7 +67,7 @@ public class ProgramDataControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(ExceptionHandler.UNKNOWN_ERROR_MESSAGE, Objects.requireNonNull(response.getBody()).getErrorMessage());
-        assertEquals("", Objects.requireNonNull(response.getBody()).getCompiledProgramString());
+        assertEquals("", Objects.requireNonNull(response.getBody()).getCompiledProgram());
         assertNull(Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }
 }

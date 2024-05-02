@@ -6,24 +6,23 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class ExecutionResult {
-    private final String compiledProgramString;
+    private final String compiledProgram;
     private final JsonNode dmfConfiguration;
     @Setter
     private String errorMessage;
 
     public ExecutionResult(List<ActionTickResult> tickResults, JsonNode dmfConfiguration) {
-        this.compiledProgramString = getCompiledProgram(tickResults);
+        this.compiledProgram = getCompiledProgram(tickResults);
         this.dmfConfiguration = dmfConfiguration;
         this.errorMessage = null;
     }
 
     public ExecutionResult(String error) {
-        this.compiledProgramString = "";
+        this.compiledProgram = "";
         this.dmfConfiguration = null;
         this.errorMessage = error;
     }
