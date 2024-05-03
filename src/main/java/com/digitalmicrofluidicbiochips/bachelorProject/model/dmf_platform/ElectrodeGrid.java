@@ -98,4 +98,21 @@ public class ElectrodeGrid implements Cloneable {
         }
         return true;
     }
+
+    public boolean isWithinBounds(int x, int y) {
+        return x >= 0 && x < getXSize() && y >= 0 && y < getYSize();
+    }
+
+    public void printGrid() {
+        for (int y = 0; y < grid[0].length; y++) {
+            for (int x = 0; x < grid.length; x++) {
+                if (grid[x][y] == null) {
+                    System.out.print("0 ");
+                } else {
+                    System.out.print("1 ");
+                }
+            }
+            System.out.println();
+        }
+    }
 }

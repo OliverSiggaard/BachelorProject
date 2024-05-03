@@ -5,31 +5,32 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+
 public class ActionTickResult {
+    @Getter
     private final List<IDmfCommand> tickCommands;
-    private boolean tickShouldBeExecuted;
+    private boolean somethingHappenedInTick;
 
     public ActionTickResult() {
         this.tickCommands = new ArrayList<>();
-        this.tickShouldBeExecuted = false;
+        this.somethingHappenedInTick = false;
     }
 
     public ActionTickResult(IDmfCommand command) {
         this.tickCommands = new ArrayList<>();
         tickCommands.add(command);
-        tickShouldBeExecuted = true;
+        somethingHappenedInTick = true;
     }
 
     public ActionTickResult(List<IDmfCommand> commands) {
         this.tickCommands = commands;
-        tickShouldBeExecuted = true;
+        somethingHappenedInTick = true;
     }
 
 
     public void addCommand(IDmfCommand command) {
         tickCommands.add(command);
-        tickShouldBeExecuted = true;
+        somethingHappenedInTick = true;
     }
 
     public void addCommands(List<IDmfCommand> commands) {
@@ -38,12 +39,12 @@ public class ActionTickResult {
         }
 
         tickCommands.addAll(commands);
-        tickShouldBeExecuted = true;
+        somethingHappenedInTick = true;
     }
 
     public void addTickResult(ActionTickResult tickResult) {
         this.tickCommands.addAll(tickResult.getTickCommands());
-        this.tickShouldBeExecuted = tickShouldBeExecuted || tickResult.tickShouldBeExecuted;
+        this.somethingHappenedInTick = somethingHappenedInTick || tickResult.somethingHappenedInTick;
     }
 
     public void updateModelWithCommands() {
@@ -60,7 +61,11 @@ public class ActionTickResult {
         return commands;
     }
 
-    public void setTickShouldBeExecuted(boolean tickShouldBeExecuted) {
-        this.tickShouldBeExecuted = tickShouldBeExecuted;
+    public void setSomethingHappenedInTick(boolean somethingHappenedInTick) {
+        this.somethingHappenedInTick = somethingHappenedInTick;
+    }
+
+    public boolean somethingHappenedInTick() {
+        return somethingHappenedInTick;
     }
 }

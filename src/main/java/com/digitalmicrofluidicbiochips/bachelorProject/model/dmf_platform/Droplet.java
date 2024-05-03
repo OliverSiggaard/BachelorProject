@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A droplet is a small liquid volume that can be moved around on the DMF platform.
@@ -15,7 +16,7 @@ import java.util.List;
  * Therefore, the diameter is calculated with the formula for calculating the diameter of a cylinder from volume and height.
  */
 @Getter
-public class Droplet {
+public class Droplet implements Cloneable {
 
     // A unique integer ID identifying the element
     private final String ID;
@@ -222,7 +223,31 @@ public class Droplet {
         return gridArea;
     }
 
+    @Override
+    public Droplet clone() {
+        try {
+            return (Droplet) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Droplet droplet = (Droplet) o;
+        return positionX == droplet.positionX &&
+                positionY == droplet.positionY &&
+                Double.compare(droplet.volume, volume) == 0 &&
+                diameter == droplet.diameter && ID.equals(droplet.ID)
+                && status == droplet.status &&
+                dropletMove == droplet.dropletMove;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID, positionX, positionY, volume, diameter, status, dropletMove);
+    }
 
 }

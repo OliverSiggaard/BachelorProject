@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -64,7 +64,7 @@ public class StoreAction extends ActionBase {
         }
 
         ActionTickResult actionTickResult = new ActionTickResult();
-        actionTickResult.setTickShouldBeExecuted(true);
+        actionTickResult.setSomethingHappenedInTick(true);
         return actionTickResult;
     }
 

@@ -14,6 +14,8 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.List;
 
@@ -78,12 +80,24 @@ public class MoveAction extends ActionBase {
             return tickResult;
         }
 
-        DropletMove move = getDropletMove(programConfiguration);
-        if(!Droplet.dropletMoveChangesDropletPosition(move)) return new ActionTickResult(); // Droplet is not moving.
+        // get droplet move
+        List<Droplet> obstacleDroplets = getObstacleDroplets(programConfiguration);
+        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
+        ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, droplet, obstacleDroplets);
+        DropletMove move = getDropletMove(programConfiguration, availableElectrodeGrid);
+
+        // If the droplet is blocked, attempt
+        if(move == DropletMove.BLOCKED && isAttemptToResolveDeadlock()) {
+            move = getYieldDropletMove(programConfiguration, availableElectrodeGrid);
+        }
+
+        // If the droplet is still blocked, then the droplet can't move.
+        if(!Droplet.dropletMoveChangesDropletPosition(move)) {
+            return new ActionTickResult(); // Droplet is not moving.
+        }
 
         droplet.setDropletMove(move);
 
-        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         ActionTickResult thisTickResult = new ActionTickResult(getCommandsToActivateAdjacentElectrodes(electrodeGrid));
         ActionTickResult nextTickResult = new ActionTickResult(getCommandsToDeactivateAbandonedElectrodes(electrodeGrid));
 
@@ -110,18 +124,41 @@ public class MoveAction extends ActionBase {
                 .toList();
     }
 
-    private DropletMove getDropletMove(ProgramConfiguration programConfiguration) {
-        List<Droplet> obstacleDroplets = new ArrayList<>(
-                programConfiguration.getDropletsOnDmfPlatform().stream()
-                     .filter(d -> !d.equals(droplet))
-                     .toList());
-        obstacleDroplets.removeAll(ExemptObstacleDroplets);
-
-        ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
-        ElectrodeGrid availableElectrodeGrid = ElectrodeGridFactory.getAvailableElectrodeGrid(electrodeGrid, droplet, obstacleDroplets);
-
+    private DropletMove getDropletMove(ProgramConfiguration programConfiguration, ElectrodeGrid availableElectrodeGrid) {
         IPathFinder pathFinder = programConfiguration.getPathFinder();
         return pathFinder.getMove(droplet, availableElectrodeGrid, posX, posY);
+    }
+
+
+    /**
+     * In case of a deadlock, where all droplets are stuck, this method can be used to attempt to move
+     * the droplet in a random direction. There is no guarantee that a solution will be found using this method,
+     * but it can be used as a last resort.
+     * @return The move that the droplet should make.
+     */
+    private DropletMove getYieldDropletMove(ProgramConfiguration programConfiguration, ElectrodeGrid availableElectrodeGrid) {
+        IPathFinder pathFinder = programConfiguration.getPathFinder();
+        List<Point> directions = new ArrayList<>(List.of(
+                new Point(1, 0),
+                new Point(0, 1),
+                new Point(-1, 0),
+                new Point(0, -1)));
+        Collections.shuffle(directions);
+
+        // Try to move the droplet in a random direction. First direction that is valid is used.
+        while (!directions.isEmpty()) {
+            Point direction = directions.remove(0);
+            int x = droplet.getPositionX() + direction.x;
+            int y = droplet.getPositionY() + direction.y;
+
+            DropletMove move = pathFinder.getMove(droplet, availableElectrodeGrid, x, y);
+            if(Droplet.dropletMoveChangesDropletPosition(move)) {
+                return move;
+            }
+        }
+
+        // If no direction is valid, then the droplet is (still) blocked.
+        return DropletMove.BLOCKED;
     }
 
     private boolean dropletIsAtTargetPosition() {
@@ -130,6 +167,14 @@ public class MoveAction extends ActionBase {
 
     public void addExemptObstacleDroplet(Droplet ExemptObstacleDroplet) {
         ExemptObstacleDroplets.add(ExemptObstacleDroplet);
+    }
+
+    private List<Droplet> getObstacleDroplets(ProgramConfiguration programConfiguration) {
+        List<Droplet> droplets = new ArrayList<>(programConfiguration.getDropletsOnDmfPlatform().stream()
+                .filter(d -> !d.equals(droplet))
+                .toList());
+        droplets.removeAll(ExemptObstacleDroplets);
+        return droplets;
     }
 
 

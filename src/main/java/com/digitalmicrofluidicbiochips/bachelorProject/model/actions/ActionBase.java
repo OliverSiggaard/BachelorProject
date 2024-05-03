@@ -4,6 +4,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
@@ -15,9 +16,13 @@ public abstract class ActionBase {
     @Getter
     private ActionStatus status;
 
+    @Getter @Setter
+    private boolean attemptToResolveDeadlock;
+
     public ActionBase(String id) {
         this.id = id;
         status = ActionStatus.NOT_STARTED;
+        this.attemptToResolveDeadlock = false;
     }
 
     public abstract Set<Droplet> dropletsRequiredForExecution();
@@ -32,6 +37,13 @@ public abstract class ActionBase {
 
     protected void setStatus(ActionStatus status) {
         this.status = status;
+    }
+
+    public ActionTickResult executeTickAttemptToResolveDeadlock(ProgramConfiguration programConfiguration) {
+        attemptToResolveDeadlock = true;
+        ActionTickResult actionTickResult = executeTick(programConfiguration);
+        attemptToResolveDeadlock = false;
+        return actionTickResult;
     }
 
 }

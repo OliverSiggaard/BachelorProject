@@ -182,6 +182,29 @@ public class MoveActionTest {
     }
 
     @Test
+    void testAttemptToResolveDeadlock() {
+        Droplet droplet = new Droplet("1", 5, 10, 7);
+        Droplet obstacleDroplet = new Droplet("1", 9, 10, 7);
+
+        when(pathFinderMock.getMove(any(Droplet.class), any(ElectrodeGrid.class), eq(9), eq(10))).thenReturn(DropletMove.BLOCKED);
+        when(pathFinderMock.getMove(any(Droplet.class), any(ElectrodeGrid.class), eq(6), eq(10))).thenReturn(DropletMove.RIGHT);
+        when(pathFinderMock.getMove(any(Droplet.class), any(ElectrodeGrid.class), eq(4), eq(10))).thenReturn(DropletMove.LEFT);
+        when(pathFinderMock.getMove(any(Droplet.class), any(ElectrodeGrid.class), eq(5), eq(11))).thenReturn(DropletMove.DOWN);
+        when(pathFinderMock.getMove(any(Droplet.class), any(ElectrodeGrid.class), eq(5), eq(9))).thenReturn(DropletMove.UP);
+        when(programConfigurationMock.getDroplets()).thenReturn(List.of(new Droplet[]{droplet, obstacleDroplet}));
+        when(programConfigurationMock.getDropletsOnDmfPlatform()).thenReturn(List.of(new Droplet[]{droplet, obstacleDroplet}));
+
+        MoveAction moveAction = new MoveAction("action", 9, 10);
+        moveAction.setDroplet(droplet);
+
+        ActionTickResult actionTickResult = moveAction.executeTick(programConfigurationMock);
+        Assertions.assertFalse(actionTickResult.somethingHappenedInTick());
+
+        actionTickResult = moveAction.executeTickAttemptToResolveDeadlock(programConfigurationMock);
+        Assertions.assertTrue(actionTickResult.somethingHappenedInTick());
+    }
+
+    @Test
     public void testAfterExecution() {
         droplet.setPositionX(5);
         droplet.setPositionY(5);

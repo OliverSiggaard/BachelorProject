@@ -13,9 +13,9 @@ import java.util.*;
  */
 public class Schedule {
 
-    private final Map<Droplet, Queue<ActionBase>> dropletActions;
+    private final Map<String, Queue<ActionBase>> dropletActions;
 
-    public Schedule(Map<Droplet, Queue<ActionBase>> dropletActions) {
+    public Schedule(Map<String, Queue<ActionBase>> dropletActions) {
         this.dropletActions = dropletActions;
     }
 
@@ -55,15 +55,15 @@ public class Schedule {
 
     private boolean allRequiredDropletsHasActionAsCurrentAction(ActionBase actionBase) {
         for (Droplet droplet : actionBase.dropletsRequiredForExecution()) {
-            if(!dropletActions.containsKey(droplet)) {
+            if(!dropletActions.containsKey(droplet.getID())) {
                 throw new IllegalStateException("Droplet should have been in the map");
             }
 
-            if(dropletActions.get(droplet).isEmpty()) {
+            if(dropletActions.get(droplet.getID()).isEmpty()) {
                 throw new IllegalStateException("Droplet should have an action in the queue");
             }
 
-            if(!dropletActions.get(droplet).peek().equals(actionBase)) {
+            if(!dropletActions.get(droplet.getID()).peek().equals(actionBase)) {
                 return false;
             }
         }

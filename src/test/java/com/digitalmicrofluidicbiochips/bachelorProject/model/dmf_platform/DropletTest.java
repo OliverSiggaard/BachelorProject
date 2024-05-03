@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MoveAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -258,6 +259,36 @@ public class DropletTest {
         Assertions.assertEquals(8, gridArea.getY1());
         Assertions.assertEquals(14, gridArea.getX2());
         Assertions.assertEquals(16, gridArea.getY2());
+    }
+
+    @Test
+    void testDropletClone() {
+        Droplet droplet = new Droplet("1", 10, 11, 15); // volume 15 = 3 electrodes diameter
+
+        Droplet clonedDroplet = droplet.clone();
+        Assertions.assertEquals(droplet.getID(), clonedDroplet.getID());
+        Assertions.assertEquals(droplet.getPositionX(), clonedDroplet.getPositionX());
+        Assertions.assertEquals(droplet.getPositionY(), clonedDroplet.getPositionY());
+        Assertions.assertEquals(droplet.getVolume(), clonedDroplet.getVolume());
+        Assertions.assertEquals(droplet.getDiameter(), clonedDroplet.getDiameter());
+        Assertions.assertEquals(droplet.getStatus(), clonedDroplet.getStatus());
+        Assertions.assertEquals(droplet.getDropletMove(), clonedDroplet.getDropletMove());
+    }
+
+    @Test
+    void testDropletEquals() {
+        Droplet droplet1 = new Droplet("1", 10, 11, 15); // volume 15 = 3 electrodes diameter
+        Droplet droplet2 = new Droplet("1", 10, 11, 15); // volume 15 = 3 electrodes diameter
+        Droplet droplet3 = new Droplet("2", 10, 11, 15); // volume 15 = 3 electrodes diameter
+        Droplet droplet4 = new Droplet("1", 11, 11, 15); // volume 15 = 3 electrodes diameter
+        Droplet droplet5 = new Droplet("1", 10, 12, 15); // volume 15 = 3 electrodes diameter
+        Droplet droplet6 = new Droplet("1", 10, 11, 16); // volume 16 = 3 electrodes diameter
+
+        Assertions.assertEquals(droplet1, droplet2);
+        Assertions.assertNotEquals(droplet1, droplet3);
+        Assertions.assertNotEquals(droplet1, droplet4);
+        Assertions.assertNotEquals(droplet1, droplet5);
+        Assertions.assertNotEquals(droplet1, droplet6);
     }
 
 }
