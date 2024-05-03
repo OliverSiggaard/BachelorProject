@@ -31,6 +31,9 @@ public class ScheduleTest {
         droplet1 = mock(Droplet.class);
         droplet2 = mock(Droplet.class);
 
+        when(droplet1.getID()).thenReturn("1");
+        when(droplet2.getID()).thenReturn("2");
+
         action1 = mock(ActionBase.class);
         action2 = mock(ActionBase.class);
         action3 = mock(ActionBase.class);
@@ -41,9 +44,9 @@ public class ScheduleTest {
         when(action3.dropletsRequiredForExecution()).thenReturn(Set.of(droplet2));
         when(action4.dropletsRequiredForExecution()).thenReturn(Set.of(droplet1, droplet2));
 
-        Map<Droplet, Queue<ActionBase>> dropletActions = new HashMap<>();
-        dropletActions.put(droplet1, new LinkedList<>(List.of(action1, action2, action4)));
-        dropletActions.put(droplet2, new LinkedList<>(List.of(action3, action4)));
+        Map<String, Queue<ActionBase>> dropletActions = new HashMap<>();
+        dropletActions.put(droplet1.getID(), new LinkedList<>(List.of(action1, action2, action4)));
+        dropletActions.put(droplet2.getID(), new LinkedList<>(List.of(action3, action4)));
         sut = new Schedule(dropletActions);
     }
 

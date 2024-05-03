@@ -17,24 +17,24 @@ public class Compiler {
 
     public static Schedule compile(List<ActionBase> actions) {
 
-        Map<Droplet, Queue<ActionBase>> dropletActions = new HashMap<>();
+        Map<String, Queue<ActionBase>> dropletActions = new HashMap<>();
 
         actions.forEach(action -> {
             Set<Droplet> affectedDroplets = action.dropletsRequiredForExecution();
             if(affectedDroplets == null) return;
             affectedDroplets.forEach(droplet -> {
-                if (!dropletActions.containsKey(droplet)) {
-                    dropletActions.put(droplet, new LinkedList<>());
+                if (!dropletActions.containsKey(droplet.getID())) {
+                    dropletActions.put(droplet.getID(), new LinkedList<>());
                 }
-                dropletActions.get(droplet).add(action);
+                dropletActions.get(droplet.getID()).add(action);
             });
 
             if(action instanceof InputAction inputAction) {
                 Droplet droplet = inputAction.getDroplet();
-                if (!dropletActions.containsKey(droplet)) {
-                    dropletActions.put(droplet, new LinkedList<>());
+                if (!dropletActions.containsKey(droplet.getID())) {
+                    dropletActions.put(droplet.getID(), new LinkedList<>());
                 }
-                dropletActions.get(droplet).add(action);
+                dropletActions.get(droplet.getID()).add(action);
             }
 
         });

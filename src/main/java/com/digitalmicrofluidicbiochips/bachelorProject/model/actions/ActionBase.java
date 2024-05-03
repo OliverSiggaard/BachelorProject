@@ -39,4 +39,11 @@ public abstract class ActionBase {
         this.status = status;
     }
 
+    public ActionTickResult executeTickAttemptToResolveDeadlock(ProgramConfiguration programConfiguration) {
+        attemptToResolveDeadlock = true;
+        ActionTickResult actionTickResult = executeTick(programConfiguration);
+        attemptToResolveDeadlock = false;
+        return actionTickResult;
+    }
+
 }
