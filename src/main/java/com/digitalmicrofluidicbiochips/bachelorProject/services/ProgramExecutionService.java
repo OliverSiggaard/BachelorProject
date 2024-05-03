@@ -24,6 +24,6 @@ public class ProgramExecutionService {
         Executor executor = new Executor(programConfiguration);
 
         // Execute the program
-        return executor.startExecution();
+        return executor.compileProgramToDmf();
     }
 }
