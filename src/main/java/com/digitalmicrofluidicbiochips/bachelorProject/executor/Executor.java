@@ -2,12 +2,13 @@ package com.digitalmicrofluidicbiochips.bachelorProject.executor;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Compiler;
 import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Schedule;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.ProgramConfigurationToDmfAsJson;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.TickResultsToStringConverter;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
@@ -24,72 +25,58 @@ public class Executor {
         this.schedule = Compiler.compile(programConfiguration.getProgramActions());
     }
 
-    public ExecutionResult startExecution() {
+    public ExecutionResult compileProgramToDmf() {
+        // Create a JSON file containing the droplets initially placed on the grid. (for the simulator)
         JsonNode dmfConfiguration = ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration);
 
-        List<ActionTickResult> tickResults = runExecutionLoop();
-        String stringTickResults = TickResultsToStringConverter.convertTickResultsToString(tickResults);
+        List<ActionTickResult> tickResults = new ArrayList<>();
+        try {
+            while(true) {
+                // Get all actions that are to be ticked in this tick.
+                List<ActionBase> actionsToBeTicked = schedule.getActionsToBeTicked();
 
-        return new ExecutionResult(stringTickResults, dmfConfiguration);
+                // If there are no actions to be ticked, The program is done. Either it has completed or it is stuck.
+                if(actionsToBeTicked.isEmpty()) break;
+
+                // Execute the tick.
+                ActionTickResult tickResult = executeTick(actionsToBeTicked);
+                tickResults.add(tickResult);
+            }
+
+        // If an error occurs, catch it and return an ExecutionResult with the error message.
+        // The ticks that have been compiled to this point will also be returned, in case a partial execution is wanted.
+        } catch (DmfException e) {
+            ExecutionResult executionResult = new ExecutionResult(tickResults, dmfConfiguration);
+            String errorMessage = ExceptionHandler.getErrorMessage(e);
+            executionResult.setErrorMessage(errorMessage);
+            return executionResult;
+        }
+
+        return new ExecutionResult(tickResults, dmfConfiguration);
     }
 
-    public List<ActionTickResult> runExecutionLoop() {
-        List<ActionTickResult> tickResults = new ArrayList<>();
-        int tick = 0;
-        while(true) {
-            ActionTickResult tickResult = new ActionTickResult();
+    private ActionTickResult executeTick(List<ActionBase> actionsToBeTicked) throws DmfException {
+        ActionTickResult tickResult = new ActionTickResult();
 
-            // Get all actions that are to be ticked in this tick.
-            List<ActionBase> actionsToBeTicked = schedule.getActionsToBeTicked();
+        // Tick all actions that are to be ticked.
+        for(ActionBase action : actionsToBeTicked) {
+            ActionTickResult actionResult = tickAction(action);
+            tickResult.addTickResult(actionResult);
+        }
 
-            // If there are no actions to be ticked, The program is done. Either it has completed or it is stuck.
-            if(actionsToBeTicked.isEmpty()) break;
-
-            // Tick all actions that are to be ticked.
-            for(ActionBase action : actionsToBeTicked) {
-                ActionTickResult actionResult = tickAction(action);
-                tickResult.addTickResult(actionResult);
-            }
-
-            for(ActionBase action : actionsToBeTicked) {
-                if(action.getStatus() == ActionStatus.COMPLETED) {
-                    action.afterExecution(programConfiguration);
-                    schedule.updateSchedule();
-                }
-            }
-
-            // If the tickResult is not able to execute any actions, then the program is stuck.
-            // In this case, the actions are attempted again, but with the attemptToResolveDeadlock flag set to true.
-            if(!tickResult.isTickShouldBeExecuted()) {
-                for(ActionBase action : actionsToBeTicked) {
-                    action.setAttemptToResolveDeadlock(true);
-                    ActionTickResult actionResult = tickAction(action);
-                    action.setAttemptToResolveDeadlock(false);
-                    tickResult.addTickResult(actionResult);
-
-                    // As soon as an action is able to execute, the program should skip to the next tick.
-                    // If all actions are allowed run with the attemptToResolveDeadlock flag set to true,
-                    // the program might enter an infinite mirror-loop. By only allowing the first action to execute,
-                    // we break the symmetry, and the program is hopefully able to continue.
-                    if(tickResult.isTickShouldBeExecuted()) break;
-                }
-            }
-
-            // If the tickResult is still not able to execute any actions, then the program is stuck.
-            if(!tickResult.isTickShouldBeExecuted()) {
-                //return tickResults;
-                throw new RuntimeException("The program got stuck. A tick was reached, that was not able to execute any actions.");
-            }
-
-            tickResults.add(tickResult);
-            tick++;
-
-            if(tick > 1000) {
-                return tickResults;
-                //throw new RuntimeException("The program took too long to execute. It was stopped after 1000 ticks.");
+        for(ActionBase action : actionsToBeTicked) {
+            if(action.getStatus() == ActionStatus.COMPLETED) {
+                action.afterExecution(programConfiguration);
+                schedule.updateSchedule();
             }
         }
-        return tickResults;
+
+        if(!tickResult.isTickShouldBeExecuted()) {
+            //return tickResults;
+            throw new DmfException("The program got stuck. A tick was reached, that was not able to execute any actions.");
+        }
+
+        return tickResult;
     }
 
 
