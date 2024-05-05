@@ -9,7 +9,7 @@ public enum DmfExceptionMessage {
     DROPLET_NOT_DEFINED_ON_ACTION("Unknown or no droplet(s) was assigned to an action in the program."),
     STORE_ACTION_INVALID_TIME("A non-positive time was assigned to a Store action in the program."),
     INPUT_ACTION_INVALID_VOLUME("A non-positive volume was assigned to an Input action in the program."),
-    POSITION_OUT_OF_BOUND("An action was attempted at position (%posX%, %posY%), which is outside the bounds of the platform. The platform has dimensions (%posXMax%, %posYMax%)."),
+    POSITION_OUT_OF_BOUND("An action was attempted at position (%posX%, %posY%), which is outside the bounds of the platform. The platform has dimensions (%posXMax%, %posYMax%). Remember that positions are zero-indexed."),
     DROPLET_PRODUCED_BY_MULTIPLE_ACTIONS("Droplet %dropletID% is produced by multiple actions"),
     DROPLET_USED_BEFORE_PRODUCED_BY_ACTION("Droplet %dropletID% was attempted to be used before being produced by an action");
 
