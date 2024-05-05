@@ -137,4 +137,59 @@ public class ActionTickResultTest {
         Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand2"));
     }
 
+    @Test
+    void testAddCommandNull() {
+        ActionTickResult sut = new ActionTickResult();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.addCommand(null));
+    }
+
+    @Test
+    void testAddCommandsContainsNull() {
+        IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
+        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
+        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+
+        List<IDmfCommand> commands = Arrays.asList(iDmfCommand1, iDmfCommand2, null);
+
+        ActionTickResult sut = new ActionTickResult();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.addCommands(commands));
+    }
+
+    @Test
+    void testAddCommandsListIsNull() {
+        List<IDmfCommand> commands = null;
+
+        ActionTickResult sut = new ActionTickResult();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.addCommands(commands));
+    }
+
+    @Test
+    void testAddNullActionTicketResult() {
+        ActionTickResult sut = new ActionTickResult();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.addTickResult(null));
+    }
+
+    @Test
+    void testConstructorNullCommand() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new ActionTickResult((IDmfCommand) null));
+    }
+
+    @Test
+    void testConstructorNullCommandList() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new ActionTickResult((List<IDmfCommand>) null));
+    }
+
+    @Test
+    void testConstructorListContainsNull() {
+        IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
+        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
+        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+
+        List<IDmfCommand> commands = Arrays.asList(iDmfCommand1, iDmfCommand2, null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new ActionTickResult(commands));
+
+    }
+
 }
