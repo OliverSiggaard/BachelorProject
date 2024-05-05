@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,7 +68,6 @@ public class ActionQueue extends ActionBase {
             if (currentActionIndex == actions.size()) {
                 setStatus(ActionStatus.COMPLETED);
             }
-            ;
 
             return actionTickResult;
         }

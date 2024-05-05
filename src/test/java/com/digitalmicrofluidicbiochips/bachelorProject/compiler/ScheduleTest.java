@@ -117,9 +117,7 @@ public class ScheduleTest {
         when(action1.getStatus()).thenReturn(ActionStatus.COMPLETED);
         when(action3.getStatus()).thenReturn(ActionStatus.NOT_STARTED);
 
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            sut.getActionsToBeTicked();
-        });
+        Assertions.assertThrows(IllegalStateException.class, () -> sut.getActionsToBeTicked());
     }
 
     @Test

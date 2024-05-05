@@ -2,7 +2,6 @@ package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
@@ -102,7 +101,7 @@ public class Schedule {
                 throw new IllegalStateException("Droplet should have an action in the queue");
             }
 
-            if(!dropletActions.get(droplet.getID()).peek().equals(actionBase)) {
+            if(!Objects.equals(dropletActions.get(droplet.getID()).peek(), actionBase)) {
                 return false;
             }
         }

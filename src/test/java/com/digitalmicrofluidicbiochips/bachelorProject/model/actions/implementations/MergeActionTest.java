@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
 public class MergeActionTest {
 
     private ProgramConfiguration programConfiguration;
-    private ElectrodeGrid electrodeGrid;
     private MergeAction sut;
     private Droplet droplet1;
     private Droplet droplet2;
@@ -27,7 +26,7 @@ public class MergeActionTest {
     @BeforeEach
     public void setUp() {
         programConfiguration = mock(ProgramConfiguration.class);
-        electrodeGrid = MockElectrodeGridSetupUtil.createMockElectrodeGrid(32,20);
+        ElectrodeGrid electrodeGrid = MockElectrodeGridSetupUtil.createMockElectrodeGrid(32,20);
         when(programConfiguration.getElectrodeGrid()).thenReturn(electrodeGrid);
         AStar aStar = new AStar(false);
         when(programConfiguration.getPathFinder()).thenReturn(aStar);
@@ -71,7 +70,7 @@ public class MergeActionTest {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getMoveAction1().getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getMoveAction2().getStatus());
-        Assertions.assertEquals(null, sut.getInputAction());
+        Assertions.assertNull(sut.getInputAction());
 
         sut.beforeExecution(programConfiguration);
 

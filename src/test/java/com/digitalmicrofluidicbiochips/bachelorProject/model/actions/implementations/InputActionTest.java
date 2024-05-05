@@ -11,7 +11,6 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtilsTest;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

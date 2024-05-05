@@ -2,7 +2,6 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementa
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
-import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
@@ -100,9 +99,7 @@ public class SplitActionTest {
                 originDroplet.setPositionY(y);
 
 
-                Assertions.assertThrows(IllegalStateException.class, () -> {
-                    sut.beforeExecution(programConfiguration);
-                });
+                Assertions.assertThrows(IllegalStateException.class, () -> sut.beforeExecution(programConfiguration));
             }
         }
 
@@ -117,9 +114,7 @@ public class SplitActionTest {
                 originDroplet.setPositionY(y);
 
 
-                Assertions.assertThrows(IllegalStateException.class, () -> {
-                    sut.beforeExecution(programConfiguration);
-                });
+                Assertions.assertThrows(IllegalStateException.class, () -> sut.beforeExecution(programConfiguration));
             }
         }
 
@@ -134,9 +129,7 @@ public class SplitActionTest {
                 originDroplet.setPositionY(y);
 
 
-                Assertions.assertThrows(IllegalStateException.class, () -> {
-                    sut.beforeExecution(programConfiguration);
-                });
+                Assertions.assertThrows(IllegalStateException.class, () -> sut.beforeExecution(programConfiguration));
             }
         }
 
@@ -151,9 +144,7 @@ public class SplitActionTest {
                 originDroplet.setPositionY(y);
 
 
-                Assertions.assertThrows(IllegalStateException.class, () -> {
-                    sut.beforeExecution(programConfiguration);
-                });
+                Assertions.assertThrows(IllegalStateException.class, () -> sut.beforeExecution(programConfiguration));
             }
         }
     }
@@ -396,19 +387,19 @@ public class SplitActionTest {
     @Test
     public void testVerifyProperties_originDropletNotSet() {
         sut.setOriginDroplet(null);
-        Assertions.assertThrows(DmfException.class, () -> { sut.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> sut.verifyProperties(programConfiguration));
     }
 
     @Test
     public void testVerifyProperties_resultDroplet1NotSet() {
         sut.setResultDroplet1(null);
-        Assertions.assertThrows(DmfException.class, () -> { sut.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> sut.verifyProperties(programConfiguration));
     }
 
     @Test
     public void testVerifyProperties_resultDroplet2NotSet() {
         sut.setResultDroplet2(null);
-        Assertions.assertThrows(DmfException.class, () -> { sut.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> sut.verifyProperties(programConfiguration));
     }
 
     @Test
@@ -417,7 +408,7 @@ public class SplitActionTest {
         action.setOriginDroplet(originDroplet);
         action.setResultDroplet1(resultDroplet1);
         action.setResultDroplet2(resultDroplet2);
-        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfiguration));
     }
 
     @Test
@@ -426,7 +417,7 @@ public class SplitActionTest {
         action.setOriginDroplet(originDroplet);
         action.setResultDroplet1(resultDroplet1);
         action.setResultDroplet2(resultDroplet2);
-        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfiguration));
     }
 
     @Test
@@ -435,7 +426,7 @@ public class SplitActionTest {
         action.setOriginDroplet(originDroplet);
         action.setResultDroplet1(resultDroplet1);
         action.setResultDroplet2(resultDroplet2);
-        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfiguration));
     }
 
     @Test
@@ -444,7 +435,7 @@ public class SplitActionTest {
         action.setOriginDroplet(originDroplet);
         action.setResultDroplet1(resultDroplet1);
         action.setResultDroplet2(resultDroplet2);
-        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfiguration));
     }
 
 

@@ -2,7 +2,6 @@ package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMergeAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonSplitAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
@@ -36,7 +35,6 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
 
     /**
      * Create a new instance of the JsonFileToInternalMapper.
-     *
      * Mainly used for testing purposes.
      *
      * @param jsonFile the JSON file to be mapped to the internal model.
@@ -51,7 +49,6 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
 
     /**
      * Create a new instance of the JsonFileToInternalMapper.
-     *
      * Used when receiving a JSON string from the frontend.
      *
      * @param jsonString the JSON string to be mapped to the internal model.

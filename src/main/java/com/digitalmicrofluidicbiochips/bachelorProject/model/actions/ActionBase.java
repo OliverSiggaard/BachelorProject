@@ -1,6 +1,5 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;

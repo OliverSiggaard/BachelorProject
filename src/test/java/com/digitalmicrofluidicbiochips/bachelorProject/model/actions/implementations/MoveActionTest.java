@@ -12,7 +12,6 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Drople
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtilsTest;
 import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGridSetupUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,7 +83,7 @@ public class MoveActionTest {
         droplet.setPositionY(3);
         sut.beforeExecution(mock(ProgramConfiguration.class));
 
-        ActionTickResult result = sut.executeTick(programConfigurationMock);
+        sut.executeTick(programConfigurationMock);
         ArgumentCaptor<ElectrodeGrid> electrodeGridCaptor = ArgumentCaptor.forClass(ElectrodeGrid.class);
         verify(pathFinderMock).getMove(eq(droplet), electrodeGridCaptor.capture(), eq(5), eq(5));
         ElectrodeGrid capturedElectrodeGrid = electrodeGridCaptor.getValue();
@@ -112,7 +111,7 @@ public class MoveActionTest {
         sut.beforeExecution(mock(ProgramConfiguration.class));
         sut.addExemptObstacleDroplet(obstacleDroplet);
 
-        ActionTickResult result = sut.executeTick(programConfigurationMock);
+        sut.executeTick(programConfigurationMock);
         ArgumentCaptor<ElectrodeGrid> electrodeGridCaptor = ArgumentCaptor.forClass(ElectrodeGrid.class);
         verify(pathFinderMock).getMove(eq(droplet), electrodeGridCaptor.capture(), eq(5), eq(5));
         ElectrodeGrid capturedElectrodeGrid = electrodeGridCaptor.getValue();

@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 public class JsonActionModelReaderTests {
     private final String filePath = "src/test/resources/reader/simpleActionModel.JSON"; // Adjust the file name if needed
     private JsonProgramConfiguration programConfiguration;
@@ -39,14 +37,14 @@ public class JsonActionModelReaderTests {
     @Test
     public void actionListAreNotEmpty() {
         if (programConfiguration.getProgramActions().isEmpty()) {
-            fail("The loaded program configuration does not contain any actions.");
+            Assertions.fail("The loaded program configuration does not contain any actions.");
         }
     }
 
     @Test
     public void actionMapIsNotEmpty() {
         if (actionMap.isEmpty()) {
-            fail("The action map is empty. (It should contain the actions from the program configuration)");
+            Assertions.fail("The action map is empty. (It should contain the actions from the program configuration)");
         }
     }
 
@@ -55,12 +53,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_input_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the input action.");
+            Assertions.fail("The action map does not contain the input action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonInputAction)) {
-            fail("The action: " + actionId + "is not of type InputAction.");
+            Assertions.fail("The action: " + actionId + "is not of type InputAction.");
         }
 
         JsonInputAction inputAction = (JsonInputAction) actionBase;
@@ -77,12 +75,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_output_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the output action.");
+            Assertions.fail("The action map does not contain the output action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonOutputAction)) {
-            fail("The action: " + actionId + "is not of type OutputAction.");
+            Assertions.fail("The action: " + actionId + "is not of type OutputAction.");
         }
 
         JsonOutputAction outputAction = (JsonOutputAction) actionBase;
@@ -98,12 +96,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_move_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the move action.");
+            Assertions.fail("The action map does not contain the move action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonMoveAction)) {
-            fail("The action: " + actionId + "is not of type MoveAction.");
+            Assertions.fail("The action: " + actionId + "is not of type MoveAction.");
         }
 
         JsonMoveAction moveAction = (JsonMoveAction) actionBase;
@@ -119,12 +117,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_merge_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the merge action.");
+            Assertions.fail("The action map does not contain the merge action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonMergeAction)) {
-            fail("The action: " + actionId + "is not of type MergeAction.");
+            Assertions.fail("The action: " + actionId + "is not of type MergeAction.");
         }
 
         JsonMergeAction mergeAction = (JsonMergeAction) actionBase;
@@ -142,12 +140,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_split_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the split action.");
+            Assertions.fail("The action map does not contain the split action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonSplitAction)) {
-            fail("The action: " + actionId + "is not of type SplitAction.");
+            Assertions.fail("The action: " + actionId + "is not of type SplitAction.");
         }
 
         JsonSplitAction splitAction = (JsonSplitAction) actionBase;
@@ -168,12 +166,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_mix_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the mix action.");
+            Assertions.fail("The action map does not contain the mix action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonMixAction)) {
-            fail("The action: " + actionId + "is not of type MixAction.");
+            Assertions.fail("The action: " + actionId + "is not of type MixAction.");
         }
 
         JsonMixAction mixAction = (JsonMixAction) actionBase;
@@ -191,12 +189,12 @@ public class JsonActionModelReaderTests {
         String actionId = "unique_store_id";
 
         if (!actionMap.containsKey(actionId)) {
-            fail("The action map does not contain the store action.");
+            Assertions.fail("The action map does not contain the store action.");
         }
 
         JsonActionBase actionBase = actionMap.get(actionId);
         if (!(actionBase instanceof JsonStoreAction)) {
-            fail("The action: " + actionId + "is not of type StoreAction.");
+            Assertions.fail("The action: " + actionId + "is not of type StoreAction.");
         }
 
         JsonStoreAction storeAction = (JsonStoreAction) actionBase;

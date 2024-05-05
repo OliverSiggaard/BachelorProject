@@ -37,7 +37,7 @@ public class Executor {
     private int attemptsAtResolvingDeadlock;
     private List<ActionBase> actionsDuringLatestDeadlockAttempt;
     private List<Droplet> dropletsBeforeDeadlockAttempt;
-    private List<ActionTickResult> ticksFromDeadlockAttempt;
+    private final List<ActionTickResult> ticksFromDeadlockAttempt;
 
     
     public Executor(ProgramConfiguration programConfiguration) {

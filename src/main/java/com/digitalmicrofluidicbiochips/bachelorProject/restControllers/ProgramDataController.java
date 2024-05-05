@@ -1,7 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.restControllers;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.services.ProgramExecutionService;
 import org.springframework.http.HttpHeaders;

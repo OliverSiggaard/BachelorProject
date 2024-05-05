@@ -2,7 +2,6 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementa
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
@@ -14,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter

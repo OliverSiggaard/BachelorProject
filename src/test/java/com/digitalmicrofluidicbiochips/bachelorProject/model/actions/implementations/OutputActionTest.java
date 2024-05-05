@@ -1,7 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
-import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
@@ -12,8 +11,6 @@ import com.digitalmicrofluidicbiochips.bachelorProject.testUtils.MockElectrodeGr
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
