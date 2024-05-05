@@ -22,8 +22,6 @@ public class SplitAction extends ActionBase {
     private final int posY2;
 
     @Setter
-    private ActionBase nextAction = null;
-    @Setter
     private Droplet originDroplet = null;
     @Setter
     private Droplet resultDroplet1 = null;
@@ -121,6 +119,8 @@ public class SplitAction extends ActionBase {
             splitHorizontally(electrodeGrid, originDropletArea);
         } else if(originDropletCanSplitVertically(programConfiguration)) {
             splitVertically(electrodeGrid, originDropletArea);
+        } else {
+            return new ActionTickResult();
         }
 
         return tickQueue.poll();

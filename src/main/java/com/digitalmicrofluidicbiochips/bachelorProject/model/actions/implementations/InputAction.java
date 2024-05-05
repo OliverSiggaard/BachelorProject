@@ -24,9 +24,6 @@ public class InputAction extends ActionBase {
     private final double volume;
 
     @Setter
-    private ActionBase nextAction = null;
-
-    @Setter
     private Droplet droplet = null;
 
     public InputAction(

@@ -43,6 +43,10 @@ public class ActionTickResult {
     }
 
     public void addTickResult(ActionTickResult tickResult) {
+        if(tickCommands == null ||tickResult == null) {
+            throw new IllegalArgumentException("Commands cannot be null");
+        }
+
         this.tickCommands.addAll(tickResult.getTickCommands());
         this.somethingHappenedInTick = somethingHappenedInTick || tickResult.somethingHappenedInTick;
     }

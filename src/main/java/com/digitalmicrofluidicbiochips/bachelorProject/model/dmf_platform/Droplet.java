@@ -206,18 +206,23 @@ public class Droplet implements Cloneable {
     }
 
     private static GridArea getExtendedGridAreaInDropletMoveDirection(Droplet movingDroplet, ElectrodeGrid electrodeGrid ,GridArea gridArea) {
+        int minX = 0;
+        int minY = 0;
+        int maxX = electrodeGrid.getXSize() - 1;
+        int maxY = electrodeGrid.getYSize() - 1;
+
         switch (movingDroplet.getDropletMove()) {
             case DOWN -> {
-                return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2(), gridArea.getY2() + 1);
+                return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2(), Math.min(maxY, gridArea.getY2() + 1));
             }
             case UP -> {
-                return new GridArea(gridArea.getX1(), gridArea.getY1() - 1, gridArea.getX2(), gridArea.getY2());
+                return new GridArea(gridArea.getX1(), Math.max(minY, gridArea.getY1() - 1), gridArea.getX2(), gridArea.getY2());
             }
             case RIGHT -> {
-                return new GridArea(gridArea.getX1(), gridArea.getY1(), gridArea.getX2() + 1, gridArea.getY2());
+                return new GridArea(gridArea.getX1(), gridArea.getY1(), Math.min(maxX, gridArea.getX2() + 1), gridArea.getY2());
             }
             case LEFT -> {
-                return new GridArea(gridArea.getX1() - 1, gridArea.getY1(), gridArea.getX2(), gridArea.getY2());
+                return new GridArea(Math.max(minX, gridArea.getX1() - 1), gridArea.getY1(), gridArea.getX2(), gridArea.getY2());
             }
         }
         return gridArea;
@@ -239,9 +244,10 @@ public class Droplet implements Cloneable {
         Droplet droplet = (Droplet) o;
         return positionX == droplet.positionX &&
                 positionY == droplet.positionY &&
-                Double.compare(droplet.volume, volume) == 0 &&
-                diameter == droplet.diameter && ID.equals(droplet.ID)
-                && status == droplet.status &&
+                volume == droplet.volume &&
+                diameter == droplet.diameter &&
+                ID.equals(droplet.ID) &&
+                status == droplet.status &&
                 dropletMove == droplet.dropletMove;
     }
 

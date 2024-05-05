@@ -19,10 +19,6 @@ public class ActionQueue extends ActionBase {
     private final List<ActionBase> actions;
     private int currentActionIndex = 0;
 
-    @Getter
-    @Setter
-    private ActionBase nextAction = null;
-
     public ActionQueue(String id, List<ActionBase> actions) {
         super(id);
         this.actions = actions;
@@ -69,6 +65,7 @@ public class ActionQueue extends ActionBase {
                 setStatus(ActionStatus.COMPLETED);
             }
 
+            actionTickResult.setSomethingHappenedInTick(true);
             return actionTickResult;
         }
 

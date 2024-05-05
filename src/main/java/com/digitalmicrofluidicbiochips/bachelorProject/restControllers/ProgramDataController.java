@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
@@ -32,7 +34,8 @@ public class ProgramDataController {
             }
 
             // Otherwise, return the successful execution result
-            System.out.println("Executed program successfully!");
+            int numberOfTicks = executionResult.getCompiledProgram().split("TICK").length - 1;
+            System.out.println("Executed program successfully in " + numberOfTicks + " ticks.");
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(executionResult);

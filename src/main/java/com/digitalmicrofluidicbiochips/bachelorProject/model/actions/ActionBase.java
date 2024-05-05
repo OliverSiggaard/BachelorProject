@@ -17,6 +17,9 @@ public abstract class ActionBase {
     @Getter
     private ActionStatus status;
 
+    @Setter
+    private ActionBase nextAction = null;
+
     @Getter @Setter
     private boolean attemptToResolveDeadlock;
 

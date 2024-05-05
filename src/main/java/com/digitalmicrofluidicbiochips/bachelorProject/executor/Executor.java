@@ -56,7 +56,7 @@ public class Executor {
         JsonNode dmfConfiguration = ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration);
 
         try {
-            tickResults.addAll(runExecutionLoopTillAllActionsAreCompleted());
+            runExecutionLoopTillAllActionsAreCompleted();
         } catch (DmfException e) {
             // If an error occurs, catch it and return an ExecutionResult with the error message.
             // The ticks that have been compiled to this point will also be returned, in case a partial execution is wanted.
@@ -72,8 +72,7 @@ public class Executor {
     /**
      * This method mutates tickResults, as it is a side-effect of the execution loop.
      */
-    private List<ActionTickResult> runExecutionLoopTillAllActionsAreCompleted() throws DmfException {
-        List<ActionTickResult> tickResults = new ArrayList<>();
+    private void runExecutionLoopTillAllActionsAreCompleted() throws DmfException {
 
         // The execution loop. This loop will continue until all actions are completed, or the program is stuck.
         while(true) {
@@ -112,8 +111,6 @@ public class Executor {
 
             tickResults.add(tickResult);
         }
-
-        return tickResults;
     }
 
     private ActionTickResult executeTick(List<ActionBase> actionsToBeTicked) throws DmfException {

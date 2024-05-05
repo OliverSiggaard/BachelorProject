@@ -20,9 +20,6 @@ public class MergeAction extends ActionBase {
     private final int posX;
     private final int posY;
 
-    @Setter
-    private ActionBase nextAction = null;
-
     private Droplet droplet1 = null;
     private Droplet droplet2 = null;
     @Setter

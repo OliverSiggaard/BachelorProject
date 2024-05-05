@@ -25,8 +25,6 @@ public class MoveAction extends ActionBase {
     @Getter
     private final int posY;
     @Getter @Setter
-    private ActionBase nextAction = null;
-    @Getter @Setter
     private Droplet droplet = null;
 
     private final Set<Droplet> ExemptObstacleDroplets;
@@ -173,7 +171,7 @@ public class MoveAction extends ActionBase {
         List<Droplet> droplets = new ArrayList<>(programConfiguration.getDropletsOnDmfPlatform().stream()
                 .filter(d -> !d.equals(droplet))
                 .toList());
-        droplets.removeAll(ExemptObstacleDroplets);
+        droplets.removeIf(d -> ExemptObstacleDroplets.stream().anyMatch(ed -> ed.getID().equals(d.getID())));
         return droplets;
     }
 

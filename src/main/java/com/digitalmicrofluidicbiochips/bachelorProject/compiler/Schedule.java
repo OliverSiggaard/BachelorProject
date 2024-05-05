@@ -20,7 +20,6 @@ public class Schedule {
 
     public Schedule(List<ActionBase> actions) {
         dropletActions = new HashMap<>();
-
         actions.forEach(action -> {
             Set<Droplet> producedByExecution = action.dropletsProducedByExecution();
 

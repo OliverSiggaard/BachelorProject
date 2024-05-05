@@ -23,8 +23,6 @@ public class StoreAction extends ActionBase {
     private int ticksLeft;
 
     @Setter
-    private ActionBase nextAction = null;
-    @Setter
     private Droplet droplet = null;
     public StoreAction(
             String id,

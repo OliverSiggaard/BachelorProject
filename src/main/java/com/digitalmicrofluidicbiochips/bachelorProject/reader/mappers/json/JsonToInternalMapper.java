@@ -73,6 +73,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
     public List<ActionBase> getActions() {
 
         HashMap<String, ActionBase> actionMap = new HashMap<>();
+        List<ActionBase> actions = new ArrayList<>(); // Used to ensure the order of the actions is preserved.
 
         //Creating a list of all the internal actions from the JSON actions. Initially, the next actions are not resolved.
         List<JsonActionBase> JsonActions = programConfiguration.getProgramActions();
@@ -80,6 +81,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
             IActionMapper mapper = JsonActionMapperFactory.getMapper(jsonAction.getClass());
             ActionBase action = mapper.mapToInternalModel(jsonAction);
             actionMap.put(action.getId(), action);
+            actions.add(action);
         });
 
         //Creating a list of all the droplets from the json input actions.
@@ -93,7 +95,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
             mapper.resolveReferences(jsonAction, actionMap, dropletMap);
         });
 
-        return actionMap.values().stream().toList();
+        return actions;
     }
 
     /**

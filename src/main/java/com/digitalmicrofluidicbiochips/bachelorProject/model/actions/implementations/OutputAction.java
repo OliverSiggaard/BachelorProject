@@ -22,8 +22,6 @@ public class OutputAction extends ActionBase {
     public int posY;
 
     @Setter
-    public ActionBase nextAction = null;
-    @Setter
     private Droplet droplet = null;
 
     public OutputAction(
@@ -59,11 +57,14 @@ public class OutputAction extends ActionBase {
             throw new IllegalStateException("Error when outputting droplet. Droplet is not at the output position.");
         }
 
-        droplet.setStatus(DropletStatus.CONSUMED);
+        droplet.setStatus(DropletStatus.UNAVAILABLE);
         droplet.setDropletMove(DropletMove.NONE);
 
         setStatus(ActionStatus.COMPLETED);
-        return new ActionTickResult();
+
+        ActionTickResult actionTickResult = new ActionTickResult();
+        actionTickResult.setSomethingHappenedInTick(true);
+        return actionTickResult;
     }
 
     @Override
