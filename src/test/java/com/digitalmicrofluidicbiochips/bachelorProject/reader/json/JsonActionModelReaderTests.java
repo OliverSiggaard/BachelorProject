@@ -66,8 +66,8 @@ public class JsonActionModelReaderTests {
         JsonInputAction inputAction = (JsonInputAction) actionBase;
         Assertions.assertEquals("unique_input_id", inputAction.getId());
         Assertions.assertEquals("unique_droplet_id", inputAction.getDropletId());
-        Assertions.assertEquals(10, inputAction.getPosX());
-        Assertions.assertEquals(20, inputAction.getPosY());
+        Assertions.assertEquals(1, inputAction.getPosX());
+        Assertions.assertEquals(2, inputAction.getPosY());
         Assertions.assertEquals(30, inputAction.getVolume());
         Assertions.assertEquals("unique_output_id", inputAction.getNextActionId());
     }
@@ -88,8 +88,8 @@ public class JsonActionModelReaderTests {
         JsonOutputAction outputAction = (JsonOutputAction) actionBase;
         Assertions.assertEquals("unique_output_id", outputAction.getId());
         Assertions.assertEquals("unique_droplet_id", outputAction.getDropletId());
-        Assertions.assertEquals(30, outputAction.getPosX());
-        Assertions.assertEquals(40, outputAction.getPosY());
+        Assertions.assertEquals(3, outputAction.getPosX());
+        Assertions.assertEquals(4, outputAction.getPosY());
         Assertions.assertEquals("unique_move_id", outputAction.getNextActionId());
     }
 
@@ -109,8 +109,8 @@ public class JsonActionModelReaderTests {
         JsonMoveAction moveAction = (JsonMoveAction) actionBase;
         Assertions.assertEquals("unique_move_id", moveAction.getId());
         Assertions.assertEquals("unique_droplet_id", moveAction.getDropletId());
-        Assertions.assertEquals(50, moveAction.getPosX());
-        Assertions.assertEquals(60, moveAction.getPosY());
+        Assertions.assertEquals(5, moveAction.getPosX());
+        Assertions.assertEquals(6, moveAction.getPosY());
         Assertions.assertEquals("unique_merge_id", moveAction.getNextActionId());
     }
 
@@ -132,8 +132,8 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id2", mergeAction.getResultDropletId());
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId1());
         Assertions.assertEquals("unique_droplet_id", mergeAction.getDropletId2());
-        Assertions.assertEquals(80, mergeAction.getPosX());
-        Assertions.assertEquals(90, mergeAction.getPosY());
+        Assertions.assertEquals(8, mergeAction.getPosX());
+        Assertions.assertEquals(9, mergeAction.getPosY());
         Assertions.assertEquals("unique_split_id", mergeAction.getNextActionId());
     }
 
@@ -156,10 +156,10 @@ public class JsonActionModelReaderTests {
         Assertions.assertEquals("unique_droplet_id3", splitAction.getResultDropletId1());
         Assertions.assertEquals("unique_droplet_id4", splitAction.getResultDropletId2());
         Assertions.assertEquals(0.2, splitAction.getRatio());
-        Assertions.assertEquals(100, splitAction.getPosX1());
-        Assertions.assertEquals(110, splitAction.getPosY1());
-        Assertions.assertEquals(120, splitAction.getPosX2());
-        Assertions.assertEquals(130, splitAction.getPosY2());
+        Assertions.assertEquals(10, splitAction.getPosX1());
+        Assertions.assertEquals(11, splitAction.getPosY1());
+        Assertions.assertEquals(12, splitAction.getPosX2());
+        Assertions.assertEquals(13, splitAction.getPosY2());
         Assertions.assertEquals("unique_mix_id", splitAction.getNextActionId());
     }
 
@@ -202,8 +202,8 @@ public class JsonActionModelReaderTests {
         JsonStoreAction storeAction = (JsonStoreAction) actionBase;
         Assertions.assertEquals("unique_store_id", storeAction.getId());
         Assertions.assertEquals("unique_droplet_id", storeAction.getDropletId());
-        Assertions.assertEquals(140, storeAction.getPosX());
-        Assertions.assertEquals(150, storeAction.getPosY());
+        Assertions.assertEquals(14, storeAction.getPosX());
+        Assertions.assertEquals(15, storeAction.getPosY());
         Assertions.assertEquals(10, storeAction.getTime());
         Assertions.assertEquals("unique_mix_id", storeAction.getNextActionId());
     }

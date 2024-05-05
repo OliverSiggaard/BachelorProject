@@ -1,5 +1,8 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
@@ -18,6 +21,7 @@ public class StoreAction extends ActionBase {
 
     private final int posX;
     private final int posY;
+    private final int ticksToWait;
     private int ticksLeft;
 
     @Setter
@@ -33,7 +37,8 @@ public class StoreAction extends ActionBase {
         super(id);
         this.posX = posX;
         this.posY = posY;
-        this.ticksLeft = time;
+        this.ticksToWait = time;
+        this.ticksLeft = ticksToWait;
     }
 
     @Override
@@ -71,5 +76,22 @@ public class StoreAction extends ActionBase {
     @Override
     public void afterExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.AVAILABLE);
+    }
+
+    @Override
+    public boolean verifyProperties(ProgramConfiguration programConfiguration) {
+        if (droplet == null) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+        }
+        if(ticksToWait <= 0){
+            throw new DmfInvalidInputException(DmfExceptionMessage.STORE_ACTION_INVALID_TIME.getMessage());
+        }
+        if (!programConfiguration.getElectrodeGrid().isWithinBounds(posX, posY)) {
+            int maxX = programConfiguration.getElectrodeGrid().getXSize();
+            int maxY = programConfiguration.getElectrodeGrid().getYSize();
+            throw new DmfInvalidInputException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX, posY, maxX, maxY));
+        }
+
+        return true;
     }
 }

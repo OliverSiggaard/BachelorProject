@@ -37,7 +37,12 @@ public class JsonFileToInternalMapperTests {
             Assertions.fail("Could not read the program configuration from the JSON file. Error: " + e.getMessage());
         }
 
-        JsonToInternalMapper jsonFileToInternalMapper = new JsonToInternalMapper(programFile);
+        JsonToInternalMapper jsonFileToInternalMapper = null;
+        try {
+            jsonFileToInternalMapper = new JsonToInternalMapper(programFile);
+        } catch (Exception e) {
+            Assertions.fail("Could not map the JSON file to the internal model. Error: " + e.getMessage());
+        }
 
         programConfiguration = mock(ProgramConfiguration.class);
         when(programConfiguration.getProgramActions())

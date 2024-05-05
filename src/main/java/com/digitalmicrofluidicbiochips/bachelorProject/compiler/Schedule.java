@@ -1,7 +1,11 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 
@@ -15,8 +19,43 @@ public class Schedule {
 
     private final Map<String, Queue<ActionBase>> dropletActions;
 
-    public Schedule(Map<String, Queue<ActionBase>> dropletActions) {
-        this.dropletActions = dropletActions;
+    public Schedule(List<ActionBase> actions) {
+        dropletActions = new HashMap<>();
+
+        actions.forEach(action -> {
+            Set<Droplet> producedByExecution = action.dropletsProducedByExecution();
+
+            for (Droplet droplet : producedByExecution) {
+                if(droplet == null) {
+                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+                }
+
+                if (dropletActions.containsKey(droplet.getID())) {
+                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_PRODUCED_BY_MULTIPLE_ACTIONS.getMessage(droplet));
+                }
+
+                dropletActions.put(droplet.getID(), new LinkedList<>());
+
+                if(action instanceof InputAction) {
+                    dropletActions.get(droplet.getID()).add(action);
+                }
+            }
+
+            Set<Droplet> dropletsRequiredForExecution = action.dropletsRequiredForExecution();
+            if(dropletsRequiredForExecution == null) return;
+
+            for (Droplet droplet : dropletsRequiredForExecution) {
+                if(droplet == null) {
+                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+                }
+
+                if (!dropletActions.containsKey(droplet.getID())) {
+                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_USED_BEFORE_PRODUCED_BY_ACTION.getMessage(droplet));
+                }
+
+                dropletActions.get(droplet.getID()).add(action);
+            }
+        });
     }
 
     public void updateSchedule() {

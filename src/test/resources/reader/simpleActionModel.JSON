@@ -16,8 +16,8 @@
       "action": "input",
       "id": "unique_input_id",
       "dropletId": "unique_droplet_id",
-      "posX": 10,
-      "posY": 20,
+      "posX": 1,
+      "posY": 2,
       "volume": 30,
       "next": "unique_output_id"
     },
@@ -25,16 +25,16 @@
       "action": "output",
       "id": "unique_output_id",
       "dropletId": "unique_droplet_id",
-      "posX": 30,
-      "posY": 40,
+      "posX": 3,
+      "posY": 4,
       "next": "unique_move_id"
     },
     {
       "action": "move",
       "id": "unique_move_id",
       "dropletId": "unique_droplet_id",
-      "posX": 50,
-      "posY": 60,
+      "posX": 5,
+      "posY": 6,
       "next": "unique_merge_id"
     },
     {
@@ -43,8 +43,8 @@
       "resultDropletId": "unique_droplet_id2",
       "dropletId1": "unique_droplet_id",
       "dropletId2": "unique_droplet_id",
-      "posX": 80,
-      "posY": 90,
+      "posX": 8,
+      "posY": 9,
       "next": "unique_split_id"
     },
     {
@@ -54,10 +54,10 @@
       "resultDroplet1": "unique_droplet_id3",
       "resultDroplet2": "unique_droplet_id4",
       "ratio": 0.2,
-      "posX1": 100,
-      "posY1": 110,
-      "posX2": 120,
-      "posY2": 130,
+      "posX1": 10,
+      "posY1": 11,
+      "posX2": 12,
+      "posY2": 13,
       "next": "unique_mix_id"
     },
     {
@@ -74,8 +74,8 @@
       "action": "store",
       "id": "unique_store_id",
       "dropletId": "unique_droplet_id",
-      "posX": 140,
-      "posY": 150,
+      "posX": 14,
+      "posY": 15,
       "time": 10,
       "next": "unique_mix_id"
     }

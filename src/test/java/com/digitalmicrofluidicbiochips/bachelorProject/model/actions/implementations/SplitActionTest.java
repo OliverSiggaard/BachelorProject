@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
@@ -390,6 +391,60 @@ public class SplitActionTest {
         Assertions.assertEquals(DropletStatus.CONSUMED, originDroplet.getStatus());
         Assertions.assertEquals(DropletStatus.AVAILABLE, resultDroplet1.getStatus());
         Assertions.assertEquals(DropletStatus.AVAILABLE, resultDroplet2.getStatus());
+    }
+
+    @Test
+    public void testVerifyProperties_originDropletNotSet() {
+        sut.setOriginDroplet(null);
+        Assertions.assertThrows(DmfException.class, () -> { sut.verifyProperties(programConfiguration); });
+    }
+
+    @Test
+    public void testVerifyProperties_resultDroplet1NotSet() {
+        sut.setResultDroplet1(null);
+        Assertions.assertThrows(DmfException.class, () -> { sut.verifyProperties(programConfiguration); });
+    }
+
+    @Test
+    public void testVerifyProperties_resultDroplet2NotSet() {
+        sut.setResultDroplet2(null);
+        Assertions.assertThrows(DmfException.class, () -> { sut.verifyProperties(programConfiguration); });
+    }
+
+    @Test
+    public void testVerifyProperties_x1OutOfBounds() {
+        SplitAction action = new SplitAction("id", 33, 2, 3, 4);
+        action.setOriginDroplet(originDroplet);
+        action.setResultDroplet1(resultDroplet1);
+        action.setResultDroplet2(resultDroplet2);
+        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+    }
+
+    @Test
+    public void testVerifyProperties_y1OutOfBounds() {
+        SplitAction action = new SplitAction("id", 3, 21, 3, 4);
+        action.setOriginDroplet(originDroplet);
+        action.setResultDroplet1(resultDroplet1);
+        action.setResultDroplet2(resultDroplet2);
+        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+    }
+
+    @Test
+    public void testVerifyProperties_x2OutOfBounds() {
+        SplitAction action = new SplitAction("id", 3, 2, 33, 4);
+        action.setOriginDroplet(originDroplet);
+        action.setResultDroplet1(resultDroplet1);
+        action.setResultDroplet2(resultDroplet2);
+        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
+    }
+
+    @Test
+    public void testVerifyProperties_y2OutOfBounds() {
+        SplitAction action = new SplitAction("id", 3, 2, 3, 21);
+        action.setOriginDroplet(originDroplet);
+        action.setResultDroplet1(resultDroplet1);
+        action.setResultDroplet2(resultDroplet2);
+        Assertions.assertThrows(DmfException.class, () -> { action.verifyProperties(programConfiguration); });
     }
 
 

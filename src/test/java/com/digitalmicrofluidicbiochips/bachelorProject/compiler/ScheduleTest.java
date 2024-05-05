@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.DropletStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,11 @@ public class ScheduleTest {
         when(droplet1.getID()).thenReturn("1");
         when(droplet2.getID()).thenReturn("2");
 
+        InputAction produce1 = mock(InputAction.class);
+        when(produce1.dropletsProducedByExecution()).thenReturn(Set.of(droplet1));
+        InputAction produce2 = mock(InputAction.class);
+        when(produce2.dropletsProducedByExecution()).thenReturn(Set.of(droplet2));
+
         action1 = mock(ActionBase.class);
         action2 = mock(ActionBase.class);
         action3 = mock(ActionBase.class);
@@ -44,10 +50,11 @@ public class ScheduleTest {
         when(action3.dropletsRequiredForExecution()).thenReturn(Set.of(droplet2));
         when(action4.dropletsRequiredForExecution()).thenReturn(Set.of(droplet1, droplet2));
 
-        Map<String, Queue<ActionBase>> dropletActions = new HashMap<>();
-        dropletActions.put(droplet1.getID(), new LinkedList<>(List.of(action1, action2, action4)));
-        dropletActions.put(droplet2.getID(), new LinkedList<>(List.of(action3, action4)));
-        sut = new Schedule(dropletActions);
+        List<ActionBase> actions = new ArrayList<>(List.of(produce1, produce2, action1, action2, action3, action4));
+        sut = new Schedule(actions);
+        when(produce1.getStatus()).thenReturn(ActionStatus.COMPLETED);
+        when(produce2.getStatus()).thenReturn(ActionStatus.COMPLETED);
+        sut.updateSchedule();
     }
 
     @Test

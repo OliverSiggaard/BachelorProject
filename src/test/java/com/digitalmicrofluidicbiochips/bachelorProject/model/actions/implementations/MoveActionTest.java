@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
@@ -218,5 +219,26 @@ public class MoveActionTest {
         sut.afterExecution(mock(ProgramConfiguration.class));
         Assertions.assertEquals(DropletStatus.AVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
+    }
+
+    @Test
+    public void testVerifyProperties_dropletNotSet() {
+        MoveAction action = new MoveAction("id", 1, 2);
+        Assertions.assertNull(action.getDroplet());
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfigurationMock));
+    }
+
+    @Test
+    public void testVerifyProperties_posXOutOfBounds() {
+        MoveAction action = new MoveAction("id", 33, 2);
+        action.setDroplet(droplet);
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfigurationMock));
+    }
+
+    @Test
+    public void testVerifyProperties_posYOutOfBounds() {
+        MoveAction action = new MoveAction("id", 10, 21);
+        action.setDroplet(droplet);
+        Assertions.assertThrows(DmfException.class, () -> action.verifyProperties(programConfigurationMock));
     }
 }

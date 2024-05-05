@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Schedule;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
@@ -26,8 +27,13 @@ public class ProgramConfiguration {
         this.platformInformation = platformInformation;
         this.programActions = programActions;
         this.droplets = getAllDropletsProducedByActions();
-        this.pathFinder = new AStar(); //
+        this.pathFinder = new AStar();
         this.electrodeGrid = ElectrodeGridFactory.getElectrodeGrid(this);
+
+        // Verify that all program actions are valid.
+        for (ActionBase action : programActions) {
+            action.verifyProperties(this);
+        }
     }
 
     /**
@@ -63,6 +69,8 @@ public class ProgramConfiguration {
                 .collect(Collectors.toList());
     }
 
-
+    public Schedule getScheduleFromActions() {
+        return new Schedule(programActions);
+    }
 
 }

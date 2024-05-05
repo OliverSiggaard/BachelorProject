@@ -24,7 +24,7 @@ public class JsonInputActionMapper implements IActionMapper<JsonInputAction, Inp
         InputAction inputAction = internalModelMap.get(dtoModel.getId());
 
         inputAction.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
-
+        
         inputAction.setDroplet(dropletMap.get(dtoModel.getDropletId()));
     }
 }

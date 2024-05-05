@@ -20,7 +20,8 @@ public class ActionQueue extends ActionBase {
     private final List<ActionBase> actions;
     private int currentActionIndex = 0;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private ActionBase nextAction = null;
 
     public ActionQueue(String id, List<ActionBase> actions) {
@@ -49,12 +50,12 @@ public class ActionQueue extends ActionBase {
     @Override
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
         ActionTickResult actionTickResult = new ActionTickResult();
-        if(currentActionIndex >= actions.size()) return new ActionTickResult();
+        if (currentActionIndex >= actions.size()) return new ActionTickResult();
 
         ActionBase action = actions.get(currentActionIndex);
         ActionStatus actionStatus = action.getStatus();
         // Start or tick already running action
-        if(actionStatus == ActionStatus.NOT_STARTED) {
+        if (actionStatus == ActionStatus.NOT_STARTED) {
             action.beforeExecution(programConfiguration);
             actionTickResult = action.executeTick(programConfiguration);
         } else if (actionStatus == ActionStatus.IN_PROGRESS) {
@@ -62,18 +63,19 @@ public class ActionQueue extends ActionBase {
         }
 
         // Check if it is completed
-        if(action.getStatus() == ActionStatus.COMPLETED) {
+        if (action.getStatus() == ActionStatus.COMPLETED) {
             action.afterExecution(programConfiguration);
             currentActionIndex++;
             if (currentActionIndex == actions.size()) {
                 setStatus(ActionStatus.COMPLETED);
-            };
+            }
+            ;
 
             return actionTickResult;
         }
 
         // Check if it failed
-        if(action.getStatus() == ActionStatus.FAILED) {
+        if (action.getStatus() == ActionStatus.FAILED) {
             setStatus(ActionStatus.FAILED);
             return new ActionTickResult();
         }
@@ -84,5 +86,10 @@ public class ActionQueue extends ActionBase {
     @Override
     public void afterExecution(ProgramConfiguration programConfiguration) {
         // Droplets status is handled in the individual actions in the queue.
+    }
+
+    @Override
+    public boolean verifyProperties(ProgramConfiguration programConfiguration) {
+        return actions.stream().allMatch(a -> a.verifyProperties(programConfiguration));
     }
 }

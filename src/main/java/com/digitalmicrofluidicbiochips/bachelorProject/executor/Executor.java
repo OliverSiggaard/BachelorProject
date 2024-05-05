@@ -1,6 +1,5 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.executor;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Compiler;
 import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Schedule;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
@@ -17,6 +16,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The executor is responsible for executing the program, by ticking the actions as they are
+ * received by the schedule. The executor will continue ticking the actions until all actions
+ * are completed, or the program is stuck in a deadlock.
+ */
 public class Executor {
 
     private final ProgramConfiguration programConfiguration;
@@ -38,7 +42,9 @@ public class Executor {
     
     public Executor(ProgramConfiguration programConfiguration) {
         this.programConfiguration = programConfiguration;
-        this.schedule = Compiler.compile(programConfiguration.getProgramActions());
+        this.schedule = programConfiguration.getScheduleFromActions();
+
+        // Initialize deadlock resolution variables.
         this.attemptsAtResolvingDeadlock = 0;
         this.actionsDuringLatestDeadlockAttempt = new ArrayList<>();
         this.dropletsBeforeDeadlockAttempt = new ArrayList<>();

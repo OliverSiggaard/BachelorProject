@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.restControllers;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.services.ProgramExecutionService;
@@ -47,7 +48,11 @@ public class ProgramDataControllerTest {
         JsonNode mockProgramConfigurationJsonNode = objectMapper.valueToTree(testProgramConfiguration);
 
         ExecutionResult executionResult = new ExecutionResult(new ArrayList<>(), mockProgramConfigurationJsonNode);
-        when(ProgramExecutionService.executeProgram(anyString())).thenReturn(executionResult);
+        try {
+            when(ProgramExecutionService.executeProgram(anyString())).thenReturn(executionResult);
+        } catch (Exception ignored) {
+            /* Ignored */
+        }
 
         ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
@@ -60,13 +65,17 @@ public class ProgramDataControllerTest {
     void dataRecievedFromFrontend_Failure() {
         String testProgram = "invalid program";
         String errorMessage = "Error occurred";
-        when(ProgramExecutionService.executeProgram(anyString()))
-                .thenThrow(new RuntimeException(errorMessage));
+        try {
+            when(ProgramExecutionService.executeProgram(anyString()))
+                    .thenThrow(new RuntimeException(errorMessage));
+        } catch (Exception ignored) {
+            /* Ignored */
+        }
 
         ResponseEntity<ExecutionResult> response = programDataController.dataFromFrontend(testProgram);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(ExceptionHandler.UNKNOWN_ERROR_MESSAGE, Objects.requireNonNull(response.getBody()).getErrorMessage());
+        assertEquals(DmfExceptionMessage.UNKNOWN_ERROR_MESSAGE.getMessage(), Objects.requireNonNull(response.getBody()).getErrorMessage());
         assertEquals("", Objects.requireNonNull(response.getBody()).getCompiledProgram());
         assertNull(Objects.requireNonNull(response.getBody()).getDmfConfiguration());
     }

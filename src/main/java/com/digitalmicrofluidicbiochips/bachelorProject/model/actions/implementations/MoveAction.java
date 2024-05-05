@@ -1,5 +1,8 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.IPathFinder;
@@ -175,6 +178,20 @@ public class MoveAction extends ActionBase {
                 .toList());
         droplets.removeAll(ExemptObstacleDroplets);
         return droplets;
+    }
+
+    @Override
+    public boolean verifyProperties(ProgramConfiguration programConfiguration) {
+        if (droplet == null) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+        }
+        if (!programConfiguration.getElectrodeGrid().isWithinBounds(posX, posY)) {
+            int maxX = programConfiguration.getElectrodeGrid().getXSize();
+            int maxY = programConfiguration.getElectrodeGrid().getYSize();
+            throw new DmfInvalidInputException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX, posY, maxX, maxY));
+        }
+
+        return true;
     }
 
 

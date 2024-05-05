@@ -14,15 +14,11 @@ import java.util.List;
 public class PlatformInformation {
 
     @Getter
-    private final int sizeX, sizeY;
+    private final int sizeX, sizeY; // size is in actual units, not number of electrodes.
 
     @Getter
     private final List<Electrode> electrodes;
 
-    // TODO: Information Actuators?
-    // TODO: Information about sensors?
-    // TODO: Information about input/output?
-    // TODO: Information about height to top glass for calculating droplet diameter?
 
     public PlatformInformation(int sizeX, int sizeY, List<Electrode> electrodes) {
         this.sizeX = sizeX;

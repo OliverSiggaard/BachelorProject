@@ -1,5 +1,8 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
@@ -16,7 +19,6 @@ import java.util.*;
 
 @Getter
 public class InputAction extends ActionBase {
-
 
     private final int posX;
     private final int posY;
@@ -85,6 +87,23 @@ public class InputAction extends ActionBase {
     @Override
     public void afterExecution(ProgramConfiguration programConfiguration) {
         droplet.setStatus(DropletStatus.AVAILABLE);
+    }
+
+    @Override
+    public boolean verifyProperties(ProgramConfiguration programConfiguration) {
+        if (droplet == null) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+        }
+        if (!programConfiguration.getElectrodeGrid().isWithinBounds(posX, posY)) {
+            int maxX = programConfiguration.getElectrodeGrid().getXSize();
+            int maxY = programConfiguration.getElectrodeGrid().getYSize();
+            throw new DmfInvalidInputException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX, posY, maxX, maxY));
+        }
+        if (volume <= 0) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.INPUT_ACTION_INVALID_VOLUME.getMessage());
+        }
+
+        return true;
     }
 
 

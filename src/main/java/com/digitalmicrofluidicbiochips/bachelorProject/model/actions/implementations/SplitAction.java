@@ -1,5 +1,8 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
@@ -366,6 +369,31 @@ public class SplitAction extends ActionBase {
         int ElectrodeSize = programConfiguration.getElectrodeGrid().getElectrodeSizeOfElectrodeInGrid();
         int originDropletSize = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(originDroplet, ElectrodeSize);
         return originDropletSize % 2 == 0;
+    }
+
+    @Override
+    public boolean verifyProperties(ProgramConfiguration programConfiguration) {
+        if (originDroplet == null) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+        }
+        if (resultDroplet1 == null) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+        }
+        if (resultDroplet2 == null) {
+            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+        }
+        if (!programConfiguration.getElectrodeGrid().isWithinBounds(posX1, posY1)) {
+            int maxX = programConfiguration.getElectrodeGrid().getXSize();
+            int maxY = programConfiguration.getElectrodeGrid().getYSize();
+            throw new DmfInvalidInputException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX1, posY1, maxX, maxY));
+        }
+        if (!programConfiguration.getElectrodeGrid().isWithinBounds(posX2, posY2)) {
+            int maxX = programConfiguration.getElectrodeGrid().getXSize();
+            int maxY = programConfiguration.getElectrodeGrid().getYSize();
+            throw new DmfInvalidInputException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX2, posY2, maxX, maxY));
+        }
+
+        return true;
     }
 
 }

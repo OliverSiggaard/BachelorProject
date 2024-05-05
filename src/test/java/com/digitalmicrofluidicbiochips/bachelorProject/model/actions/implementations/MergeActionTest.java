@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.AStar;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
@@ -156,4 +157,46 @@ public class MergeActionTest {
         Assertions.assertTrue(result.contains(droplet2));
     }
 
+    @Test
+    public void testVerifyProperties_droplet1NotSet() {
+        MergeAction mergeAction = new MergeAction("id", 1, 2);
+        mergeAction.setDroplet2(droplet2);
+        mergeAction.setResultDroplet(resultDroplet);
+        Assertions.assertNull(mergeAction.getDroplet1());
+        Assertions.assertThrows(DmfException.class, () -> mergeAction.verifyProperties(programConfiguration));
+    }
+    @Test
+    public void testVerifyProperties_droplet2NotSet() {
+        MergeAction mergeAction = new MergeAction("id", 1, 2);
+        mergeAction.setDroplet1(droplet1);
+        mergeAction.setResultDroplet(resultDroplet);
+        Assertions.assertNull(mergeAction.getDroplet2());
+        Assertions.assertThrows(DmfException.class, () -> mergeAction.verifyProperties(programConfiguration));
+    }
+    @Test
+    public void testVerifyProperties_resultDropletNotSet() {
+        MergeAction mergeAction = new MergeAction("id", 1, 2);
+        mergeAction.setDroplet1(droplet1);
+        mergeAction.setDroplet2(droplet2);
+        Assertions.assertNull(mergeAction.getResultDroplet());
+        Assertions.assertThrows(DmfException.class, () -> mergeAction.verifyProperties(programConfiguration));
+    }
+
+    @Test
+    public void testVerifyProperties_posXOutOfBounds() {
+        MergeAction mergeAction = new MergeAction("id", 33, 2);
+        mergeAction.setDroplet1(droplet1);
+        mergeAction.setDroplet2(droplet2);
+        mergeAction.setResultDroplet(resultDroplet);
+        Assertions.assertThrows(DmfException.class, () -> mergeAction.verifyProperties(programConfiguration));
+    }
+
+    @Test
+    public void testVerifyProperties_posYOutOfBounds() {
+        MergeAction mergeAction = new MergeAction("id", 10, 21);
+        mergeAction.setDroplet1(droplet1);
+        mergeAction.setDroplet2(droplet2);
+        mergeAction.setResultDroplet(resultDroplet);
+        Assertions.assertThrows(DmfException.class, () -> mergeAction.verifyProperties(programConfiguration));
+    }
 }
