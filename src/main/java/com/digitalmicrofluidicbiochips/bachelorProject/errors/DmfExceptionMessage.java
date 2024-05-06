@@ -11,7 +11,10 @@ public enum DmfExceptionMessage {
     INPUT_ACTION_INVALID_VOLUME("A non-positive volume was assigned to an Input action in the program."),
     POSITION_OUT_OF_BOUND("An action was attempted at position (%posX%, %posY%), which is outside the bounds of the platform. The platform has dimensions (%posXMax%, %posYMax%). Remember that positions are zero-indexed."),
     DROPLET_PRODUCED_BY_MULTIPLE_ACTIONS("Droplet %dropletID% is produced by multiple actions"),
-    DROPLET_USED_BEFORE_PRODUCED_BY_ACTION("Droplet %dropletID% was attempted to be used before being produced by an action");
+    DROPLET_USED_BEFORE_PRODUCED_BY_ACTION("Droplet %dropletID% was attempted to be used before being produced by an action"),
+    ACTION_FIELD_EMPTY("One or more actions in the program have empty fields. All fields must be non-empty."),
+    ACTION_FIELD_INTEGER_NOT_INTEGER("One or more actions in the program have non-integer elements in a integer field. All integer fields must be integers."),
+    ACTION_FIELD_DOUBLE_NOT_DOUBLE("One or more actions in the program have non-decimal elements in a decimal field. All decimal fields must be decimals."),;
 
     private final String message;
     DmfExceptionMessage(String message) {

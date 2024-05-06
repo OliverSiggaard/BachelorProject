@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMergeAction;
@@ -16,6 +17,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.JsonPro
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonInputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.JsonModelLoader;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +44,12 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
     public JsonToInternalMapper(File jsonFile) throws DmfInvalidInputException {
         try {
             programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(jsonFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            // If the exception is a JsonMappingException, and the cause is a DmfException, throw the DmfException
+            // instead of the generic parsing error.
+            if(e instanceof JsonMappingException jsonMappingException) {
+                if(jsonMappingException.getCause() instanceof DmfException dmfException) throw dmfException;
+            }
             throw new DmfInvalidInputException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
         }
     }
@@ -56,7 +63,12 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
     public JsonToInternalMapper(String jsonString) throws DmfInvalidInputException {
         try {
             programConfiguration = JsonModelLoader.loadProgramConfigurationFromJsonString(jsonString);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            // If the exception is a JsonMappingException, and the cause is a DmfException, throw the DmfException
+            // instead of the generic parsing error.
+            if(e instanceof JsonMappingException jsonMappingException) {
+                if(jsonMappingException.getCause() instanceof DmfException dmfException) throw dmfException;
+            }
             throw new DmfInvalidInputException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
         }
     }

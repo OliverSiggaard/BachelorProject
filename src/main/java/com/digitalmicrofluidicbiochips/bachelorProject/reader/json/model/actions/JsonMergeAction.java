@@ -1,7 +1,10 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.misc.StrictNonEmptyIntegerDeserializer;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.misc.StrictNonEmptyStringDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 
 /*
@@ -9,11 +12,17 @@ import lombok.Getter;
  */
 @Getter
 public class JsonMergeAction extends JsonActionBase {
+    @JsonDeserialize(using = StrictNonEmptyStringDeserializer.class)
     private final String resultDropletId;
+    @JsonDeserialize(using = StrictNonEmptyStringDeserializer.class)
     private final String dropletId1;
+    @JsonDeserialize(using = StrictNonEmptyStringDeserializer.class)
     private final String dropletId2;
+    @JsonDeserialize(using = StrictNonEmptyIntegerDeserializer.class)
     private final int posX;
+    @JsonDeserialize(using = StrictNonEmptyIntegerDeserializer.class)
     private final int posY;
+    @JsonDeserialize(using = StrictNonEmptyStringDeserializer.class)
     private final String nextActionId;
 
     @JsonCreator
