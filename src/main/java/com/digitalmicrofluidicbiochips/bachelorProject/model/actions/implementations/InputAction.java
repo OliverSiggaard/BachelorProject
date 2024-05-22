@@ -50,7 +50,6 @@ public class InputAction extends ActionBase {
 
     @Override
     public void beforeExecution(ProgramConfiguration programConfiguration) {
-        droplet.setStatus(DropletStatus.UNAVAILABLE);
         setStatus(ActionStatus.IN_PROGRESS);
     }
 
@@ -58,10 +57,20 @@ public class InputAction extends ActionBase {
     public ActionTickResult executeTick(ProgramConfiguration programConfiguration) {
         ActionTickResult actionTickResult = new ActionTickResult();
 
-        // Droplet can be placed on the platform
         droplet.setPositionX(posX);
         droplet.setPositionY(posY);
         droplet.setDropletMove(DropletMove.NONE);
+        droplet.setVolume(volume);
+
+        Collection<Droplet> obstacleDroplets = programConfiguration.getDropletsOnDmfPlatform().stream().filter(o -> o != droplet).toList();
+        boolean dropletCanBePlacedOnPlatform = obstacleDroplets.stream().allMatch(obstacleDroplet -> {
+            GridArea gridArea = droplet.getDropletSafeArea(programConfiguration.getElectrodeGrid(), obstacleDroplet);
+            return !gridArea.contains(posX, posY);
+        });
+
+        if(!dropletCanBePlacedOnPlatform) {
+            return actionTickResult;
+        }
 
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
         int electrodeWidth = electrodeGrid.getElectrode(0, 0).getSizeX();
@@ -76,6 +85,7 @@ public class InputAction extends ActionBase {
             }
         }
 
+        droplet.setStatus(DropletStatus.UNAVAILABLE);
         setStatus(ActionStatus.COMPLETED);
         return actionTickResult;
     }

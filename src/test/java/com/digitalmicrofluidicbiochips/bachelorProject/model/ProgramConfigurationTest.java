@@ -64,16 +64,6 @@ public class ProgramConfigurationTest {
     }
 
     @Test
-    public void testGetDropletsFromInputActions() {
-        Assertions.assertEquals(1, sut.getDropletsFromInputActions().size());
-        when(droplet1.getStatus()).thenReturn(DropletStatus.UNAVAILABLE);
-        Assertions.assertEquals(1, sut.getDropletsFromInputActions().size());
-        when(droplet1.getStatus()).thenReturn(DropletStatus.NOT_CREATED);
-        when(droplet2.getStatus()).thenReturn(DropletStatus.UNAVAILABLE);
-        Assertions.assertEquals(1, sut.getDropletsFromInputActions().size());
-    }
-
-    @Test
     public void testElectrodeGrid() {
         Assertions.assertNotNull(sut.getElectrodeGrid());
         Assertions.assertEquals(1, sut.getElectrodeGrid().getXSize());

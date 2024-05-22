@@ -7,6 +7,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguratio
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResult.ActionTickResult;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.ProgramConfigurationToDmfAsJson;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,6 +29,7 @@ public class Executor {
     private final Schedule schedule;
 
     private final List<ActionTickResult> tickResults = new ArrayList<>();
+    private JsonNode dmfConfigurationWithInitialDroplets;
 
     // Deadlock resolution variables.
 
@@ -49,24 +51,22 @@ public class Executor {
         this.actionsDuringLatestDeadlockAttempt = new ArrayList<>();
         this.dropletsBeforeDeadlockAttempt = new ArrayList<>();
         this.ticksFromDeadlockAttempt = new ArrayList<>();
+        this.dmfConfigurationWithInitialDroplets = null;
     }
 
     public ExecutionResult compileProgramToDmf() {
-        // Create a JSON file containing the droplets initially placed on the grid. (for the simulator)
-        JsonNode dmfConfiguration = ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration);
-
         try {
             runExecutionLoopTillAllActionsAreCompleted();
         } catch (DmfException e) {
             // If an error occurs, catch it and return an ExecutionResult with the error message.
             // The ticks that have been compiled to this point will also be returned, in case a partial execution is wanted.
-            ExecutionResult executionResult = new ExecutionResult(tickResults, dmfConfiguration);
+            ExecutionResult executionResult = new ExecutionResult(tickResults, dmfConfigurationWithInitialDroplets);
             String errorMessage = ExceptionHandler.getErrorMessage(e);
             executionResult.setErrorMessage(errorMessage);
             return executionResult;
         }
 
-        return new ExecutionResult(tickResults, dmfConfiguration);
+        return new ExecutionResult(tickResults, dmfConfigurationWithInitialDroplets);
     }
 
     /**
@@ -107,6 +107,13 @@ public class Executor {
             if(isAttemptToResolveDeadlock()) {
                 ticksFromDeadlockAttempt.add(tickResult);
                 continue;
+            }
+
+            // We have to run the first tick, before we know the initial droplets on the DMF platform.
+            // This if-statement is only true once, and the dmfConfigurationWithInitialDroplets will be set.
+            if(dmfConfigurationWithInitialDroplets == null) {
+                List<Droplet> dropletsOnTheDmfPlatform = programConfiguration.getDropletsOnDmfPlatform().stream().toList();
+                dmfConfigurationWithInitialDroplets = ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration, dropletsOnTheDmfPlatform);
             }
 
             tickResults.add(tickResult);

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ProgramConfigurationToDmfAsJson {
-    public static JsonNode convertProgramConfigurationToDmfAsJson(ProgramConfiguration programConfiguration) {
+    public static JsonNode convertProgramConfigurationToDmfAsJson(ProgramConfiguration programConfiguration, List<Droplet> droplets) {
         ElectrodeGrid electrodeGrid = programConfiguration.getElectrodeGrid();
 
         // File paths
@@ -31,10 +31,9 @@ public class ProgramConfigurationToDmfAsJson {
             JsonNode originalData = mapper.readTree(new File(originalFilePath));
             ArrayNode dropletsArray = (ArrayNode) originalData.get("droplets");
 
-            List<Droplet> dropletsList = programConfiguration.getDropletsFromInputActions();
-            List<String> colors = generateHexColors(dropletsList.size());
+            List<String> colors = generateHexColors(droplets.size());
             int id = 0;
-            for (Droplet droplet : dropletsList) {
+            for (Droplet droplet : droplets) {
                 Electrode electrode = electrodeGrid.getElectrode(droplet.getPositionX(), droplet.getPositionY());
                 int electrodeWidth = electrode.getSizeX();
                 int dropletDiameterElectrodeSpan = DmfPlatformUtils.electrodeSpanRequiredToMoveDroplet(droplet, electrodeWidth);

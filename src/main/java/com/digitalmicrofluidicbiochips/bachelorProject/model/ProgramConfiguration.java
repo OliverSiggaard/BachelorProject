@@ -54,19 +54,6 @@ public class ProgramConfiguration {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Used to get all the droplets that are initially placed on the DMF platform.
-     * This is used by the platform json generator, to generate the initial droplets in the json file.
-     * @return List of droplets that are initially placed on the DMF platform.
-     */
-    public List<Droplet> getDropletsFromInputActions() {
-        return programActions.stream()
-                .filter(action -> action instanceof InputAction)
-                .flatMap(action -> action.dropletsProducedByExecution().stream())
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
     public Schedule getScheduleFromActions() {
         return new Schedule(programActions);
     }
