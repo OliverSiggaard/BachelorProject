@@ -27,7 +27,7 @@ public class ProgramExecutionService {
             // Execute the program
             return executor.compileProgramToDmf();
         } catch (DmfException e) {
-            // If there is a DMF exception, return the error message
+            // If there is a DMF exception, create a new ExecutionResult with the error message.
             return new ExecutionResult(e.getMessage());
         }
     }

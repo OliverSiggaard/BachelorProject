@@ -17,15 +17,4 @@ public class ClearElectrodeCommandTest {
         ClearElectrodeCommand sut = new ClearElectrodeCommand(electrode);
         Assertions.assertEquals(DmfPlatformUtils.getClearElectrodeCommand(3), sut.getDmfCommand());
     }
-
-    @Test
-    void testUpdateModelWithCommand() {
-        Electrode electrode = mock(Electrode.class);
-        when(electrode.getID()).thenReturn(3);
-
-        ClearElectrodeCommand sut = new ClearElectrodeCommand(electrode);
-
-        sut.updateModelWithCommand();
-        verify(electrode).setStatus(0);
-    }
 }

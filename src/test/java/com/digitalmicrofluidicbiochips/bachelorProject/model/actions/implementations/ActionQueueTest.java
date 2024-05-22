@@ -107,28 +107,6 @@ public class ActionQueueTest {
     }
 
     @Test
-    public void testExecuteTickWithFailingAction() {
-
-        ProgramConfiguration programConfiguration = mock(ProgramConfiguration.class);
-        ActionTickResult actionTickResult1 = mock(ActionTickResult.class);
-        ActionTickResult actionTickResult2 = mock(ActionTickResult.class);
-        ActionTickResult actionTickResult3 = mock(ActionTickResult.class);
-        when(action1.executeTick(programConfiguration)).thenReturn(actionTickResult1);
-        when(action2.executeTick(programConfiguration)).thenReturn(actionTickResult2);
-        when(action3.executeTick(programConfiguration)).thenReturn(actionTickResult3);
-
-        sut.beforeExecution(programConfiguration);
-
-        when(action1.getStatus())
-                .thenReturn(ActionStatus.NOT_STARTED)
-                .thenReturn(ActionStatus.FAILED);
-        ActionTickResult result = sut.executeTick(programConfiguration);
-        verify(action1).beforeExecution(programConfiguration);
-        Assertions.assertEquals(0, result.getTickCommands().size());
-        Assertions.assertEquals(ActionStatus.FAILED, sut.getStatus());
-    }
-
-    @Test
     public void testAfterExecution() {
         sut.afterExecution(mock(ProgramConfiguration.class));
         verifyNoMoreInteractions(droplet1);

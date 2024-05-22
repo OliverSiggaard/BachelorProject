@@ -15,9 +15,4 @@ public class SetElectrodeCommand implements IDmfCommand {
     public String getDmfCommand() {
         return DmfPlatformUtils.getSetElectrodeCommand(electrode.getID());
     }
-
-    @Override
-    public void updateModelWithCommand() {
-        electrode.setStatus(1);
-    }
 }

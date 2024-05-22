@@ -75,23 +75,6 @@ public class ActionTickResultTest {
     }
 
     @Test
-    void actionTickResultUpdateModelWithCommands() {
-        IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
-        IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
-        IDmfCommand iDmfCommand3 = mock(IDmfCommand.class);
-        List<IDmfCommand> iDmfCommands = Arrays.asList(iDmfCommand1, iDmfCommand2, iDmfCommand3);
-        ActionTickResult sut = new ActionTickResult(iDmfCommands);
-
-        // Call the method to be tested
-        sut.updateModelWithCommands();
-
-        // Verify that the updateModelWithCommand method is called for each mocked IDmfCommand instance
-        verify(iDmfCommand1).updateModelWithCommand();
-        verify(iDmfCommand2).updateModelWithCommand();
-        verify(iDmfCommand3).updateModelWithCommand();
-    }
-
-    @Test
     void testGetTickCommandsAsString() {
         IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
         when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");

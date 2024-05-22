@@ -34,9 +34,8 @@ public class JsonMixActionMapper implements IActionMapper<JsonMixAction, ActionQ
         actionQueue.setNextAction(internalModelMap.get(dtoModel.getNextActionId()));
 
         actionQueue.getActions().forEach(action -> {
-            if(action instanceof MoveAction) {
-                MoveAction moveTask = (MoveAction) action;
-                moveTask.setDroplet(dropletMap.get(dtoModel.getDropletId()));
+            if(action instanceof MoveAction moveAction) {
+                moveAction.setDroplet(dropletMap.get(dtoModel.getDropletId()));
             }
         });
     }

@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
@@ -24,12 +24,8 @@ public class Schedule {
             Set<Droplet> producedByExecution = action.dropletsProducedByExecution();
 
             for (Droplet droplet : producedByExecution) {
-                if(droplet == null) {
-                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
-                }
-
                 if (dropletActions.containsKey(droplet.getID())) {
-                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_PRODUCED_BY_MULTIPLE_ACTIONS.getMessage(droplet));
+                    throw new DmfInputReaderException(DmfExceptionMessage.DROPLET_PRODUCED_BY_MULTIPLE_ACTIONS.getMessage(droplet));
                 }
 
                 dropletActions.put(droplet.getID(), new LinkedList<>());
@@ -43,12 +39,8 @@ public class Schedule {
             if(dropletsRequiredForExecution == null) return;
 
             for (Droplet droplet : dropletsRequiredForExecution) {
-                if(droplet == null) {
-                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
-                }
-
                 if (!dropletActions.containsKey(droplet.getID())) {
-                    throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_USED_BEFORE_PRODUCED_BY_ACTION.getMessage(droplet));
+                    throw new DmfInputReaderException(DmfExceptionMessage.DROPLET_USED_BEFORE_PRODUCED_BY_ACTION.getMessage(droplet));
                 }
 
                 dropletActions.get(droplet.getID()).add(action);
@@ -56,7 +48,8 @@ public class Schedule {
         });
     }
 
-    public void updateSchedule() {
+    // This method is used to update the schedule by removing completed actions from the queue(s).
+    private void updateSchedule() {
         for ( Queue<ActionBase> actions : dropletActions.values() ) {
             while(!actions.isEmpty() && actions.peek().getStatus() == ActionStatus.COMPLETED) {
                 actions.poll();
@@ -65,6 +58,7 @@ public class Schedule {
     }
 
     public List<ActionBase> getActionsToBeTicked() {
+        updateSchedule();
         List<ActionBase> actionsToBeTicked = new ArrayList<>();
         for ( Queue<ActionBase> actions : dropletActions.values() ) {
             if(actions.isEmpty()) {

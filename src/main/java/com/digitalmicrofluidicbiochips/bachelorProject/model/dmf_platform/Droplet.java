@@ -117,7 +117,7 @@ public class Droplet implements Cloneable {
         }
 
         // Filter out electrodes that are null, and only return electrodes that are currently off.
-        return electrodes.stream().filter(o -> o != null && o.getStatus() == 0).toList();
+        return electrodes.stream().filter(Objects::nonNull).toList();
     }
 
     public List<Electrode> getElectrodesToDisableDuringDropletMove(ElectrodeGrid electrodeGrid) {
@@ -146,8 +146,8 @@ public class Droplet implements Cloneable {
             }
         }
 
-        // Filter out electrodes that are null, and only return electrodes that are currently active.
-        return electrodes.stream().filter(o -> o != null && o.getStatus() >= 0).toList();
+        // Filter out electrodes that are null.
+        return electrodes.stream().filter(Objects::nonNull).toList();
     }
 
     /**

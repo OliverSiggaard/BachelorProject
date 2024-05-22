@@ -1,14 +1,12 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.restControllers;
 
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.services.ProgramExecutionService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -42,7 +40,8 @@ public class ProgramDataController {
 
         } catch (Exception e) { // Catch any exception that is not caught by the program (this should not happen)
             System.err.println("Error processing data: " + e.getMessage());
-            ExecutionResult executionResult = new ExecutionResult(DmfExceptionMessage.UNKNOWN_ERROR_MESSAGE.getMessage());
+            String exceptionMessage = ExceptionHandler.getErrorMessage(e);
+            ExecutionResult executionResult = new ExecutionResult(exceptionMessage);
             return ResponseEntity.badRequest()
                     .headers(headers)
                     .body(executionResult);

@@ -23,7 +23,6 @@ public class JsonMoveAction extends JsonActionBase {
 
     @JsonCreator
     public JsonMoveAction(
-
             @JsonProperty("id") String id,
             @JsonProperty("dropletId") String dropletId,
             @JsonProperty("posX") int posX,

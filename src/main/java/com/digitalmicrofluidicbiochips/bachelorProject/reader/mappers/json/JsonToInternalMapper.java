@@ -2,7 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMergeAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonSplitAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
@@ -41,7 +41,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
      *
      * @param jsonFile the JSON file to be mapped to the internal model.
      */
-    public JsonToInternalMapper(File jsonFile) throws DmfInvalidInputException {
+    public JsonToInternalMapper(File jsonFile) throws DmfInputReaderException {
         try {
             programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(jsonFile);
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
             if(e instanceof JsonMappingException jsonMappingException) {
                 if(jsonMappingException.getCause() instanceof DmfException dmfException) throw dmfException;
             }
-            throw new DmfInvalidInputException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
+            throw new DmfInputReaderException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
      *
      * @param jsonString the JSON string to be mapped to the internal model.
      */
-    public JsonToInternalMapper(String jsonString) throws DmfInvalidInputException {
+    public JsonToInternalMapper(String jsonString) throws DmfInputReaderException {
         try {
             programConfiguration = JsonModelLoader.loadProgramConfigurationFromJsonString(jsonString);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
             if(e instanceof JsonMappingException jsonMappingException) {
                 if(jsonMappingException.getCause() instanceof DmfException dmfException) throw dmfException;
             }
-            throw new DmfInvalidInputException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
+            throw new DmfInputReaderException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
         }
     }
 

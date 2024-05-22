@@ -125,7 +125,6 @@ public class Executor {
         for(ActionBase action : actionsToBeTicked) {
             if(action.getStatus() == ActionStatus.COMPLETED) {
                 action.afterExecution(programConfiguration);
-                schedule.updateSchedule();
             }
         }
 

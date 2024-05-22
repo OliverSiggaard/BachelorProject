@@ -73,12 +73,6 @@ public class ActionTickResult {
         this.somethingHappenedInTick = somethingHappenedInTick || tickResult.somethingHappenedInTick;
     }
 
-    public void updateModelWithCommands() {
-        for (IDmfCommand command : tickCommands) {
-            command.updateModelWithCommand();
-        }
-    }
-
     public List<String> getTickCommandsAsStrings() {
         List<String> commands = new ArrayList<>();
         for (IDmfCommand command : tickCommands) {

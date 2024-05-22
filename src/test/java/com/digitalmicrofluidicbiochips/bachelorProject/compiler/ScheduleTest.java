@@ -54,7 +54,6 @@ public class ScheduleTest {
         sut = new Schedule(actions);
         when(produce1.getStatus()).thenReturn(ActionStatus.COMPLETED);
         when(produce2.getStatus()).thenReturn(ActionStatus.COMPLETED);
-        sut.updateSchedule();
     }
 
     @Test
@@ -114,7 +113,7 @@ public class ScheduleTest {
         when(droplet2.getStatus()).thenReturn(DropletStatus.AVAILABLE);
 
         // Action setups
-        when(action1.getStatus()).thenReturn(ActionStatus.COMPLETED);
+        when(action1.getStatus()).thenReturn(ActionStatus.NOT_STARTED, ActionStatus.COMPLETED);
         when(action3.getStatus()).thenReturn(ActionStatus.NOT_STARTED);
 
         Assertions.assertThrows(IllegalStateException.class, () -> sut.getActionsToBeTicked());
@@ -136,8 +135,6 @@ public class ScheduleTest {
         Assertions.assertTrue(actionsToBeTicked.contains(action1));
         Assertions.assertTrue(actionsToBeTicked.contains(action3));
 
-        sut.updateSchedule();
-
         List<ActionBase> actionsToBeTicked2 = sut.getActionsToBeTicked();
         Assertions.assertEquals(2, actionsToBeTicked2.size());
         Assertions.assertTrue(actionsToBeTicked.contains(action1));
@@ -151,7 +148,7 @@ public class ScheduleTest {
         when(droplet2.getStatus()).thenReturn(DropletStatus.AVAILABLE);
 
         // Action setups
-        when(action1.getStatus()).thenReturn(ActionStatus.NOT_STARTED, ActionStatus.COMPLETED);
+        when(action1.getStatus()).thenReturn(ActionStatus.NOT_STARTED);
         when(action3.getStatus()).thenReturn(ActionStatus.NOT_STARTED);
 
         List<ActionBase> actionsToBeTicked = sut.getActionsToBeTicked();
@@ -159,8 +156,8 @@ public class ScheduleTest {
         Assertions.assertTrue(actionsToBeTicked.contains(action1));
         Assertions.assertTrue(actionsToBeTicked.contains(action3));
 
-        sut.updateSchedule();
 
+        when(action1.getStatus()).thenReturn(ActionStatus.COMPLETED);
         List<ActionBase> actionsToBeTicked2 = sut.getActionsToBeTicked();
         Assertions.assertEquals(2, actionsToBeTicked2.size());
         Assertions.assertTrue(actionsToBeTicked2.contains(action2));
@@ -179,7 +176,6 @@ public class ScheduleTest {
         when(action4.getStatus()).thenReturn(ActionStatus.COMPLETED);
 
         // Updating (should remove action 1, 2 and 3)
-        sut.updateSchedule();
         List<ActionBase> actionsToBeTicked = sut.getActionsToBeTicked();
 
         Assertions.assertEquals(1, actionsToBeTicked.size());

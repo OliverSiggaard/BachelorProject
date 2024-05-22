@@ -69,12 +69,6 @@ public class ActionQueue extends ActionBase {
             return actionTickResult;
         }
 
-        // Check if it failed
-        if (action.getStatus() == ActionStatus.FAILED) {
-            setStatus(ActionStatus.FAILED);
-            return new ActionTickResult();
-        }
-
         return actionTickResult;
     }
 

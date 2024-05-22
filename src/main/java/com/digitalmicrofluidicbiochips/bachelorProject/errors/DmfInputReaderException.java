@@ -5,8 +5,8 @@ package com.digitalmicrofluidicbiochips.bachelorProject.errors;
  * This could be a syntax error, a parsing error, or any other error that causes
  * the parser to not being able to parse the received input.
  */
-public class DmfInvalidInputException extends DmfException {
-    public DmfInvalidInputException(String errorMessage) {
+public class DmfInputReaderException extends DmfException {
+    public DmfInputReaderException(String errorMessage) {
         super(errorMessage);
     }
 }

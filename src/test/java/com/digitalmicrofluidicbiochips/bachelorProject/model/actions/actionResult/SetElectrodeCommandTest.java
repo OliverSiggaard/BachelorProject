@@ -19,15 +19,4 @@ public class SetElectrodeCommandTest {
         SetElectrodeCommand sut = new SetElectrodeCommand(electrode);
         Assertions.assertEquals(DmfPlatformUtils.getSetElectrodeCommand(3), sut.getDmfCommand());
     }
-
-    @Test
-    void testUpdateModelWithCommand() {
-        Electrode electrode = mock(Electrode.class);
-        when(electrode.getID()).thenReturn(3);
-
-        SetElectrodeCommand sut = new SetElectrodeCommand(electrode);
-
-        sut.updateModelWithCommand();
-        verify(electrode).setStatus(1);
-    }
 }

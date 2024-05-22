@@ -16,6 +16,4 @@ public class DmfCommand implements IDmfCommand {
         return command;
     }
 
-    @Override
-    public void updateModelWithCommand() {} // Not needed for the current tests
 }

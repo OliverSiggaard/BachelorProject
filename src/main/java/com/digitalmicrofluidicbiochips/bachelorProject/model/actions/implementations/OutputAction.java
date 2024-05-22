@@ -1,7 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
-import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInvalidInputException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
@@ -75,12 +75,12 @@ public class OutputAction extends ActionBase {
     @Override
     public boolean verifyProperties(ProgramConfiguration programConfiguration) {
         if (droplet == null) {
-            throw new DmfInvalidInputException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
+            throw new DmfInputReaderException(DmfExceptionMessage.DROPLET_NOT_DEFINED_ON_ACTION.getMessage());
         }
         if (!programConfiguration.getElectrodeGrid().isWithinBounds(posX, posY)) {
             int maxX = programConfiguration.getElectrodeGrid().getXSize();
             int maxY = programConfiguration.getElectrodeGrid().getYSize();
-            throw new DmfInvalidInputException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX, posY, maxX, maxY));
+            throw new DmfInputReaderException(DmfExceptionMessage.POSITION_OUT_OF_BOUND.getMessage(posX, posY, maxX, maxY));
         }
 
         return true;

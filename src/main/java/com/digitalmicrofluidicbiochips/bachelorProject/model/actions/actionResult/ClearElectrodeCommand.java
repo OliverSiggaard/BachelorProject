@@ -15,9 +15,4 @@ public class ClearElectrodeCommand implements IDmfCommand {
     public String getDmfCommand() {
         return DmfPlatformUtils.getClearElectrodeCommand(electrode.getID());
     }
-
-    @Override
-    public void updateModelWithCommand() {
-        electrode.setStatus(0);
-    }
 }

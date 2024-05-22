@@ -2,5 +2,4 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResu
 
 public interface IDmfCommand {
     String getDmfCommand();
-    void updateModelWithCommand();
 }

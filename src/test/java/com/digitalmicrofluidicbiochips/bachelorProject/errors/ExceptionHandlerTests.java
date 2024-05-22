@@ -16,7 +16,7 @@ public class ExceptionHandlerTests {
     @Test
     public void testDmfCompilerException() {
         String errorMessage = "Test";
-        DmfCompilerException exception = new DmfCompilerException(errorMessage);
+        DmfExecutorException exception = new DmfExecutorException(errorMessage);
         Assertions.assertEquals(errorMessage, exception.getMessage());
         Assertions.assertEquals(errorMessage, ExceptionHandler.getErrorMessage(exception));
     }
@@ -32,7 +32,7 @@ public class ExceptionHandlerTests {
     @Test
     public void testDmfParsingException() {
         String errorMessage = "Test";
-        DmfInvalidInputException exception = new DmfInvalidInputException(errorMessage);
+        DmfInputReaderException exception = new DmfInputReaderException(errorMessage);
         Assertions.assertEquals(errorMessage, exception.getMessage());
         Assertions.assertEquals(errorMessage, ExceptionHandler.getErrorMessage(exception));
     }
