@@ -1,16 +1,4 @@
 {
-  "dmf_configuration": {
-    "information": {},
-    "electrodes": [],
-    "actuators": [],
-    "sensors": [],
-    "inputs": [],
-    "outputs": [],
-    "droplets": [],
-    "bubbles": [],
-    "unclassified": []
-  },
-
   "program_actions": [
     {
       "action": "input",

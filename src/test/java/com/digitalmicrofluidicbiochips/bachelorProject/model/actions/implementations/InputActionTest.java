@@ -55,7 +55,7 @@ public class InputActionTest {
         Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
         sut.beforeExecution(mock(ProgramConfiguration.class));
-        Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
+        Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
     }
 
@@ -65,7 +65,7 @@ public class InputActionTest {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
 
         sut.beforeExecution(mock(ProgramConfiguration.class));
-        Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
+        Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
         ActionTickResult tickResult = sut.executeTick(programConfigurationMock);
@@ -87,7 +87,7 @@ public class InputActionTest {
 
     @Test
     public void testExecuteTickWithDropletSpanning3x3() {
-
+        sut = new InputAction("id", 1, 2, 15.0);
         droplet = new Droplet("droplet1", 0,0, 15.0);
         sut.setDroplet(droplet);
 
@@ -95,7 +95,7 @@ public class InputActionTest {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
 
         sut.beforeExecution(mock(ProgramConfiguration.class));
-        Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
+        Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
         ActionTickResult tickResult = sut.executeTick(programConfigurationMock);
@@ -125,7 +125,7 @@ public class InputActionTest {
         Assertions.assertEquals(ActionStatus.NOT_STARTED, sut.getStatus());
 
         sut.beforeExecution(mock(ProgramConfiguration.class));
-        Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
+        Assertions.assertEquals(DropletStatus.NOT_CREATED, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
 
         // Execute tick (should always run before afterExecution) - For input the action is completed in first tick.
