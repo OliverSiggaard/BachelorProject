@@ -9,7 +9,7 @@ public class TickResultsToStringConverter {
         StringBuilder programStringBuilder = new StringBuilder();
 
         for (ActionTickResult tickResult : tickResults) {
-            for (String command : tickResult.getTickCommandsAsStrings()) {
+            for (String command : tickResult.getBioAssemblyStringFromDmfCommands()) {
                 programStringBuilder.append(command).append(System.lineSeparator());
             }
             programStringBuilder.append("TICK;").append(System.lineSeparator());

@@ -77,19 +77,19 @@ public class ActionTickResultTest {
     @Test
     void testGetTickCommandsAsString() {
         IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
-        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        when(iDmfCommand1.getBioAssemblyInstruction()).thenReturn("iDmfCommand1");
         IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
-        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+        when(iDmfCommand2.getBioAssemblyInstruction()).thenReturn("iDmfCommand2");
         IDmfCommand iDmfCommand3 = mock(IDmfCommand.class);
-        when(iDmfCommand3.getDmfCommand()).thenReturn("iDmfCommand3");
+        when(iDmfCommand3.getBioAssemblyInstruction()).thenReturn("iDmfCommand3");
         List<IDmfCommand> iDmfCommands = Arrays.asList(iDmfCommand1, iDmfCommand2, iDmfCommand3);
         ActionTickResult sut = new ActionTickResult(iDmfCommands);
         
 
-        Assertions.assertEquals(3, sut.getTickCommandsAsStrings().size());
-        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand1"));
-        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand2"));
-        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand3"));
+        Assertions.assertEquals(3, sut.getBioAssemblyStringFromDmfCommands().size());
+        Assertions.assertTrue(sut.getBioAssemblyStringFromDmfCommands().contains("iDmfCommand1"));
+        Assertions.assertTrue(sut.getBioAssemblyStringFromDmfCommands().contains("iDmfCommand2"));
+        Assertions.assertTrue(sut.getBioAssemblyStringFromDmfCommands().contains("iDmfCommand3"));
     }
 
     @Test
@@ -104,9 +104,9 @@ public class ActionTickResultTest {
     @Test
     void testAddCommands() {
         IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
-        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        when(iDmfCommand1.getBioAssemblyInstruction()).thenReturn("iDmfCommand1");
         IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
-        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+        when(iDmfCommand2.getBioAssemblyInstruction()).thenReturn("iDmfCommand2");
 
         List<IDmfCommand> commands = Arrays.asList(iDmfCommand1, iDmfCommand2);
 
@@ -115,9 +115,9 @@ public class ActionTickResultTest {
 
         sut.addCommands(commands);
         Assertions.assertEquals(true, sut.somethingHappenedInTick());
-        Assertions.assertEquals(2, sut.getTickCommandsAsStrings().size());
-        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand1"));
-        Assertions.assertTrue(sut.getTickCommandsAsStrings().contains("iDmfCommand2"));
+        Assertions.assertEquals(2, sut.getBioAssemblyStringFromDmfCommands().size());
+        Assertions.assertTrue(sut.getBioAssemblyStringFromDmfCommands().contains("iDmfCommand1"));
+        Assertions.assertTrue(sut.getBioAssemblyStringFromDmfCommands().contains("iDmfCommand2"));
     }
 
     @Test
@@ -129,9 +129,9 @@ public class ActionTickResultTest {
     @Test
     void testAddCommandsContainsNull() {
         IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
-        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        when(iDmfCommand1.getBioAssemblyInstruction()).thenReturn("iDmfCommand1");
         IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
-        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+        when(iDmfCommand2.getBioAssemblyInstruction()).thenReturn("iDmfCommand2");
 
         List<IDmfCommand> commands = Arrays.asList(iDmfCommand1, iDmfCommand2, null);
 
@@ -166,9 +166,9 @@ public class ActionTickResultTest {
     @Test
     void testConstructorListContainsNull() {
         IDmfCommand iDmfCommand1 = mock(IDmfCommand.class);
-        when(iDmfCommand1.getDmfCommand()).thenReturn("iDmfCommand1");
+        when(iDmfCommand1.getBioAssemblyInstruction()).thenReturn("iDmfCommand1");
         IDmfCommand iDmfCommand2 = mock(IDmfCommand.class);
-        when(iDmfCommand2.getDmfCommand()).thenReturn("iDmfCommand2");
+        when(iDmfCommand2.getBioAssemblyInstruction()).thenReturn("iDmfCommand2");
 
         List<IDmfCommand> commands = Arrays.asList(iDmfCommand1, iDmfCommand2, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> new ActionTickResult(commands));

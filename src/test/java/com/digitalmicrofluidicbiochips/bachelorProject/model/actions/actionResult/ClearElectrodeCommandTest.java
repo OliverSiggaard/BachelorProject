@@ -2,7 +2,6 @@ package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.actionResu
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Electrode;
 import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
-import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtilsTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +14,6 @@ public class ClearElectrodeCommandTest {
         when(electrode.getID()).thenReturn(3);
 
         ClearElectrodeCommand sut = new ClearElectrodeCommand(electrode);
-        Assertions.assertEquals(DmfPlatformUtils.getClearElectrodeCommand(3), sut.getDmfCommand());
+        Assertions.assertEquals(DmfPlatformUtils.getClearElectrodeCommand(3), sut.getBioAssemblyInstruction());
     }
 }

@@ -12,7 +12,7 @@ public class DmfCommand implements IDmfCommand {
     }
 
     @Override
-    public String getDmfCommand() {
+    public String getBioAssemblyInstruction() {
         return command;
     }
 

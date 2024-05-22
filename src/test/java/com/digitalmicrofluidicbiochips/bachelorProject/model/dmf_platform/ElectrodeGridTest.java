@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -146,7 +144,7 @@ public class ElectrodeGridTest {
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
                 String expected = DmfPlatformUtils.getSetElectrodeCommand(sut.getElectrode(x,y).getID());
-                Assertions.assertEquals(expected, setCommands.get(i).getDmfCommand());
+                Assertions.assertEquals(expected, setCommands.get(i).getBioAssemblyInstruction());
                 i++;
             }
         }
@@ -172,7 +170,7 @@ public class ElectrodeGridTest {
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
                 String expected = DmfPlatformUtils.getClearElectrodeCommand(sut.getElectrode(x,y).getID());
-                Assertions.assertEquals(expected, clearCommands.get(i).getDmfCommand());
+                Assertions.assertEquals(expected, clearCommands.get(i).getBioAssemblyInstruction());
                 i++;
             }
         }

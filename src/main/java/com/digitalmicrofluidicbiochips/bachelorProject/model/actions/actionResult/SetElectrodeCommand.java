@@ -12,7 +12,7 @@ public class SetElectrodeCommand implements IDmfCommand {
     }
 
     @Override
-    public String getDmfCommand() {
+    public String getBioAssemblyInstruction() {
         return DmfPlatformUtils.getSetElectrodeCommand(electrode.getID());
     }
 }

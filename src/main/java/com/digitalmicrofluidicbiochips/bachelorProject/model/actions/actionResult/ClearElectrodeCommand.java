@@ -12,7 +12,7 @@ public class ClearElectrodeCommand implements IDmfCommand {
     }
 
     @Override
-    public String getDmfCommand() {
+    public String getBioAssemblyInstruction() {
         return DmfPlatformUtils.getClearElectrodeCommand(electrode.getID());
     }
 }

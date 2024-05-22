@@ -73,10 +73,10 @@ public class ActionTickResult {
         this.somethingHappenedInTick = somethingHappenedInTick || tickResult.somethingHappenedInTick;
     }
 
-    public List<String> getTickCommandsAsStrings() {
+    public List<String> getBioAssemblyStringFromDmfCommands() {
         List<String> commands = new ArrayList<>();
         for (IDmfCommand command : tickCommands) {
-            commands.add(command.getDmfCommand());
+            commands.add(command.getBioAssemblyInstruction());
         }
         return commands;
     }

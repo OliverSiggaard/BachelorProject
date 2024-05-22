@@ -145,7 +145,7 @@ public class MoveActionTest {
         Electrode expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 4);
         Assertions.assertEquals(
                 DmfPlatformUtils.getSetElectrodeCommand(expectedElectrode.getID()),
-                (result.getTickCommands().get(0)).getDmfCommand());
+                (result.getTickCommands().get(0)).getBioAssemblyInstruction());
 
         result = sut.executeTick(programConfigurationMock);
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
@@ -156,7 +156,7 @@ public class MoveActionTest {
         expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 3);
         Assertions.assertEquals(
                 DmfPlatformUtils.getClearElectrodeCommand(expectedElectrode.getID()),
-                (result.getTickCommands().get(0)).getDmfCommand());
+                (result.getTickCommands().get(0)).getBioAssemblyInstruction());
 
         result = sut.executeTick(programConfigurationMock);
         Assertions.assertEquals(ActionStatus.IN_PROGRESS, sut.getStatus());
@@ -167,7 +167,7 @@ public class MoveActionTest {
         expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 5);
         Assertions.assertEquals(
                 DmfPlatformUtils.getSetElectrodeCommand(expectedElectrode.getID()),
-                (result.getTickCommands().get(0)).getDmfCommand());
+                (result.getTickCommands().get(0)).getBioAssemblyInstruction());
 
         result = sut.executeTick(programConfigurationMock);
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
@@ -178,7 +178,7 @@ public class MoveActionTest {
         expectedElectrode = programConfigurationMock.getElectrodeGrid().getElectrode(5, 4);
         Assertions.assertEquals(
                 DmfPlatformUtils.getClearElectrodeCommand(expectedElectrode.getID()),
-                (result.getTickCommands().get(0)).getDmfCommand());
+                (result.getTickCommands().get(0)).getBioAssemblyInstruction());
     }
 
     @Test

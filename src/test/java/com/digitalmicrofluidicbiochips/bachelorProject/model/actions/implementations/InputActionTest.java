@@ -82,7 +82,7 @@ public class InputActionTest {
         Electrode electrodeUnderDroplet = electrodeGrid.getElectrode(droplet.getPositionX(), droplet.getPositionY());
         Assertions.assertEquals(
                 DmfPlatformUtils.getSetElectrodeCommand(electrodeUnderDroplet.getID()),
-                command.getDmfCommand());
+                command.getBioAssemblyInstruction());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class InputActionTest {
                 Electrode electrodeUnderDroplet = electrodeGrid.getElectrode(droplet.getPositionX() + dx, droplet.getPositionY() + dy);
                 Assertions.assertEquals(
                         DmfPlatformUtils.getSetElectrodeCommand(electrodeUnderDroplet.getID()),
-                        tickResult.getTickCommands().get(dx * 3 + dy).getDmfCommand());
+                        tickResult.getTickCommands().get(dx * 3 + dy).getBioAssemblyInstruction());
             }
         }
     }
