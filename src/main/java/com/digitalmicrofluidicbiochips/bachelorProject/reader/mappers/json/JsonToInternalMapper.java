@@ -5,6 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessag
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMergeAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonSplitAction;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.dmf_platform.JsonDmfPlatformState;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.IDtoToInternalMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.dmf_platform.JsonDmfInformationMapper;
@@ -114,21 +115,23 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
      * Get the platform information from the JSON file.
      */
     public PlatformInformation getPlatformInformation() {
-        //For now, the platform is hardcoded to be read from the file "src/test/resources/reader/dmf_configuration.JSON".
-        //This allows for us not having to deal with sending the files from the frontend to the backend (for now).
-        String dmfConfigFilePath = "src/main/resources/dmf_configuration.JSON";
-        File dmfConfigFile = new File(dmfConfigFilePath);
+        JsonDmfPlatformState jsonDmfPlatformState = programConfiguration.getDmfPlatformState();
 
-        JsonProgramConfiguration dmfProgramConfiguration;
-        try {
-            dmfProgramConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(dmfConfigFile);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read the JSON file: " + dmfConfigFile, e);
+        // If no platform information is provided (i.e. not present in the received JSON object), we will use a default
+        // platform configuration. The default platform is a 32x20 grid of electrodes, with a electrode size of 20x20.
+        if(jsonDmfPlatformState == null) {
+            String dmfConfigFilePath = "src/main/resources/dmf_configuration.JSON";
+            File dmfConfigFile = new File(dmfConfigFilePath);
+            try {
+                JsonProgramConfiguration jsonProgramConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(dmfConfigFile);
+                jsonDmfPlatformState = jsonProgramConfiguration.getDmfPlatformState();
+            } catch (IOException e) {
+                throw new RuntimeException("Could not read the JSON file: " + dmfConfigFile, e);
+            }
         }
 
         JsonDmfInformationMapper mapper = new JsonDmfInformationMapper();
-
-        return mapper.mapToInternal(dmfProgramConfiguration.getDmfPlatformState());
+        return mapper.mapToInternal(jsonDmfPlatformState);
     }
 
 
