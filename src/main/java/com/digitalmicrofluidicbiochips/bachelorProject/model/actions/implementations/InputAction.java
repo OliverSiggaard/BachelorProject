@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExecutorException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.path_finding.DropletMove;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
@@ -61,6 +62,10 @@ public class InputAction extends ActionBase {
         droplet.setPositionY(posY);
         droplet.setDropletMove(DropletMove.NONE);
         droplet.setVolume(volume);
+
+        if(droplet.getDiameter() <= programConfiguration.getElectrodeGrid().getElectrodeSizeOfElectrodeInGrid()) {
+            throw new DmfExecutorException(DmfExceptionMessage.INPUT_ACTION_DROPLET_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE.getMessage(droplet));
+        }
 
         Collection<Droplet> obstacleDroplets = programConfiguration.getDropletsOnDmfPlatform().stream().filter(o -> o != droplet).toList();
         boolean dropletCanBePlacedOnPlatform = obstacleDroplets.stream().allMatch(obstacleDroplet -> {

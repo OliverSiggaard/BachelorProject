@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExecutorException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
@@ -73,6 +74,10 @@ public class SplitAction extends ActionBase {
         originDroplet.setStatus(DropletStatus.UNAVAILABLE);
         resultDroplet1.setVolume(originDroplet.getVolume()/2);
         resultDroplet2.setVolume(originDroplet.getVolume()/2);
+
+        if(resultDroplet1.getDiameter() <= programConfiguration.getElectrodeGrid().getElectrodeSizeOfElectrodeInGrid()) {
+            throw new DmfExecutorException(DmfExceptionMessage.SPLIT_ACTION_RESULT_DROPLETS_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE.getMessage(originDroplet));
+        }
 
         moveAction1 = new MoveAction("MoveAction1", posX1, posY1);
         moveAction1.setDroplet(resultDroplet1);

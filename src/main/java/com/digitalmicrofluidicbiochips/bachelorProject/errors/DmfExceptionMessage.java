@@ -14,7 +14,9 @@ public enum DmfExceptionMessage {
     DROPLET_USED_BEFORE_PRODUCED_BY_ACTION("Droplet %dropletID% was attempted to be used before being produced by an action"),
     ACTION_FIELD_EMPTY("One or more actions in the program have empty fields. All fields must be non-empty."),
     ACTION_FIELD_INTEGER_NOT_INTEGER("One or more actions in the program have non-integer elements in a integer field. All integer fields must be integers."),
-    ACTION_FIELD_DOUBLE_NOT_DOUBLE("One or more actions in the program have non-decimal elements in a decimal field. All decimal fields must be decimals."),;
+    ACTION_FIELD_DOUBLE_NOT_DOUBLE("One or more actions in the program have non-decimal elements in a decimal field. All decimal fields must be decimals."),
+    INPUT_ACTION_DROPLET_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplet %dropletID% is too small to be moved around on the board. Please increase the volume."),
+    SPLIT_ACTION_RESULT_DROPLETS_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplets resulting from splitting %dropletID% is too small to be moved around on the board. Please increase the volume."),;
 
     private final String message;
     DmfExceptionMessage(String message) {
