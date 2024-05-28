@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.InputAction;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.*;
 
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -182,4 +184,18 @@ public class ScheduleTest {
         Assertions.assertTrue(actionsToBeTicked.contains(action3));
     }
 
+    @Test void GetActionsToBeTicked_2DropletsProduceSameAction_Error() {
+        InputAction produce1 = mock(InputAction.class);
+        when(produce1.dropletsProducedByExecution()).thenReturn(Set.of(droplet1));
+        InputAction produce2 = mock(InputAction.class);
+        when(produce2.dropletsProducedByExecution()).thenReturn(Set.of(droplet1));
+
+        action1 = mock(ActionBase.class);
+        action2 = mock(ActionBase.class);
+
+
+        List<ActionBase> actions = new ArrayList<>(List.of(produce1, produce2));
+
+        assertThrows(DmfInputReaderException.class, () -> new Schedule(actions));
+    }
 }

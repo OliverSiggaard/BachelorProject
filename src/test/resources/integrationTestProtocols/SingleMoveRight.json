@@ -1,0 +1,1 @@
+{"program_actions":[{"action":"input","id":0,"next":1,"dropletId":"drop1","posX":"10","posY":"10","volume":"7"},{"action":"move","id":1,"next":-1,"dropletId":"drop1","posX":"20","posY":"10"}]}

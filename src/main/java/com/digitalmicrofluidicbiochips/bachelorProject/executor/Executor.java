@@ -2,6 +2,7 @@ package com.digitalmicrofluidicbiochips.bachelorProject.executor;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.compiler.Schedule;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.ExceptionHandler;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
@@ -79,9 +80,6 @@ public class Executor {
             // Get all actions that are to be ticked in this tick.
             List<ActionBase> actionsToBeTicked = schedule.getActionsToBeTicked();
 
-            boolean allActionsAreCompleted = actionsToBeTicked.isEmpty();
-            if(allActionsAreCompleted) break;
-
             // To ensure that unnecessary ticks are not added to the tickResults, ticks from a deadlock attempts are
             // only added to the tickResults if the actions change (meaning that the deadlock was resolved)
             boolean deadlockResolved = attemptsAtResolvingDeadlock > 0 && !actionsDuringLatestDeadlockAttempt.equals(actionsToBeTicked);
@@ -90,6 +88,10 @@ public class Executor {
                 ticksFromDeadlockAttempt.clear();
                 attemptsAtResolvingDeadlock = 0;
             }
+
+            // If there are no actions to be ticked, the program is done.
+            boolean allActionsAreCompleted = actionsToBeTicked.isEmpty();
+            if(allActionsAreCompleted) break;
 
             boolean duplicateStateFoundDuringDeadlockResolution = attemptsAtResolvingDeadlock > 0 && dropletsBeforeDeadlockAttempt.equals(programConfiguration.getDroplets());
             if(duplicateStateFoundDuringDeadlockResolution) {
@@ -101,7 +103,7 @@ public class Executor {
             ActionTickResult tickResult = executeTick(actionsToBeTicked);
 
             if(attemptsAtResolvingDeadlock > MAX_ATTEMPTS_AT_RESOLVING_DEADLOCK) {
-                throw new DmfException("The program got stuck. We attempted to resolve the deadlock without success.");
+                throw new DmfException(DmfExceptionMessage.PROGRAM_GOT_STUCK.getMessage());
             }
 
             if(isAttemptToResolveDeadlock()) {

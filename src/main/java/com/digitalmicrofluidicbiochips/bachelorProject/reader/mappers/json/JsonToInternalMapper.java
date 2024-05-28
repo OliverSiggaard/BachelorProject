@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,13 +46,9 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
      */
     public JsonToInternalMapper(File jsonFile) throws DmfInputReaderException {
         try {
-            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJson(jsonFile);
-        } catch (Exception e) {
-            // If the exception is a JsonMappingException, and the cause is a DmfException, throw the DmfException
-            // instead of the generic parsing error.
-            if(e instanceof JsonMappingException jsonMappingException) {
-                if(jsonMappingException.getCause() instanceof DmfException dmfException) throw dmfException;
-            }
+            String jsonString = new String(Files.readAllBytes(Paths.get(jsonFile.getPath())));
+            programConfiguration = loadProgramConfigurationFromJsonString(jsonString);
+        } catch (IOException e) {
             throw new DmfInputReaderException(DmfExceptionMessage.ERROR_PARSING_PROGRAM.getMessage());
         }
     }
@@ -61,9 +59,13 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
      *
      * @param jsonString the JSON string to be mapped to the internal model.
      */
-    public JsonToInternalMapper(String jsonString) throws DmfInputReaderException {
+    public JsonToInternalMapper(String jsonString) {
+        programConfiguration = loadProgramConfigurationFromJsonString(jsonString);
+    }
+
+    private JsonProgramConfiguration loadProgramConfigurationFromJsonString(String jsonString) {
         try {
-            programConfiguration = JsonModelLoader.loadProgramConfigurationFromJsonString(jsonString);
+            return JsonModelLoader.loadProgramConfigurationFromJsonString(jsonString);
         } catch (Exception e) {
             // If the exception is a JsonMappingException, and the cause is a DmfException, throw the DmfException
             // instead of the generic parsing error.

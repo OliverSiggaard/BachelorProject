@@ -16,7 +16,9 @@ public enum DmfExceptionMessage {
     ACTION_FIELD_INTEGER_NOT_INTEGER("One or more actions in the program have non-integer elements in a integer field. All integer fields must be integers."),
     ACTION_FIELD_DOUBLE_NOT_DOUBLE("One or more actions in the program have non-decimal elements in a decimal field. All decimal fields must be decimals."),
     INPUT_ACTION_DROPLET_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplet %dropletID% is too small to be moved around on the board. Please increase the volume."),
-    SPLIT_ACTION_RESULT_DROPLETS_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplets resulting from splitting %dropletID% is too small to be moved around on the board. Please increase the volume."),;
+    SPLIT_ACTION_RESULT_DROPLETS_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplets resulting from splitting %dropletID% is too small to be moved around on the board. Please increase the volume."),
+    PROGRAM_GOT_STUCK("The program got stuck. We attempted to resolve the deadlock without success."),
+    MIX_INVALID_SIZE("The size of the mix action must be greater than 0, and x and y can not both be 1 (i.e. not mixing)."),;
 
     private final String message;
     DmfExceptionMessage(String message) {

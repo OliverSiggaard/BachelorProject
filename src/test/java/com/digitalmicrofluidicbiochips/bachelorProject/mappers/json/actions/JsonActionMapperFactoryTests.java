@@ -1,5 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.mappers.json.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.*;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.factory.JsonActionMapperFactory;
@@ -210,18 +211,18 @@ public class JsonActionMapperFactoryTests {
 
         Assertions.assertTrue(actions.get(1) instanceof MoveAction);
         MoveAction a1 = (MoveAction) actions.get(1);
-        Assertions.assertEquals(jsonMixAction.getPosX() + jsonMixAction.getSizeX(), a1.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosX() + jsonMixAction.getSizeX() - 1, a1.getPosX());
         Assertions.assertEquals(jsonMixAction.getPosY(), a1.getPosY());
 
         Assertions.assertTrue(actions.get(2) instanceof MoveAction);
         MoveAction a2 = (MoveAction) actions.get(2);
-        Assertions.assertEquals(jsonMixAction.getPosX() + jsonMixAction.getSizeX(), a2.getPosX());
-        Assertions.assertEquals(jsonMixAction.getPosY() + jsonMixAction.getSizeY(), a2.getPosY());
+        Assertions.assertEquals(jsonMixAction.getPosX() + jsonMixAction.getSizeX() - 1, a2.getPosX());
+        Assertions.assertEquals(jsonMixAction.getPosY() + jsonMixAction.getSizeY() - 1, a2.getPosY());
 
         Assertions.assertTrue(actions.get(3) instanceof MoveAction);
         MoveAction a3 = (MoveAction) actions.get(3);
         Assertions.assertEquals(jsonMixAction.getPosX(), a3.getPosX());
-        Assertions.assertEquals(jsonMixAction.getPosY() + jsonMixAction.getSizeY(), a3.getPosY());
+        Assertions.assertEquals(jsonMixAction.getPosY() + jsonMixAction.getSizeY() - 1, a3.getPosY());
 
         Assertions.assertTrue(actions.get(4) instanceof MoveAction);
         MoveAction a4 = (MoveAction) actions.get(4);
@@ -263,6 +264,54 @@ public class JsonActionMapperFactoryTests {
         Assertions.assertEquals(posY, storeAction.getPosY());
         Assertions.assertEquals(time, storeAction.getTicksLeft());
         Assertions.assertNull(storeAction.getDroplet());
+    }
+
+    @Test
+    public void MapsJsonMixActionDtoModelToInternalModel_bothSize1_error() {
+        // Arrange
+        String id = "id";
+        String dropletId = "dropletId";
+        String nextActionId = "nextActionId";
+        int posX = 1;
+        int posY = 2;
+        int sizeX = 1;
+        int sizeY = 1;
+
+        JsonMixAction jsonMixAction = new JsonMixAction(id, dropletId, nextActionId, posX, posY, sizeX, sizeY);
+
+        Assertions.assertThrows(DmfInputReaderException.class, () -> getInternalAction(jsonMixAction));
+    }
+
+    @Test
+    public void MapsJsonMixActionDtoModelToInternalModel_xSizeZero() {
+        // Arrange
+        String id = "id";
+        String dropletId = "dropletId";
+        String nextActionId = "nextActionId";
+        int posX = 1;
+        int posY = 2;
+        int sizeX = 0;
+        int sizeY = 3;
+
+        JsonMixAction jsonMixAction = new JsonMixAction(id, dropletId, nextActionId, posX, posY, sizeX, sizeY);
+
+        Assertions.assertThrows(DmfInputReaderException.class, () -> getInternalAction(jsonMixAction));
+    }
+
+    @Test
+    public void MapsJsonMixActionDtoModelToInternalModel_ySizeZero() {
+        // Arrange
+        String id = "id";
+        String dropletId = "dropletId";
+        String nextActionId = "nextActionId";
+        int posX = 1;
+        int posY = 2;
+        int sizeX = 3;
+        int sizeY = 0;
+
+        JsonMixAction jsonMixAction = new JsonMixAction(id, dropletId, nextActionId, posX, posY, sizeX, sizeY);
+
+        Assertions.assertThrows(DmfInputReaderException.class, () -> getInternalAction(jsonMixAction));
     }
 
 }

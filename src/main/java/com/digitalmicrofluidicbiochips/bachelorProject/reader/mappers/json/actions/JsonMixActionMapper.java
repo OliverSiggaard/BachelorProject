@@ -1,11 +1,15 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.actions;
 
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
+import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.ActionQueue;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.implementations.MoveAction;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.actions.IActionMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.json.model.actions.JsonMixAction;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -13,18 +17,36 @@ public class JsonMixActionMapper implements IActionMapper<JsonMixAction, ActionQ
 
     @Override
     public ActionQueue mapToInternalModel(JsonMixAction dtoModel) {
+
+        int xSize = dtoModel.getSizeX() - 1;
+        int ySize = dtoModel.getSizeY() - 1;
+
+        if(xSize < 0 || ySize < 0 || (xSize == 0 && ySize == 0)) {
+            throw new DmfInputReaderException(DmfExceptionMessage.MIX_INVALID_SIZE.getMessage());
+        }
+
+        ArrayList<ActionBase> moveActions = new ArrayList<>();
+
         //Move to the first position
-        MoveAction moveAction1 = new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY());
+        moveActions.add(new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY()));
 
         //Do a lap in the anti-clockwise direction
-        MoveAction moveAction2 = new MoveAction(dtoModel.getId(), dtoModel.getPosX() + dtoModel.getSizeX(), dtoModel.getPosY());
-        MoveAction moveAction3 = new MoveAction(dtoModel.getId(), dtoModel.getPosX() + dtoModel.getSizeX(), dtoModel.getPosY() + dtoModel.getSizeY());
-        MoveAction moveAction4 = new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY() + dtoModel.getSizeY());
-        MoveAction moveAction5 = new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY());
+        if(xSize > 0) {
+            moveActions.add(new MoveAction(dtoModel.getId(), dtoModel.getPosX() + xSize, dtoModel.getPosY()));
+        }
+        if(ySize > 0) {
+            moveActions.add(new MoveAction(dtoModel.getId(), dtoModel.getPosX() + xSize, dtoModel.getPosY() + ySize));
+        }
+        if(xSize > 0) {
+            moveActions.add(new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY() + ySize));
+        }
+        if(ySize > 0) {
+            moveActions.add(new MoveAction(dtoModel.getId(), dtoModel.getPosX(), dtoModel.getPosY()));
+        }
 
         return new ActionQueue(
                 dtoModel.getId(),
-                Arrays.asList(moveAction1, moveAction2, moveAction3, moveAction4, moveAction5));
+                moveActions);
     }
 
     @Override
