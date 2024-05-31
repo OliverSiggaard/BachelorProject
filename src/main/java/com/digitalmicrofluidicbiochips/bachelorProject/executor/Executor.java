@@ -114,12 +114,16 @@ public class Executor {
             // We have to run the first tick, before we know the initial droplets on the DMF platform.
             // This if-statement is only true once, and the dmfConfigurationWithInitialDroplets will be set.
             if(dmfConfigurationWithInitialDroplets == null) {
-                List<Droplet> dropletsOnTheDmfPlatform = programConfiguration.getDropletsOnDmfPlatform().stream().toList();
-                dmfConfigurationWithInitialDroplets = ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration, dropletsOnTheDmfPlatform);
+                dmfConfigurationWithInitialDroplets = createDmfConfigurationWithInitialDroplets();
             }
 
             tickResults.add(tickResult);
         }
+    }
+
+    private JsonNode createDmfConfigurationWithInitialDroplets() {
+        List<Droplet> dropletsOnTheDmfPlatform = programConfiguration.getDropletsOnDmfPlatform().stream().toList();
+        return ProgramConfigurationToDmfAsJson.convertProgramConfigurationToDmfAsJson(programConfiguration, dropletsOnTheDmfPlatform);
     }
 
     private ActionTickResult executeTick(List<ActionBase> actionsToBeTicked) throws DmfException {

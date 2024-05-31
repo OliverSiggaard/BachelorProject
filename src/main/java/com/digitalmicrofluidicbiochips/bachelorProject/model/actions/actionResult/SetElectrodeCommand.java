@@ -5,7 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 
 public class SetElectrodeCommand implements IDmfCommand {
 
-    protected final Electrode electrode;
+    private final Electrode electrode;
 
     public SetElectrodeCommand(Electrode electrode) {
         this.electrode = electrode;
