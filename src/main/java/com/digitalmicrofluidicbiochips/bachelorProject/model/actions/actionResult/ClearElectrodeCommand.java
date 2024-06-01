@@ -5,7 +5,7 @@ import com.digitalmicrofluidicbiochips.bachelorProject.utils.DmfPlatformUtils;
 
 public class ClearElectrodeCommand implements IDmfCommand {
 
-    protected final Electrode electrode;
+    private final Electrode electrode;
 
     public ClearElectrodeCommand(Electrode electrode) {
         this.electrode = electrode;

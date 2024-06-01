@@ -85,7 +85,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
     /**
      * Get a list of all the actions from the JSON file, mapped to their internal representation.
      */
-    public List<ActionBase> getActions() {
+    private List<ActionBase> getActions() {
 
         HashMap<String, ActionBase> actionMap = new HashMap<>();
         List<ActionBase> actions = new ArrayList<>(); // Used to ensure the order of the actions is preserved.
@@ -116,7 +116,7 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
     /**
      * Get the platform information from the JSON file.
      */
-    public PlatformInformation getPlatformInformation() {
+    private PlatformInformation getPlatformInformation() {
         JsonDmfPlatformState jsonDmfPlatformState = programConfiguration.getDmfPlatformState();
 
         // If no platform information is provided (i.e. not present in the received JSON object), we will use a default

@@ -27,7 +27,7 @@ public class MoveAction extends ActionBase {
     @Getter @Setter
     private Droplet droplet = null;
 
-    private final Set<Droplet> ExemptObstacleDroplets;
+    private final Set<Droplet> exemptObstacleDroplets;
     private final Queue<ActionTickResult> tickQueue;
 
     public MoveAction(
@@ -40,7 +40,7 @@ public class MoveAction extends ActionBase {
         this.posY = posY;
 
         this.tickQueue = new LinkedList<>();
-        ExemptObstacleDroplets = new HashSet<>();
+        exemptObstacleDroplets = new HashSet<>();
     }
 
     @Override
@@ -164,14 +164,14 @@ public class MoveAction extends ActionBase {
     }
 
     public void addExemptObstacleDroplet(Droplet ExemptObstacleDroplet) {
-        ExemptObstacleDroplets.add(ExemptObstacleDroplet);
+        exemptObstacleDroplets.add(ExemptObstacleDroplet);
     }
 
     private List<Droplet> getObstacleDroplets(ProgramConfiguration programConfiguration) {
         List<Droplet> droplets = new ArrayList<>(programConfiguration.getDropletsOnDmfPlatform().stream()
                 .filter(d -> !d.equals(droplet))
                 .toList());
-        droplets.removeIf(d -> ExemptObstacleDroplets.stream().anyMatch(ed -> ed.getID().equals(d.getID())));
+        droplets.removeIf(d -> exemptObstacleDroplets.stream().anyMatch(ed -> ed.getID().equals(d.getID())));
         return droplets;
     }
 
