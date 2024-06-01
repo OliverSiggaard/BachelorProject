@@ -4,13 +4,9 @@ import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfException;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.ExecutionResult;
 import com.digitalmicrofluidicbiochips.bachelorProject.executor.Executor;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.ProgramConfiguration;
+import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.generic.IDtoToInternalMapper;
 import com.digitalmicrofluidicbiochips.bachelorProject.reader.mappers.json.JsonToInternalMapper;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 @Service
 public class ProgramExecutionService {
@@ -23,7 +19,7 @@ public class ProgramExecutionService {
     public static ExecutionResult executeProgram(String jsonString) {
         try {
             // Get the JsonFileToInternalMapper, and use it to get the program configuration.
-            JsonToInternalMapper dataMapper = new JsonToInternalMapper(jsonString);
+            IDtoToInternalMapper dataMapper = new JsonToInternalMapper(jsonString);
             ProgramConfiguration programConfiguration = dataMapper.getProgramConfiguration();
 
             // Create the executor, passing the program configuration to it.

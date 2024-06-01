@@ -27,14 +27,19 @@ public class IntegrationTests {
 
         // Assert
         Assertions.assertNull(executionResult.getErrorMessage());
-        Assertions.assertEquals(1, executionResult.getDmfConfiguration().get("droplets").size());
+        int dropletsInDmfConfig = executionResult.getDmfConfiguration().get("droplets").size();
+
+        Assertions.assertEquals(1, dropletsInDmfConfig);
 
         // 4 initial SETEL for input. Droplet is 2x2, moving 10 right, so 20 SETELs to move. 24 is expected.
-        Assertions.assertEquals(24, executionResult.getCompiledProgram().split("SETEL").length - 1);
+        int setelCount = executionResult.getCompiledProgram().split("SETELI").length - 1;
+        Assertions.assertEquals(24, setelCount);
         // no initial CLREL, Droplet is 2x2, moving 10 right, so 20 CLRELs to clear. 20 is expected.
-        Assertions.assertEquals(20, executionResult.getCompiledProgram().split("CLREL").length - 1);
+        int clrelCount = executionResult.getCompiledProgram().split("CLRELI").length - 1;
+        Assertions.assertEquals(20, clrelCount);
         // 1 tick for insert. 20 ticks for moving. 2 extra after TSTOP. 23 is expected.
-        Assertions.assertEquals(23, executionResult.getCompiledProgram().split("TICK").length - 1);
+        int ticks = executionResult.getCompiledProgram().split("TICK").length - 1;
+        Assertions.assertEquals(23, ticks);
     }
 
     @Test

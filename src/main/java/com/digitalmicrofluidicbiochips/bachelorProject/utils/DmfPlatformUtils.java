@@ -1,7 +1,6 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.utils;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.Droplet;
-import com.digitalmicrofluidicbiochips.bachelorProject.model.dmf_platform.ElectrodeGrid;
 
 public class DmfPlatformUtils {
     /**
