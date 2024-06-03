@@ -81,7 +81,7 @@ public class OutputActionTest {
         sut.executeTick(programConfiguration);
 
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
-        Assertions.assertEquals(DropletStatus.CONSUMED, droplet.getStatus());
+        Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class OutputActionTest {
         sut.beforeExecution(mock(ProgramConfiguration.class));
         sut.executeTick(mock(ProgramConfiguration.class));
         sut.afterExecution(mock(ProgramConfiguration.class));
-        Assertions.assertEquals(DropletStatus.CONSUMED, droplet.getStatus());
+        Assertions.assertEquals(DropletStatus.UNAVAILABLE, droplet.getStatus());
         Assertions.assertEquals(ActionStatus.COMPLETED, sut.getStatus());
     }
 
