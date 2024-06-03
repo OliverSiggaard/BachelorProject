@@ -18,6 +18,7 @@ public enum DmfExceptionMessage {
     INPUT_ACTION_DROPLET_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplet %dropletID% is too small to be moved around on the board. Please increase the volume."),
     SPLIT_ACTION_RESULT_DROPLETS_DIAMETER_SMALLER_THAN_ELECTRODE_SIZE("The droplets resulting from splitting %dropletID% is too small to be moved around on the board. Please increase the volume."),
     PROGRAM_GOT_STUCK("The program got stuck. We attempted to resolve the deadlock without success."),
+    DROPLET_CONSUMED_BEFORE_USED("Droplet %dropletID% was attempted to be used after being consumed by an action"),
     MIX_INVALID_SIZE("The size of the mix action must be greater than 0, and x and y can not both be 1 (i.e. not mixing)."),;
 
     private final String message;

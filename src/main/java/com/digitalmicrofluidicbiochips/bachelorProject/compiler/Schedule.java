@@ -1,6 +1,7 @@
 package com.digitalmicrofluidicbiochips.bachelorProject.compiler;
 
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExceptionMessage;
+import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfExecutorException;
 import com.digitalmicrofluidicbiochips.bachelorProject.errors.DmfInputReaderException;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionBase;
 import com.digitalmicrofluidicbiochips.bachelorProject.model.actions.ActionStatus;
@@ -70,6 +71,10 @@ public class Schedule {
                 throw new IllegalStateException("Action should have been removed from queue");
             }
 
+            if(action.getStatus() != ActionStatus.IN_PROGRESS && !NoRequiredDropletsMarkedAsConsumed(action)) {
+                continue;
+            }
+
             if(action.getStatus() == ActionStatus.NOT_STARTED && !allDropletsAvailable(action.dropletsRequiredForExecution())) {
                 continue;
             }
@@ -99,6 +104,15 @@ public class Schedule {
             }
         }
 
+        return true;
+    }
+
+    private boolean NoRequiredDropletsMarkedAsConsumed(ActionBase actionBase) {
+        for (Droplet droplet : actionBase.dropletsRequiredForExecution()) {
+            if(droplet.getStatus() == DropletStatus.CONSUMED) {
+                throw new DmfExecutorException(DmfExceptionMessage.DROPLET_CONSUMED_BEFORE_USED.getMessage(droplet));
+            }
+        }
         return true;
     }
 

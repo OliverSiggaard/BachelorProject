@@ -57,7 +57,7 @@ public class OutputAction extends ActionBase {
             throw new IllegalStateException("Error when outputting droplet. Droplet is not at the output position.");
         }
 
-        droplet.setStatus(DropletStatus.UNAVAILABLE);
+        droplet.setStatus(DropletStatus.CONSUMED);
         droplet.setDropletMove(DropletMove.NONE);
 
         setStatus(ActionStatus.COMPLETED);
