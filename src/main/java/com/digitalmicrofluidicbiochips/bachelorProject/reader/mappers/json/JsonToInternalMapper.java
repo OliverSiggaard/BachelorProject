@@ -101,8 +101,14 @@ public class JsonToInternalMapper implements IDtoToInternalMapper {
 
         //Creating a list of all the droplets from the json input actions.
         List<Droplet> dropletList = deriveAllDropletsFromJsonActions(JsonActions);
-        Map<String, Droplet> dropletMap = dropletList.stream()
-                .collect(Collectors.toMap(Droplet::getID, droplet -> droplet));
+
+        Map<String, Droplet> dropletMap;
+        try {
+            dropletMap = dropletList.stream()
+                    .collect(Collectors.toMap(Droplet::getID, droplet -> droplet));
+        } catch (IllegalStateException e) {
+            throw new DmfInputReaderException(DmfExceptionMessage.UNKNOWN_DROPLET_PRODUCED_BY_MULTIPLE_ACTIONS.getMessage());
+        }
 
         //Resolving the next actions for all the internal actions. The JsonActions are required to resolve the next actions.
         JsonActions.forEach(jsonAction -> {
